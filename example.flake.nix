@@ -6,10 +6,10 @@
   inputs.currentDir.url = ".";
 
   # A flake in some other directory.
-  # inputs.otherDir.url = "/home/alice/src/patchelf";
+  inputs.otherDir.url = "/home/alice/src/patchelf";
 
   # A flake in some absolute path
-  inputs.otherDir.url = "path:/home/alice/src/patchelf";
+  # inputs.otherDir.url = "path:/home/alice/src/patchelf";
 
   # The nixpkgs entry in the flake registry.
   inputs.nixpkgsRegistry.url = "nixpkgs";

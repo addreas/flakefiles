@@ -3,8 +3,8 @@
 
   inputs.nixpkgs.url = "nixpkgs";
 
-  inputs.pcp.path = "./packages/pcp";
-  inputs.cockpit.path = "./packages/cockpit";
+  inputs.pcp.url = "./packages/pcp";
+  inputs.cockpit.url = "./packages/cockpit";
 
   inputs.grcov = {
     type = "github";
