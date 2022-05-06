@@ -9,10 +9,9 @@
     flake-utils.lib.eachDefaultSystem
       (system:
         {
-          defaultPackage = nixpkgs.callPackaget ./default.nix
-            {
-              inherit system};
-              devShell = defaultPackage;
-            }
-            );
+          inherit system;
+          defaultPackage = nixpkgs.callPackage ./default.nix;
+          devShell = nixpkgs.callPackage ./default.nix;
         }
+      );
+}
