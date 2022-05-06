@@ -6,12 +6,12 @@
   inputs.pcp.url = "./packages/pcp";
   inputs.cockpit.url = "./packages/cockpit";
 
-  inputs.grcov = {
-    type = "github";
-    owner = "mozilla";
-    repo = "grcov";
-    flake = false;
-  };
+  # inputs.grcov = {
+  #   type = "github";
+  #   owner = "mozilla";
+  #   repo = "grcov";
+  #   flake = false;
+  # };
 
   outputs = all@{ self, nixpkgs, wsl, pcp, cockpit, ... }: {
     packages.x86_64-linux = {
