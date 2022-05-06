@@ -3,9 +3,8 @@
 
   inputs.nixpkgs.url = "nixpkgs";
 
-  inputs.wsl.path = ./wsl;
-  inputs.pcp.path = ./pcp;
-  inputs.cockpit.path = ./cockpit;
+  inputs.pcp.path = "./packages/pcp";
+  inputs.cockpit.path = "./packages/cockpit";
 
   inputs.grcov = {
     type = "github";
@@ -15,7 +14,6 @@
   };
 
   outputs = all@{ self, nixpkgs, wsl, pcp, cockpit, ... }: {
-
     packages.x86_64-linux = {
       pcp = pcp.package.x86_64-linux;
       cockpit = cockpit.package.x86_64-linux;
@@ -34,18 +32,18 @@
     nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        sergioFilesystems
-        sergioServices
-        kubeNode
+        # sergioFilesystems
+        # sergioServices
+        # kubeNode
       ];
     };
 
     nixosConfigurations.lenny = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        wsl
-        devBox
-      ]
-        };
+        # wsl
+        # devBox
+      ];
     };
-  }
+  };
+}
