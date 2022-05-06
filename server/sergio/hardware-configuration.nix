@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "ahci" "mpt3sas" "nvme" "usb_storage" "usbhid" "sd_mod" ];
@@ -14,17 +15,19 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/26a17605-5008-45b1-b428-36fe1f79b309";
+    {
+      device = "/dev/disk/by-uuid/26a17605-5008-45b1-b428-36fe1f79b309";
       fsType = "btrfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/EB2A-3002";
+    {
+      device = "/dev/disk/by-uuid/EB2A-3002";
       fsType = "vfat";
     };
 
   swapDevices =
-    [];
+    [ ];
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config

@@ -9,8 +9,9 @@ let
     device = "/dev/disk/by-uuid/660b83df-c44d-4265-b293-272127aabf22";
     fsType = "btrfs";
   };
-in {
-  fileSystems."/mnt/data" = btrfsDataHDD // {};
+in
+{
+  fileSystems."/mnt/data" = btrfsDataHDD // { };
   fileSystems."/mnt/videos" = btrfsDataHDD // { options = [ "subvol=videos" ]; };
   fileSystems."/mnt/pictures" = btrfsDataHDD // { options = [ "subvol=pictures" ]; };
   fileSystems."/mnt/minio-objects" = btrfsDataHDD // { options = [ "subvol=minio-objects" ]; };
@@ -23,5 +24,5 @@ in {
   fileSystems."/export/longhorn-backup" = btrfsDataHDD // { options = [ "subvol=longhorn-backup" ]; };
   fileSystems."/export/videos" = btrfsDataHDD // { options = [ "subvol=videos" ]; };
 
-  fileSystems."/mnt/plex-config" = btrfsDataSSD // {  options = [ "subvol=plex-config" ]; };
+  fileSystems."/mnt/plex-config" = btrfsDataSSD // { options = [ "subvol=plex-config" ]; };
 }

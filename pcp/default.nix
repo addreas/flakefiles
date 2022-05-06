@@ -1,58 +1,56 @@
-{
-  ccacheStdenv,
-  lib,
-  fetchzip,
-  callPackage,
-  makeWrapper,
-
-  bintools,
-  bison,
-  flex,
-  gnumake,
-  pkgconfig,
-  python,
-  python3,
-  perl,
-  which,
-  gawk,
-  gnused,
-  gnugrep,
-  procps,
-  coreutils,
-
-  qt48Full,
-  systemd,
-
-  ragel,
-  avahi, 
-  libbpf,
-  libelf,
-  bpftools,
-  ncurses,
-  libuv,
-  libpfm,
-  lzma,
-  lzip,
-  readline,
-  inkscape,
+{ ccacheStdenv
+, lib
+, fetchzip
+, callPackage
+, makeWrapper
+, bintools
+, bison
+, flex
+, gnumake
+, pkgconfig
+, python
+, python3
+, perl
+, which
+, gawk
+, gnused
+, gnugrep
+, procps
+, coreutils
+, qt48Full
+, systemd
+, ragel
+, avahi
+, libbpf
+, libelf
+, bpftools
+, ncurses
+, libuv
+, libpfm
+, lzma
+, lzip
+, readline
+, inkscape
+,
 }:
 let
   python2Pkgs = python.withPackages (ps: [
-      ps.setuptools
-      ps.six
+    ps.setuptools
+    ps.six
   ]);
   python3Pkgs = python3.withPackages (ps: [
-      ps.pylint
-      # ps.BPF
-      ps.jsonpointer
-      ps.openpyxl
-      ps.setuptools
-      ps.requests
-      ps.libvirt
-      ps.six
-      # ps.influxdb
+    ps.pylint
+    # ps.BPF
+    ps.jsonpointer
+    ps.openpyxl
+    ps.setuptools
+    ps.requests
+    ps.libvirt
+    ps.six
+    # ps.influxdb
   ]);
-in ccacheStdenv.mkDerivation rec {
+in
+ccacheStdenv.mkDerivation rec {
   pname = "pcp";
   version = "5.3.6";
 
@@ -121,7 +119,7 @@ in ccacheStdenv.mkDerivation rec {
     "--with-make=${gnumake}/bin/make"
     "--with-tmpdir=$tmpTmp"
   ];
-  
+
   postInstall = ''
     mv $out/etc/pcp.env .
     echo 'export PATH=$PATH:${lib.makeBinPath [gnused gawk gnugrep procps]}' | cat - pcp.env > $out/etc/pcp.env
@@ -129,8 +127,8 @@ in ccacheStdenv.mkDerivation rec {
     wrapProgram $out/libexec/pcp/lib/pmcd --prefix PATH : ${lib.makeBinPath [coreutils gnused]}
     wrapProgram $out/libexec/pcp/lib/pmlogger --prefix PATH : ${lib.makeBinPath [coreutils]}
     mkdir -p tmpTmp
-    '';
- 
+  '';
+
 
   meta = with lib; {
     description = "A sysadmin login session in a web browser";

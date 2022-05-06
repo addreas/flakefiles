@@ -4,8 +4,9 @@ with lib;
 
 let
   cfg = config.services.pcp;
-  pcp = pkgs.callPackage ./default.nix {};
-in {
+  pcp = pkgs.callPackage ./default.nix { };
+in
+{
   options.services.pcp.enable = mkEnableOption "performance copilot";
 
   config = mkIf cfg.enable {

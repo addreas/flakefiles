@@ -6,7 +6,7 @@
   inputs.currentDir.url = ".";
 
   # A flake in some other directory.
-  inputs.otherDir.url = "/home/alice/src/patchelf";
+  # inputs.otherDir.url = "/home/alice/src/patchelf";
 
   # A flake in some absolute path
   inputs.otherDir.url = "path:/home/alice/src/patchelf";
@@ -131,7 +131,7 @@
     overlays = { exampleOverlay = self.overlay; };
 
     # Default module, for use in dependent flakes
-    nixosModule = { config, ... }: { options = {}; config = {}; };
+    nixosModule = { config, ... }: { options = { }; config = { }; };
 
     # Same idea as nixosModule but a list or attrset of them.
     nixosModules = { exampleModule = self.nixosModule; };
@@ -140,7 +140,7 @@
     # nixosConfigurations."<hostname>".config.system.build.toplevel must be a derivation
     nixosConfigurations.example = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [{boot.isContainer=true;}] ;
+      modules = [{ boot.isContainer = true; }];
     };
 
     # Utilized by `nix develop`

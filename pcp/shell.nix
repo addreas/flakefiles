@@ -1,5 +1,5 @@
-{ pkgs ? import <nixpkgs> {} }:
-pkgs.callPackage ./default.nix {}
+{ pkgs ? import <nixpkgs> { } }:
+pkgs.callPackage ./default.nix { }
 
 # https://nixos.wiki/wiki/Development_environment_with_nix-shell
 # echo "src = $src" && cd $(mktemp -d) && unpackPhase && cd *
