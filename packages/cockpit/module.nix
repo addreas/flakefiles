@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.cockpit;
-  cockpit = pkgs.callPackage ./default.nix { };
 in
 {
   options.services.cockpit.enable = mkEnableOption "cockpit linux server gui";
@@ -33,7 +32,7 @@ in
 
     environment.pathsToLink = [ "/share/cockpit" "/share/locale" "/share/polkit-1/actions" ];
 
-    security.pam.services.cockpit.text = ''
+    security.pam.services.cockpit.text = with pkgs; ''
       # Account management.
       account required pam_nologin.so
       account required pam_unix.so
@@ -57,8 +56,8 @@ in
       session required pam_env.so conffile=/etc/pam/environment readenv=0
       session required pam_unix.so
       session optional pam_loginuid.so
-      # session required ${pkgs.linux-pam}/lib/security/pam_lastlog.so silent
-      # session optional ${pkgs.systemd}/lib/security/pam_systemd.so
+      # session required ${linux-pam}/lib/security/pam_lastlog.so silent
+      # session optional ${systemd}/lib/security/pam_systemd.so
     '';
   };
 }

@@ -4,17 +4,17 @@ with lib;
 
 let
   cfg = config.services.pcp;
-  pcp = pkgs.callPackage ./default.nix { };
+  pcp = pkgs.pcp;
 in
 {
   options.services.pcp.enable = mkEnableOption "performance copilot";
 
   config = mkIf cfg.enable {
-    systemd.packages = with  pkgs; [ pcp ];
+    systemd.packages = [ pcp ];
 
     environment.etc."pcp.env".source = "${pcp}/etc/pcp.env";
     environment.etc."pcp.conf".source = "${pcp}/etc/pcp.conf";
 
-    environment.systemPackages = with pkgs; [ pcp ];
+    environment.systemPackages = [ pcp ];
   };
 }

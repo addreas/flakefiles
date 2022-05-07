@@ -3,9 +3,6 @@
 
   inputs.nixpkgs.url = "nixpkgs";
 
-  inputs.pcp.url = "./packages/pcp";
-  inputs.cockpit.url = "./packages/cockpit";
-
   # inputs.grcov = {
   #   type = "github";
   #   owner = "mozilla";
@@ -13,37 +10,38 @@
   #   flake = false;
   # };
 
-  outputs = all@{ self, nixpkgs, wsl, pcp, cockpit, ... }: {
-    packages.x86_64-linux = {
-      pcp = pcp.package.x86_64-linux;
-      cockpit = cockpit.package.x86_64-linux;
-    };
-
-    nixosModules = {
-      pcp = pcp.module;
-      cockpit = cockpit.module;
-    };
-
-    devShells.x86_64-linux = {
-      pcp = pcp.shell.x86_64-linux;
-      cockpit = cockpit.shell.x86_64-linux;
-    };
-
-    nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
+  outputs = all@{ self, nixpkgs, ... }:
+    let
       system = "x86_64-linux";
-      modules = [
-        # sergioFilesystems
-        # sergioServices
-        # kubeNode
-      ];
-    };
+    in
+    with import nixpkgs { inherit system; };
+    rec {
+      packages.${system} = rec {
+        pcp = callPackage ./packages/pcp { };
+        cockpit = callPackage ./packages/cockpit { inherit pcp; };
+        cockpit-machines = callPackage ./packages/cockpit-machines { };
+      };
 
-    nixosConfigurations.lenny = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        # wsl
-        # devBox
-      ];
+      nixosModules = {
+        pcp = import ./packages/pcp/module.nix;
+        cockpit = import ./packages/cockpit/module.nix;
+      };
+
+      nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          # sergioFilesystems
+          # sergioServices
+          # kubeNode
+        ];
+      };
+
+      nixosConfigurations.lenny = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          # wsl
+          # devBox
+        ];
+      };
     };
-  };
 }
