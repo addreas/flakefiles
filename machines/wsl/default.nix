@@ -1,6 +1,9 @@
 { config, pkgs, lib, ... }: {
-  config = {
+  options = {
+    users.defaultUser = lib.mkOption { type = lib.types.str; };
+  };
 
+  config = {
     # WSL is closer to a container than anything else
     boot.isContainer = true;
     environment.noXlibs = false;
@@ -10,11 +13,18 @@
 
     networking.dhcpcd.enable = false;
 
-    users.users.root = {
-      shell = "${syschdemd}/bin/syschdemd";
-      # Otherwise WSL fails to login as root with "initgroups failed 5"
-      extraGroups = [ "root" ];
-    };
+    users.users.root =
+      let
+        syschdemd = import ./syschdemd.nix {
+          inherit lib pkgs config;
+          defaultUser = config.users.defaultUser;
+        };
+      in
+      {
+        shell = "${syschdemd}/bin/syschdemd";
+        # Otherwise WSL fails to login as root with "initgroups failed 5"
+        extraGroups = [ "root" ];
+      };
 
     security.sudo.wheelNeedsPassword = false;
 

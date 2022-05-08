@@ -6,6 +6,7 @@ https://nixos.wiki/wiki/Flakes
 https://github.com/jordanisaacs/neovim-flake
 https://github.com/jordanisaacs/jdpkgs
 https://github.com/jordanisaacs/dotfiles
+https://github.com/jordanisaacs/neovim-flake
 https://jdisaacs.com/blog/nixos-config/
 https://christine.website/blog/my-homelab-nas-2021-11-29
 https://christine.website/blog/nix-flakes-1-2022-02-21

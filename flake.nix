@@ -10,7 +10,7 @@
   #   flake = false;
   # };
 
-  outputs = all@{ self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
     in
@@ -30,18 +30,16 @@
 
       nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [
-          # sergioFilesystems
-          # sergioServices
-          # kubeNode
-        ];
+        modules = [ "${self}/machines/sergio" ];
       };
 
-      nixosConfigurations.lenny = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          # wsl
-          # devBox
+          "${self}/machines/lenny-wsl"
+          "${self}/machines/wsl"
+          "${self}/packages/cockpit/module.nix"
+          "${self}/packages/pcp/module.nix"
         ];
       };
     };

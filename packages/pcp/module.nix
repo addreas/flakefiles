@@ -4,10 +4,14 @@ with lib;
 
 let
   cfg = config.services.pcp;
-  pcp = pkgs.pcp;
+  pcp = cfg.package;
 in
 {
   options.services.pcp.enable = mkEnableOption "performance copilot";
+  options.services.pcp.package = mkOption {
+    type = types.package;
+    default = pkgs.callPackage ./default.nix { };
+  };
 
   config = mkIf cfg.enable {
     systemd.packages = [ pcp ];

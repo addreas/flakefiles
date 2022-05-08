@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "06anqm3im12sgnk16hfcp2h16xzlbxc0l7fq2b3n44bkfxhizjyx";
   };
 
-  nativeBuildInputs = [
-    gettext
-  ];
+  nativeBuildInputs = [ gettext ];
+
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace /usr/share $out/share
+      --replace /usr/share /share
   '';
 
   meta = with lib; {

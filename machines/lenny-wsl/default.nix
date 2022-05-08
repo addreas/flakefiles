@@ -3,7 +3,6 @@
 with lib;
 let
   defaultUser = "addem";
-  syschdemd = import ./wsl/syschdemd.nix { inherit lib pkgs config defaultUser; };
   zshFastHighlight = (pkgs.zsh-fast-syntax-highlighting.overrideAttrs (_: {
     installPhase = ''
       plugindir="$out/share/zsh/plugins/fast-syntax-highlighting"
@@ -16,11 +15,9 @@ in
 {
   imports = [
     "${modulesPath}/profiles/minimal.nix"
-    "./wsl/module.nix"
-    #"/home/addem/cockpit/module.nix"
-    #"/home/addem/pcp/module.nix"
   ];
 
+  system.stateVersion = "22.05";
 
   nix = {
     package = pkgs.nixFlakes; # or versioned attributes like nix_2_7
@@ -31,6 +28,7 @@ in
     '';
   };
 
+  users.defaultUser = defaultUser;
   users.defaultUserShell = pkgs.zsh;
 
   users.users.${defaultUser} = {
@@ -44,6 +42,13 @@ in
     zshFastHighlight
   ];
 
+  services.pcp.enable = true;
+  services.cockpit.enable = true;
+  services.cockpit.extraPackages = [ config.services.pcp.package ];
+
+  # virtualisation.podman.enable = true;
+  # virtualisation.libvirtd.enable = true;
+
   programs.zsh.enable = true;
   programs.zsh.ohMyZsh.enable = true;
   programs.zsh.ohMyZsh.theme = "arrow";
@@ -55,6 +60,4 @@ in
     "fzf"
   ];
 
-  #services.cockpit.enable = true;
-  #services.pcp.enable = true;
 }

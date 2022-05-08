@@ -4,9 +4,41 @@ with lib;
 
 let
   cfg = config.services.cockpit;
+  cockpit = cfg.package;
+  cockpit-podman = cfg.podman.package;
+  cockpit-machines = cfg.machines.package;
+  extraPackages = cfg.extraPackages;
 in
 {
-  options.services.cockpit.enable = mkEnableOption "cockpit linux server gui";
+  options.services.cockpit = {
+    enable = mkEnableOption "cockpit linux server gui";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.callPackage ../cockpit {
+        inherit extraPackages;
+      };
+    };
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+    };
+
+    podman.enable = mkEnableOption "cockpit podman container support" // {
+      default = config.virtualisation.podman.enable;
+    };
+    podman.package = mkOption {
+      type = types.package;
+      default = pkgs.callPackage ../cockpit-podman { };
+    };
+
+    machines.enable = mkEnableOption "cockpit virtual machine support" // {
+      default = config.virtualisation.libvirtd.enable;
+    };
+    machines.package = mkOption {
+      type = types.package;
+      default = pkgs.callPackage ../cockpit-machines { };
+    };
+  };
 
   config = mkIf cfg.enable {
     # users.groups.cockpit-ws = {};
@@ -26,9 +58,17 @@ in
     #   description = "User for cockpit-ws instances";
     # };
 
-    systemd.packages = with  pkgs; [ cockpit packagekit ];
+    systemd.packages = with  pkgs; [ cockpit ];
 
-    environment.systemPackages = with pkgs; [ cockpit packagekit selinux-python ];
+    services.packagekit.enable = true;
+    services.udisks2.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      cockpit
+      selinux-python
+    ]
+    ++ (if cfg.podman.enable then [ cockpit-podman ] else [ ])
+    ++ (if cfg.machines.enable then [ cockpit-machines ] else [ ]);
 
     environment.pathsToLink = [ "/share/cockpit" "/share/locale" "/share/polkit-1/actions" ];
 

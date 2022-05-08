@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchzip, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "cockpit-podman";
@@ -6,10 +6,12 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/cockpit-project/cockpit-podman/releases/download/${version}/cockpit-podman-${version}.tar.xz";
-    sha256 = "06anqm3im12sgnk16hfcp2h16xzlbxc0l7fq2b3n44bkfxhizjyx";
+    sha256 = "RO10Ml+0H3pXnWnK8F5zqScMoV4KTK4+CbczTtTaj74=";
   };
 
-  DESTDIR = out;
+  nativeBuildInputs = [ gettext ];
+
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   postPatch = ''
     substituteInPlace Makefile \
