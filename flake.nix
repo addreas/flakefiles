@@ -20,6 +20,7 @@
         pcp = callPackage ./packages/pcp { };
         cockpit = callPackage ./packages/cockpit { inherit pcp; };
         cockpit-machines = callPackage ./packages/cockpit-machines { };
+        cockpit-podman = callPackage ./packages/cockpit-podman { };
       };
 
       nixosModules = {
