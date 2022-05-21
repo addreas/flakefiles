@@ -30,7 +30,7 @@
 , lzma
 , lzip
 , readline
-, inkscape
+  # , inkscape
 ,
 }:
 let
@@ -52,11 +52,11 @@ let
 in
 ccacheStdenv.mkDerivation rec {
   pname = "pcp";
-  version = "5.3.6";
+  version = "5.3.7";
 
   src = fetchzip {
     url = "https://github.com/performancecopilot/pcp/archive/refs/tags/${version}.tar.gz";
-    sha256 = "+XbIqXCjrj/qJnpRwCSrblAhFIpC8fj5NrRY2gW72Tk=";
+    sha256 = "hOiIo3eE83te7UPP2l0JVN+YO76wkR8DMxrF/OdJNOU=";
   };
 
   nativeBuildInputs = [
@@ -88,8 +88,8 @@ ccacheStdenv.mkDerivation rec {
     lzma
     lzip
     readline
-    inkscape
 
+    # inkscape
     # dtrace
     # gtar, hdiutil, mkinstallp, pkgmk, dlltool, rpmbuild, rpm, dpkg, makepkg
     # libzfs, curses, ncursesw, nss, nss3, nspr, nspr4
@@ -107,26 +107,31 @@ ccacheStdenv.mkDerivation rec {
 
   preConfigure = ''
     export CCACHE_DIR=/nix/var/cache/ccache
-    export CCACHE_UMASK=007
-    export CCACHE_LOGFILE=/tmp/ccache.debug
+    export CCACHE_UMASK=002
+    export CCACHE_NOLINK=true
+    export CCACHE_NOHASHDIR=true
+
     export AR=$(which ar)
     export SYSTEMD_SYSTEMUNITDIR=$out/etc/systemd/system
     export PCP_DIR=$out
-    tmpTmp=/tmp/$(stripHash $out)
   '';
 
   configureFlags = [
     "--with-make=${gnumake}/bin/make"
-    "--with-tmpdir=$tmpTmp"
+    "--with-tmpdir=/tmp/pcp"
   ];
 
   postInstall = ''
+    rm -r $out/var/lib/pcp/testsuite
+    
+    mkdir -p /tmp/pcp
+
     mv $out/etc/pcp.env .
     echo 'export PATH=$PATH:${lib.makeBinPath [gnused gawk gnugrep procps]}' | cat - pcp.env > $out/etc/pcp.env
     rm pcp.env
+    
     wrapProgram $out/libexec/pcp/lib/pmcd --prefix PATH : ${lib.makeBinPath [coreutils gnused]}
     wrapProgram $out/libexec/pcp/lib/pmlogger --prefix PATH : ${lib.makeBinPath [coreutils]}
-    mkdir -p tmpTmp
   '';
 
 
@@ -135,8 +140,6 @@ ccacheStdenv.mkDerivation rec {
     homepage = "https://pcp.io";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers;
-      [
-      ];
+    maintainers = with maintainers; [ ];
   };
 }
