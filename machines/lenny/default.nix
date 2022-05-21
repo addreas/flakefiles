@@ -19,16 +19,25 @@ in
 
   system.stateVersion = "22.05";
 
-  nix = {
-    package = pkgs.nixFlakes; # or versioned attributes like nix_2_7
-    extraOptions = ''
-      experimental-features = nix-command flakes
+  networking.hostName = "LAPTOP-EK7DRJB8";
 
-      extra-sandbox-paths = /nix/var/cache/ccache
-    '';
+  nix.package = pkgs.nixFlakes; # or versioned attributes like nix_2_7
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+
+    extra-sandbox-paths = /nix/var/cache/ccache
+  '';
+
+  wsl = {
+    enable = true;
+    automountPath = "/mnt";
+    inherit defaultUser;
+    startMenuLaunchers = true;
+
+    # Enable integration with Docker Desktop (needs to be installed)
+    docker-desktop.enable = true;
   };
 
-  users.defaultUser = defaultUser;
   users.defaultUserShell = pkgs.zsh;
 
   users.users.${defaultUser} = {

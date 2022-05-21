@@ -1,8 +1,9 @@
-{ ccacheStdenv
+{ stdenv
 , lib
 , fetchzip
 , callPackage
 , makeWrapper
+, breakpointHook
 , bintools
 , bison
 , flex
@@ -50,7 +51,7 @@ let
     # ps.influxdb
   ]);
 in
-ccacheStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pcp";
   version = "5.3.7";
 
@@ -63,6 +64,7 @@ ccacheStdenv.mkDerivation rec {
     pkgconfig
     flex
     bison
+    # breakpointHook
     makeWrapper
   ];
 
@@ -106,10 +108,10 @@ ccacheStdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    export CCACHE_DIR=/nix/var/cache/ccache
-    export CCACHE_UMASK=002
-    export CCACHE_NOLINK=true
-    export CCACHE_NOHASHDIR=true
+    # export CCACHE_DIR=/nix/var/cache/ccache
+    # export CCACHE_UMASK=002
+    # export CCACHE_NOLINK=true
+    # export CCACHE_NOHASHDIR=true
 
     export AR=$(which ar)
     export SYSTEMD_SYSTEMUNITDIR=$out/etc/systemd/system
@@ -118,13 +120,13 @@ ccacheStdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-make=${gnumake}/bin/make"
-    "--with-tmpdir=/tmp/pcp"
+    "--with-tmpdir=/tmp$(out)"
   ];
 
   postInstall = ''
     rm -r $out/var/lib/pcp/testsuite
     
-    mkdir -p /tmp/pcp
+    mkdir -p /tmp$out
 
     mv $out/etc/pcp.env .
     echo 'export PATH=$PATH:${lib.makeBinPath [gnused gawk gnugrep procps]}' | cat - pcp.env > $out/etc/pcp.env

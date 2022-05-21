@@ -22,7 +22,10 @@ https://cnx.srht.site/blog/butter/index.html
 https://wiki.archlinux.org/title/Avahi
 
 
-
+# nixos
+```sh
+sudo nixos-rebuild switch --flake .#LAPTOP-EK7DRJB8
+```
 
 
 # Cockpit nix module (experimental/unmaintained)

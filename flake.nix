@@ -3,14 +3,9 @@
 
   inputs.nixpkgs.url = "nixpkgs";
 
-  # inputs.grcov = {
-  #   type = "github";
-  #   owner = "mozilla";
-  #   repo = "grcov";
-  #   flake = false;
-  # };
+  inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, nixos-wsl, ... }:
     let
       system = "x86_64-linux";
     in
@@ -18,7 +13,7 @@
     rec {
       packages.${system} = rec {
         pcp = callPackage ./packages/pcp { };
-        cockpit = callPackage ./packages/cockpit { inherit pcp; };
+        cockpit = callPackage ./packages/cockpit { extraPackages = [ pcp ]; };
         cockpit-machines = callPackage ./packages/cockpit-machines { };
         cockpit-podman = callPackage ./packages/cockpit-podman { };
       };
@@ -33,11 +28,11 @@
         modules = [ "${self}/machines/sergio" ];
       };
 
-      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
+      nixosConfigurations."LAPTOP-EK7DRJB8" = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          "${self}/machines/lenny-wsl"
-          "${self}/machines/wsl"
+          nixos-wsl.nixosModules.wsl
+          "${self}/machines/lenny"
           "${self}/packages/cockpit/module.nix"
           "${self}/packages/pcp/module.nix"
         ];
