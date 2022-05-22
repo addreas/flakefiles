@@ -14,6 +14,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    users.groups.pcp = { };
+    users.users.pcp = {
+      isSystemUser = true;
+      group = "pcp";
+      home = "/var/lib/pcp";
+      description = "Performance Co-Pilot";
+    };
+
     systemd.packages = [ pcp ];
 
     environment.etc."pcp.env".source = "${pcp}/etc/pcp.env";

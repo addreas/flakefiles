@@ -27,6 +27,11 @@ https://wiki.archlinux.org/title/Avahi
 sudo nixos-rebuild switch --flake .#LAPTOP-EK7DRJB8
 ```
 
+```
+nix develop .#pcp
+
+echo "src = $src" && cd $(mktemp -d) && unpackPhase && cd * && patchPhase && configurePhase
+```
 
 # Cockpit nix module (experimental/unmaintained)
 

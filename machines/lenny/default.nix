@@ -28,6 +28,10 @@ in
     extra-sandbox-paths = /nix/var/cache/ccache
   '';
 
+  programs.ccache.enable = true;
+  programs.ccache.cacheDir = "/nix/var/cache/ccache";
+  nix.sandboxPaths = [ (toString config.programs.ccache.cacheDir) ];
+
   wsl = {
     enable = true;
     automountPath = "/mnt";
@@ -43,7 +47,7 @@ in
   users.users.${defaultUser} = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "nixbld" ];
   };
 
   environment.systemPackages = with pkgs; [

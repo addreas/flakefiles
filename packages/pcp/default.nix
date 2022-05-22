@@ -1,12 +1,12 @@
-{ stdenv
+{ ccacheStdenv
 , lib
 , fetchzip
 , callPackage
 , makeWrapper
-, breakpointHook
-, bintools
+  # , breakpointHook
 , bison
 , flex
+, binutils-unwrapped
 , gnumake
 , pkgconfig
 , python
@@ -18,7 +18,7 @@
 , gnugrep
 , procps
 , coreutils
-, qt48Full
+  # , qt48Full
 , systemd
 , ragel
 , avahi
@@ -51,7 +51,7 @@ let
     # ps.influxdb
   ]);
 in
-stdenv.mkDerivation rec {
+ccacheStdenv.mkDerivation rec {
   pname = "pcp";
   version = "5.3.7";
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     which
 
     systemd
-    qt48Full # qtchooser, qmake, qmake-qt5, qmake-qt4
+    # qt48Full # qtchooser, qmake, qmake-qt5, qmake-qt4
 
     ragel
     avahi
@@ -108,19 +108,30 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    # export CCACHE_DIR=/nix/var/cache/ccache
-    # export CCACHE_UMASK=002
-    # export CCACHE_NOLINK=true
-    # export CCACHE_NOHASHDIR=true
+    export CCACHE_DIR=/nix/var/cache/ccache
 
-    export AR=$(which ar)
-    export SYSTEMD_SYSTEMUNITDIR=$out/etc/systemd/system
-    export PCP_DIR=$out
+    OUT_BASE=''${out##*/}
+    RANDOM_SEED=-frandom-seed=''${OUT_BASE:0:10}
+    export NIX_CFLAGS_COMPILE=''\${NIX_CFLAGS_COMPILE/$RANDOM_SEED}
   '';
 
+  out = placeholder "out";
+
   configureFlags = [
+    "AR=${binutils-unwrapped}/bin/ar"
     "--with-make=${gnumake}/bin/make"
-    "--with-tmpdir=/tmp$(out)"
+    "--with-tmpdir=/tmp${out}"
+    # "pcp_etc_dir=${out}/etc"
+    # "pcp_run_dir=/run/pcp"
+    # "pcp_tmp_dir=/tmp/pcp"
+    # "pcp_tmpfile_dir=/tmp/pcp"
+    # "pcp_log_dir=/var/log/pcp"
+    # "pcp_sa_dir=/var/log/pcp/sa"
+    # "pcp_archive_dir=/var/log/pcp/pmlogger"
+    "SYSTEMD_SYSTEMUNITDIR=${out}/etc/systemd/system"
+    "SYSTEMD_TMPFILESDIR=${out}/etc/tmpfiles.d"
+    # "PCP_ETC_DIR=/etc"
+    # "PCP_DIR=$(out)"
   ];
 
   postInstall = ''
@@ -131,6 +142,8 @@ stdenv.mkDerivation rec {
     mv $out/etc/pcp.env .
     echo 'export PATH=$PATH:${lib.makeBinPath [gnused gawk gnugrep procps]}' | cat - pcp.env > $out/etc/pcp.env
     rm pcp.env
+
+    sed -i s#$out/var/run#/run# $out/etc/systemd/system/pmcd.service
     
     wrapProgram $out/libexec/pcp/lib/pmcd --prefix PATH : ${lib.makeBinPath [coreutils gnused]}
     wrapProgram $out/libexec/pcp/lib/pmlogger --prefix PATH : ${lib.makeBinPath [coreutils]}
@@ -145,3 +158,26 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
   };
 }
+
+/*
+  
+  PCP_PYTHON_PROG=python3
+  PCP_PERL_PROG=perl
+  PCP_PLATFORM_PATHS=/usr/bin/X11:/usr/local/bin
+
+
+  PCP_SYSCONF_DIR=/etc/pcp
+  PCP_SYSCONFIG_DIR=/etc/sysconfig
+  PCP_PMCDCONF_PATH=/etc/pcp/pmcd/pmcd.conf
+  PCP_PMCDOPTIONS_PATH=/etc/pcp/pmcd/pmcd.options
+  PCP_PMCDRCLOCAL_PATH=/etc/pcp/pmcd/rc.local
+  PCP_PMPROXYOPTIONS_PATH=/etc/pcp/pmproxy/pmproxy.options
+  PCP_PMIECONTROL_PATH=/etc/pcp/pmie/control
+  PCP_PMSNAPCONTROL_PATH=/etc/pcp/pmsnap/control
+  PCP_PMLOGGERCONTROL_PATH=/etc/pcp/pmlogger/control
+  PCP_SECURE_DB_PATH=/etc/pcp/nssdb
+  PCP_SASLCONF_DIR=/etc/sasl2
+
+  PCP_PACCT_SYSTEM_PATH=${prefix}/var/account/pacct
+
+*/
