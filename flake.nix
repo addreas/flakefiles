@@ -36,6 +36,7 @@
           "${self}/packages/cockpit/module.nix"
           "${self}/packages/pcp/module.nix"
         ];
+
       };
     };
 }

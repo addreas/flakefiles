@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
     ./fix_paths.patch
   ];
 
+  inherit coreutils gnused openssh;
+
   postPatch = ''
     patchShebangs tools
 
@@ -87,13 +89,13 @@ stdenv.mkDerivation rec {
 
     substituteAllInPlace src/session/session-utils.h
   
-    coreutils=${coreutils} substituteAllInPlace src/systemd/cockpit.service.in
+    substituteAllInPlace src/systemd/cockpit.service.in
     substituteAllInPlace src/systemd/cockpit-wsinstance-http.service.in
     substituteAllInPlace src/systemd/cockpit-wsinstance-https-factory@.service.in
     substituteAllInPlace src/systemd/cockpit-wsinstance-https@.service.in
-    gnused=${gnused} substituteAllInPlace src/systemd/update-motd
+    substituteAllInPlace src/systemd/update-motd
 
-    openssh=${openssh} substituteAllInPlace src/pam-ssh-add/pam-ssh-add.c
+    substituteAllInPlace src/pam-ssh-add/pam-ssh-add.c
   '';
 
   configureFlags = [

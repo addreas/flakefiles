@@ -23,6 +23,7 @@ in
     };
 
     systemd.packages = [ pcp ];
+    # systemd.tmpfiles.packages = [ pcp ];
 
     environment.etc."pcp.env".source = "${pcp}/etc/pcp.env";
     environment.etc."pcp.conf".source = "${pcp}/etc/pcp.conf";

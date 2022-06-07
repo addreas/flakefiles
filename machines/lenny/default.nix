@@ -59,6 +59,11 @@ in
   services.cockpit.enable = true;
   services.cockpit.extraPackages = [ config.services.pcp.package ];
 
+  # systemd.services.cockpit.enable = true;
+  # systemd.services.pmcd.enable = true;
+  # systemd.services.pmlogger.enable = true;
+
+
   # virtualisation.podman.enable = true;
   # virtualisation.libvirtd.enable = true;
 

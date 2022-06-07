@@ -120,7 +120,7 @@ ccacheStdenv.mkDerivation rec {
   configureFlags = [
     "AR=${binutils-unwrapped}/bin/ar"
     "--with-make=${gnumake}/bin/make"
-    "--with-tmpdir=/tmp${out}"
+    "--with-tmpdir=/tmp"
     # "pcp_etc_dir=${out}/etc"
     # "pcp_run_dir=/run/pcp"
     # "pcp_tmp_dir=/tmp/pcp"
@@ -129,15 +129,13 @@ ccacheStdenv.mkDerivation rec {
     # "pcp_sa_dir=/var/log/pcp/sa"
     # "pcp_archive_dir=/var/log/pcp/pmlogger"
     "SYSTEMD_SYSTEMUNITDIR=${out}/etc/systemd/system"
-    "SYSTEMD_TMPFILESDIR=${out}/etc/tmpfiles.d"
+    "SYSTEMD_TMPFILESDIR=${out}/lib/tmpfiles.d"
     # "PCP_ETC_DIR=/etc"
     # "PCP_DIR=$(out)"
   ];
 
   postInstall = ''
     rm -r $out/var/lib/pcp/testsuite
-    
-    mkdir -p /tmp$out
 
     mv $out/etc/pcp.env .
     echo 'export PATH=$PATH:${lib.makeBinPath [gnused gawk gnugrep procps]}' | cat - pcp.env > $out/etc/pcp.env
