@@ -1,9 +1,8 @@
-{ ccacheStdenv
+{ stdenv
 , lib
 , fetchzip
 , callPackage
 , makeWrapper
-  # , breakpointHook
 , bison
 , flex
 , binutils-unwrapped
@@ -51,7 +50,7 @@ let
     # ps.influxdb
   ]);
 in
-ccacheStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pcp";
   version = "5.3.7";
 
@@ -64,7 +63,6 @@ ccacheStdenv.mkDerivation rec {
     pkgconfig
     flex
     bison
-    # breakpointHook
     makeWrapper
   ];
 
@@ -108,8 +106,6 @@ ccacheStdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    export CCACHE_DIR=/nix/var/cache/ccache
-
     OUT_BASE=''${out##*/}
     RANDOM_SEED=-frandom-seed=''${OUT_BASE:0:10}
     export NIX_CFLAGS_COMPILE=''\${NIX_CFLAGS_COMPILE/$RANDOM_SEED}

@@ -30,7 +30,7 @@ in
 
   programs.ccache.enable = true;
   programs.ccache.cacheDir = "/nix/var/cache/ccache";
-  nix.sandboxPaths = [ (toString config.programs.ccache.cacheDir) ];
+  nix.settings.extra-sandbox-paths = [ (toString config.programs.ccache.cacheDir) ];
 
   wsl = {
     enable = true;
@@ -55,17 +55,7 @@ in
     zshFastHighlight
   ];
 
-  services.pcp.enable = true;
-  services.cockpit.enable = true;
-  services.cockpit.extraPackages = [ config.services.pcp.package ];
-
-  # systemd.services.cockpit.enable = true;
-  # systemd.services.pmcd.enable = true;
-  # systemd.services.pmlogger.enable = true;
-
-
   # virtualisation.podman.enable = true;
-  # virtualisation.libvirtd.enable = true;
 
   programs.zsh.enable = true;
   programs.zsh.ohMyZsh.enable = true;

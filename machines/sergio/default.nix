@@ -14,30 +14,45 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./sergio-fs.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./nas.nix
+    ./monitoring.nix
+  ];
   swapDevices = [ ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = false;
 
-  services.snapper.snapshotRootOnBoot = true;
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "22.05"; # Did you read the comment?
   system.autoUpgrade.enable = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
 
-  networking.hostName = "sergio"; # Define your hostname.
+  # requires manual `sudo btrfs subvolume create /.snapshots`
+  services.snapper.snapshotRootOnBoot = true;
+  services.snapper.configs.root.subvolume = "/";
 
-  # Set your time zone.
   time.timeZone = "Europe/Stockholm";
 
+  networking.hostName = "sergio";
+  networking.domain = "localdomain";
+
   systemd.network.enable = true;
+  systemd.network.networks.lan.name = "en*";
+  systemd.network.networks.lan.dns = [ "192.168.1.1" ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
@@ -69,6 +84,8 @@
     fzf
     jq
     dig
+    git
+    cntr
   ];
 
   programs.zsh.ohMyZsh = {
@@ -84,17 +101,17 @@
   };
 
   services.openssh.enable = true;
+  services.kmscon.enable = true;
   services.locate.enable = true;
   services.locate.locate = pkgs.plocate;
   services.locate.localuser = null;
+  services.avahi.enable = true;
+  services.tailscale.enable = true;
 
-  services.kmscon.enable = true;
+  # services.pcp.enable = true;
+  # services.cockpit.enable = true;
 
-  #services.kubernetes.kubelet.enable = true;
-  #services.kubernetes.kubelet.manifests = {};
-  #virtualisation.cri-o.enable = true;
   virtualisation.podman.enable = true;
-
   virtualisation.oci-containers.backend = "podman";
   virtualisation.oci-containers.containers.plex = {
     image = "linuxserver/plex";
@@ -108,94 +125,16 @@
       "/mnt/plex-config:/config"
       "/etc/localtime:/etc/localtime"
     ];
-    extraOptions = [
-      "--network=host"
-    ];
+    extraOptions = [ "--network=host" ];
   };
 
-  services.rpcbind.enable = true;
-  services.nfs.server.enable = true;
-  services.nfs.server.statdPort = 4000;
-  services.nfs.server.lockdPort = 4001;
-  services.nfs.server.mountdPort = 4002;
-  services.nfs.server.exports = ''
-    /export/pictures *(rw,async,insecure)
-    /export/backups *(rw,no_root_squash,async,insecure)
-    /export/longhorn-backup *(rw,no_root_squash,async,insecure)
-    /export/videos *(rw,async,insecure)
-  '';
 
-  services.samba.enable = true;
-  services.samba-wsdd.enable = true;
-  services.samba.openFirewall = true;
-  services.samba.extraConfig = ''
-    unix password sync = yes
-  '';
-
-  services.samba.shares =
-    let
-      simpleShare = path: {
-        path = path;
-        "read only" = false;
-        browseable = "yes";
-        "guest ok" = "no";
-        "admin users" = "addem jonas";
-      };
-    in
-    {
-      videos = simpleShare "/mnt/videos";
-      pictures = simpleShare "/mnt/pictures";
-      backups = simpleShare "/mnt/backups";
-    };
-
-  services.netatalk.enable = true;
-  services.netatalk.settings =
-    let
-      simpleShare = path: {
-        path = path;
-        "time machine" = "no";
-      };
-    in
-    {
-      videos = simpleShare "/mnt/videos";
-      pictures = simpleShare "/mnt/pictures";
-      backups = simpleShare "/mnt/backups" // {
-        "time machine" = "yes";
-      };
-    };
-
-  services.smartd.enable = true;
-  services.smartd.notifications.mail.enable = true;
-  services.prometheus.exporters.smartctl.enable = true;
-
-  services.btrfs.autoScrub.enable = true;
-
-  services.apcupsd.enable = true;
-  services.prometheus.exporters.apcupsd.enable = true;
-
-  # power.ups.enable = true;
-  # power.ups.mode = "netserver";
-  # power.ups.ups.ups = {
-  #   port = "auto";
-  #   driver = "usbhid-ups";
-  # };
+  networking.firewall.checkReversePath = "loose";
 
   networking.firewall.allowedTCPPorts = [
     22
     80
     443
-
-    111 # rpcbind
-    139 # smbd // covered by module?
-    445 # smbd // covered by module?
-
-    548 # netatalk afpd
-    5357 # services.samba-wsdd
-
-    2049 # nfs
-    4000 # nfs statd
-    4001 # nfs lockd
-    4002 # nfs mountd
 
     3005 # plex
     8324 # plex
@@ -204,7 +143,6 @@
   ];
   networking.firewall.allowedUDPPorts = [
     1900 # upnp / ssdp (plex)
-    3702 # services.samba-wsdd // covered bymodule?
     5353 # mdns (plex)
 
     32410 # plex
@@ -212,15 +150,5 @@
     32413 # plex
     32414 # plex
   ];
-
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.05"; # Did you read the comment?
-  # nixpkgs.config.packageOverrides = pkgs:
-  #   { 
-  #     nut = pkgs.nut.overrideAttrs (oldAttrs: {
-  #         makeFlags = [ "CPPFLAGS=-std=c++14"];
-  #       });
-  #   };
 }
 
