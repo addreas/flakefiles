@@ -9,7 +9,7 @@
     let system = "x86_64-linux";
     in with import nixpkgs { inherit system; }; rec {
       packages.${system} = rec {
-        pcp = callPackage ./packages/pcp { };
+        pcp = callPackage ./packages/pcp { }; # just run container instead? https://quay.io/repository/performancecopilot/pcp?tab=tags
         cockpit = callPackage ./packages/cockpit { extraPackages = [ pcp ]; };
         cockpit-machines = callPackage ./packages/cockpit-machines { };
         cockpit-podman = callPackage ./packages/cockpit-podman { };
@@ -26,6 +26,7 @@
           "${self}/machines/sergio"
           "${self}/packages/cockpit/module.nix"
           "${self}/packages/pcp/module.nix"
+          "${self}/packages/kubeadm/kubelet.nix"
         ];
       };
 

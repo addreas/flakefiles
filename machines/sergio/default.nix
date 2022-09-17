@@ -17,11 +17,28 @@
 { config, pkgs, lib, ... }:
 
 {
+  nixpkgs.overlays = [
+    (self: super: {
+      kubernetes = super.kubernetes.overrideAttrs
+        (oldAttrs: rec {
+          version = "1.24.5";
+          src = pkgs.fetchFromGitHub {
+            owner = "kubernetes";
+            repo = "kubernetes";
+            rev = "v${version}";
+            sha256 = "sha256-8fEn2ac6bzqRtDbMzs7ZuUKfaLaJZuPoLQ3LZ/lnmTo=";
+          };
+
+        });
+    })
+  ];
+
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./nas.nix
     ./monitoring.nix
+    ./kube.nix
   ];
   swapDevices = [ ];
 
@@ -30,8 +47,8 @@
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = false;
 
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+  # boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  # boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
