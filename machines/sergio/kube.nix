@@ -21,7 +21,7 @@ in
   };
 
   services.kubeadm.kubelet = {
-    enable = true;
+    enable = false;
     package = kubernetes;
   };
 

@@ -9,6 +9,7 @@ in
       type = lib.types.package;
       default = pkgs.kubernetes;
     };
+    controlPlane = lib.mkEnableOption "control ports";
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,8 +22,16 @@ in
     };
 
     networking.firewall.allowedTCPPorts = [
+      10250
+    ] ++ (if !cfg.controlPlane then [ ] else [
+      6443
       2379
-    ];
+      2380
+      # 10259
+      # 10257
+    ]);
+    networking.firewall.allowedTCPPortRanges = [{ from = 30000; to = 32767; }];
+
 
     systemd.services.kubelet = {
       description = "Kubernetes Kubelet Service";

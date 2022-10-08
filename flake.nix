@@ -35,5 +35,15 @@
         modules = [ nixos-wsl.nixosModules.wsl "${self}/machines/lenny" ];
 
       };
+      
+      nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/pixie-installer" ];
+      };
+
+      nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/pixie-trixie" ];
+      };
     };
 }

@@ -16,9 +16,6 @@ https://christine.website/blog/nix-flakes-4-wsl-2022-05-01
 
 https://cnx.srht.site/blog/butter/index.html
 
-
-
-
 https://wiki.archlinux.org/title/Avahi
 
 
@@ -31,6 +28,25 @@ sudo nixos-rebuild switch --flake .#LAPTOP-EK7DRJB8
 nix develop .#pcp
 
 echo "src = $src" && cd $(mktemp -d) && unpackPhase && cd * && patchPhase && configurePhase
+```
+
+https://nixos.wiki/wiki/Netboot
+https://github.com/danderson/netboot/tree/master/pixiecore
+https://github.com/lucernae/nixos-pi/
+```sh
+# pixie pie host
+# if boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+nix build .#nixosConfigurations.pixie-pie-host.config.system.build.sdImage
+
+# PXE unattended provisioning
+nix build .#nixosConfigurations.pixie-installer.config.system.build.kernel
+nix build .#nixosConfigurations.pixie-installer.config.system.build.netbootRamdisk
+nix build .#nixosConfigurations.pixie-installer.config.system.build.netbootIpxeScript
+
+# PXE tmproot
+nix build .#nixosConfigurations.pixie-trixie.config.system.build.kernel
+nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootRamdisk
+nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootIpxeScript
 ```
 
 # Cockpit nix module (experimental/unmaintained)
