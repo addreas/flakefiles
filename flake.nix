@@ -22,20 +22,22 @@
 
       nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [
-          "${self}/machines/sergio"
-          "${self}/packages/cockpit/module.nix"
-          "${self}/packages/pcp/module.nix"
-          "${self}/packages/kubeadm/kubelet.nix"
-        ];
+        modules = [ "${self}/machines/sergio" ];
       };
 
       nixosConfigurations."LAPTOP-EK7DRJB8" = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [ nixos-wsl.nixosModules.wsl "${self}/machines/lenny" ];
-
+        modules = [
+          nixos-wsl.nixosModules.wsl
+          "${self}/machines/lenny"
+        ];
       };
-      
+
+      nixosConfigurations.pixie-pie-host = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/pixie-pie-host" ];
+      };
+
       nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [ "${self}/machines/pixie-installer" ];
