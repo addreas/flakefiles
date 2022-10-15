@@ -41,7 +41,9 @@
     ./kube.nix
 
     ../../users/addem.nix
-    ../../packages/basic-node/module.nix
+    ../../packages/basic/common.nix
+    ../../packages/basic/services.nix
+
     ../../packages/cockpit/module.nix
     ../../packages/pcp/module.nix
     ../../packages/kubeadm/kubelet.nix
@@ -66,26 +68,12 @@
   services.snapper.snapshotRootOnBoot = true;
   services.snapper.configs.root.subvolume = "/";
 
-
   networking.hostName = "sergio";
   networking.domain = "localdomain";
 
   systemd.network.enable = true;
   systemd.network.networks.lan.name = "enp4s0";
   systemd.network.networks.lan.dns = [ "192.168.1.1" ];
-
-  programs.zsh.ohMyZsh = {
-    enable = true;
-    theme = "arrow";
-    plugins = [
-      "git"
-      "command-not-found"
-      "colored-man-pages"
-      "fzf"
-      "fast-syntax-highlighting"
-    ];
-  };
-
 
   services.tailscale.enable = true;
 

@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 {
+  nix.package = pkgs.nixVersions.stable;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
 
@@ -12,23 +14,15 @@
 
   fonts.enableDefaultFonts = true;
 
-  services.openssh.enable = true;
-  services.kmscon.enable = true;
-  services.locate.enable = true;
-  services.locate.locate = pkgs.plocate;
-  services.locate.localuser = null;
-  services.avahi.enable = true;
-
-  virtualisation.podman.enable = true;
-
   environment.systemPackages = with pkgs; [
-    btrfs-progs
-    podman
+    zsh
     vim
     wget
     curl
     git
     cntr
   ];
+  
+  users.defaultUserShell = pkgs.zsh;
 }
 

@@ -2,6 +2,10 @@
 {
   imports = [
     (modulesPath + "/installer/sd-card/sd-image-aarch64-installer.nix")
+
+    ../../users/addem.nix
+    ../../packages/basic/common.nix
+    ../../packages/basic/services.nix
   ];
 
   system.stateVersion = "22.11";
@@ -21,48 +25,9 @@
   # On a Raspberry Pi 4 with 4 GB, you should either disable this parameter or increase to at least 64M if you want the USB ports to work.
   boot.kernelParams = [ "cma=256M" ];
 
-  environment.systemPackages = with pkgs; [
-    vim
-    helix
-    curl
-    wget
-  ];
-
-  services.openssh.enable = true;
-
-  programs.zsh = {
-    enable = true;
-    ohMyZsh = {
-      enable = true;
-      theme = "arrow";
-    };
-  };
-
   networking.firewall.enable = true;
 
   networking.interfaces.eth0.useDHCP = true;
-
-  users.defaultUserShell = pkgs.zsh;
-  users.mutableUsers = true;
-
-  users.groups = {
-    addem = {
-      gid = 1000;
-      name = "addem";
-    };
-  };
-
-  users.users = {
-    addem = {
-      uid = 1000;
-      isNormalUser = true;
-      home = "/home/addem";
-      name = "addem";
-      group = "addem";
-      shell = pkgs.zsh;
-      extraGroups = [ "wheel" ];
-    };
-  };
 
   services.pixiecore = {
     enable = true;

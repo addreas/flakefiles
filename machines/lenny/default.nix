@@ -3,28 +3,21 @@
 with lib;
 let
   defaultUser = "addem";
-  zshFastHighlight = (pkgs.zsh-fast-syntax-highlighting.overrideAttrs (_: {
-    installPhase = ''
-      plugindir="$out/share/zsh/plugins/fast-syntax-highlighting"
-      mkdir -p "$plugindir"
-      cp -r -- {,_,-,.}fast-* *chroma themes "$plugindir"/
-    '';
-  })
-  );
 in
 {
   imports = [
     "${modulesPath}/profiles/minimal.nix"
+
+    ../../users/addem.nix
+    ../../packages/basic/common.nix
   ];
 
   system.stateVersion = "22.05";
 
   networking.hostName = "LAPTOP-EK7DRJB8";
 
-  nix.package = pkgs.nixFlakes; # or versioned attributes like nix_2_7
+  nix.package = pkgs.nixVersions.stable;
   nix.extraOptions = ''
-    experimental-features = nix-command flakes
-
     extra-sandbox-paths = /nix/var/cache/ccache
   '';
 
@@ -42,30 +35,5 @@ in
     docker-desktop.enable = true;
   };
 
-  users.defaultUserShell = pkgs.zsh;
-
-  users.users.${defaultUser} = {
-    isNormalUser = true;
-    uid = 1000;
-    extraGroups = [ "wheel" "nixbld" ];
-  };
-
-  environment.systemPackages = with pkgs; [
-    fzf-zsh
-    zshFastHighlight
-  ];
-
   # virtualisation.podman.enable = true;
-
-  programs.zsh.enable = true;
-  programs.zsh.ohMyZsh.enable = true;
-  programs.zsh.ohMyZsh.theme = "arrow";
-  programs.zsh.ohMyZsh.customPkgs = [ zshFastHighlight ];
-  programs.zsh.ohMyZsh.plugins = [
-    "git"
-    "command-not-found"
-    "colored-man-pages"
-    "fzf"
-  ];
-
 }
