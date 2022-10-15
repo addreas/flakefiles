@@ -30,6 +30,12 @@ nix develop .#pcp
 echo "src = $src" && cd $(mktemp -d) && unpackPhase && cd * && patchPhase && configurePhase
 ```
 
+```
+  build .#nixosConfigurations.sergio.config.system.build.toplevel
+  nix-diff --character-oriented /run/current-system result
+```
+
+
 https://nixos.wiki/wiki/Netboot
 https://github.com/danderson/netboot/tree/master/pixiecore
 https://github.com/lucernae/nixos-pi/
@@ -48,7 +54,6 @@ nix build .#nixosConfigurations.pixie-trixie.config.system.build.kernel
 nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootRamdisk
 nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootIpxeScript
 ```
-
 # Cockpit nix module (experimental/unmaintained)
 
 https://github.com/NixOS/nixpkgs/issues/38161
