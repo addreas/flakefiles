@@ -1,7 +1,7 @@
 {
   description = "Just a bunch of stuff";
 
-  inputs.nixpkgs.url = "nixpkgs";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs";
 
   inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
