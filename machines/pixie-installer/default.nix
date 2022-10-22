@@ -1,12 +1,28 @@
 { config, pkgs, lib, modulesPath, ... }:
+let
+  nukeAndInstall = pkgs.writeShellApplication
+    {
+      name = "nuke-nvme0n1-and-install";
+      runtimeInputs = [ pkgs.parted ];
+      text = builtins.readFile ./nuke.sh;
+    };
+in
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/installer/netboot/netboot-minimal.nix")
 
-    ../../packages/common.nix
-    ../../packages/services.nix
+    ../../packages/basic/common.nix
+    ../../packages/basic/services.nix
     ../../users/addem.nix
+  ];
+
+  system.stateVersion = "22.11";
+
+  services.getty.autologinUser = lib.mkForce "root";
+
+  environment.systemPackages = [
+    nukeAndInstall
   ];
 }
 

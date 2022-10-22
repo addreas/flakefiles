@@ -7,7 +7,8 @@
 
   outputs = { self, nixpkgs, nixos-wsl, ... }:
     let system = "x86_64-linux";
-    in with import nixpkgs { inherit system; }; rec {
+    in
+    with import nixpkgs { inherit system; }; rec {
       packages.${system} = rec {
         pcp = callPackage ./packages/pcp { }; # just run container instead? https://quay.io/repository/performancecopilot/pcp?tab=tags
         cockpit = callPackage ./packages/cockpit { extraPackages = [ pcp ]; };
@@ -34,18 +35,36 @@
       };
 
       nixosConfigurations.pixie-pie-host = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/pixie-pie-host" ];
+        system = "aarch64-linux";
+        modules = [
+          "${self}/machines/pixie-pie-host"
+          {
+            environment.systemPackages = [ images.pixie-installer ];
+          }
+        ];
       };
+      images.pixie-pie-host = nixosConfigurations.pixie-pie-host.config.system.build.sdImage;
 
-      nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/pixie-installer" ];
-      };
+      nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem
+        {
+          inherit system;
+          modules = [ "${self}/machines/pixie-installer" ];
+        };
+      images.pixie-installer = pkgs.symlinkJoin
+        {
+          name = "pixie-installer-netboot";
+          paths = with nixosConfigurations.pixie-installer.config.system.build; [
+            netbootRamdisk
+            kernel
+            netbootIpxeScript
+          ];
+          preferLocalBuild = true;
+        };
 
-      nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/pixie-trixie" ];
-      };
+      nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem
+        {
+          inherit system;
+          modules = [ "${self}/machines/pixie-trixie" ];
+        };
     };
 }

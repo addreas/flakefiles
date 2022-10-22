@@ -15,10 +15,12 @@
   fileSystems."/" = {
     fsType = "tmpfs";
   };
-  
+
   fileSystems."/nix" = {
-    
+    # TODO: what should be here
   };
+
+  # TODO: what todo about stuff in setup-persistance.sh?
 
   swapDevices = [ ];
 

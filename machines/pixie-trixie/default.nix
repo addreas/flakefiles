@@ -1,5 +1,11 @@
 { config, pkgs, lib, modulesPath, ... }:
-
+let setupPersistance = pkgs.writeShellApplication
+  {
+    name = "setup-persistance";
+    runtimeInputs = [ pkgs.parted ];
+    text = builtins.readFile ./setup-persistance.sh;
+  };
+in
 {
   nixpkgs.overlays = [
     (self: super: {
@@ -26,6 +32,8 @@
     ../../packages/basic/common.nix
     ../../packages/basic/services.nix
   ];
+
+
   # boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
   # boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
@@ -44,7 +52,7 @@
   systemd.network.networks.lan.name = "enp4s0";
   systemd.network.networks.lan.dns = [ "192.168.1.1" ];
 
-   services.tailscale.enable = true;
+  services.tailscale.enable = true;
 
   # services.pcp.enable = true;
   # services.cockpit.enable = true;

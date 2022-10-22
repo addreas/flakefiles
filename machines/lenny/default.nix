@@ -12,13 +12,15 @@ in
     ../../packages/basic/common.nix
   ];
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   system.stateVersion = "22.05";
 
   networking.hostName = "LAPTOP-EK7DRJB8";
 
-  nix.package = pkgs.nixVersions.stable;
   nix.extraOptions = ''
     extra-sandbox-paths = /nix/var/cache/ccache
+    extra-platforms = aarch64-linux arm-linux
   '';
 
   programs.ccache.enable = true;
@@ -30,6 +32,7 @@ in
     automountPath = "/mnt";
     inherit defaultUser;
     startMenuLaunchers = true;
+    interop.register = true;
 
     # Enable integration with Docker Desktop (needs to be installed)
     docker-desktop.enable = true;
