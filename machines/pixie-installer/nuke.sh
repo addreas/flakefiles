@@ -28,5 +28,6 @@ mount -t btrfs -o noatime,compress=zstd,subvol=@varlib "$P2" /mnt/var/lib
 mount -t btrfs -o noatime,compress=zstd,subvol=@varlog "$P2" /mnt/var/log
 
 nixos-generate-config --root /mnt
-nixos-install
+git clone https://github.com/addreas/flakefiles /mnt/etc/nixos
+nixos-install --flake /mnt/etc/nixos#$(hostname)
 reboot

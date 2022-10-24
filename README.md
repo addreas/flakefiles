@@ -44,6 +44,8 @@ https://github.com/lucernae/nixos-pi/
 # if boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 nix build .#nixosConfigurations.pixie-pie-host.config.system.build.sdImage
 
+# requests http://localhost:8080/v1/boot/84:a9:3e:10:c4:66
+
 # PXE unattended provisioning
 nix build .#nixosConfigurations.pixie-installer.config.system.build.kernel
 nix build .#nixosConfigurations.pixie-installer.config.system.build.netbootRamdisk
@@ -54,14 +56,17 @@ nix build .#nixosConfigurations.pixie-trixie.config.system.build.kernel
 nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootRamdisk
 nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootIpxeScript
 ```
+
+
+
 # Cockpit nix module (experimental/unmaintained)
 
 https://github.com/NixOS/nixpkgs/issues/38161
 https://github.com/repos-holder/nur-packages/blob/master/pkgs/cockpit/default.nix
 
-Since the official release tarball contains pre-packaged web resources we can sidestep the issue of running webpack et. al. by just going for a `make install` in the build phase. 
+Since the official release tarball contains pre-packaged web resources we can sidestep the issue of running webpack et. al. by just going for a `make install` in the build phase.
 
-Adding `module.nix` as an import, and `services.cockpit.enabled = true`  in `/etc/nixos/configuration.nix` should be enough to get started. 
+Adding `module.nix` as an import, and `services.cockpit.enabled = true`  in `/etc/nixos/configuration.nix` should be enough to get started.
 
 # Seems to work
 - Overview (except package updates link, usage history)

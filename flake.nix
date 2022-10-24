@@ -3,9 +3,11 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs";
 
+  inputs.nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
   inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
-  outputs = { self, nixpkgs, nixos-wsl, ... }:
+  outputs = { self, nixpkgs, nixos-wsl, nixos-hardware, ... }:
     let system = "x86_64-linux";
     in
     with import nixpkgs { inherit system; }; rec {
@@ -38,6 +40,7 @@
         system = "aarch64-linux";
         modules = [
           "${self}/machines/pixie-pie-host"
+          nixos-hardware.nixosModules.raspberry-pi."4"
           {
             environment.systemPackages = [ images.pixie-installer ];
           }

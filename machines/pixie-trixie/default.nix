@@ -45,8 +45,25 @@ in
   services.snapper.snapshotRootOnBoot = true;
   services.snapper.configs.root.subvolume = "@";
 
-  networking.hostName = "pixie-trixie";
-  networking.domain = "localdomain";
+  networking.hostName = ""; # these have ot be set via kernel cmdline
+  networking.domain = ""; # these have ot be set via kernel cmdline
+
+  system.activationScripts.cmdline-setup = ''
+    function get_cmd_val() {
+      cat /proc/cmdline | tr " " "\n" | grep $1 | sed 's/.*=\(.*\)/\1/'
+    }
+
+    HOSTNAME=$(get_cmd_val hostname)
+    if [[ $HOSTNAME != "null" ]]; then
+      hostname $HOSTNAME
+      echo $HOSTNAME > /etc/hostname
+    fi
+
+    DOMAINNAME=$(get_cmd_val domainname)
+    if [[ $DOMAINNAME != "null" ]]; then
+      domainname $DOMAINNAME
+    fi
+  '';
 
   systemd.network.enable = true;
   systemd.network.networks.lan.name = "enp4s0";
