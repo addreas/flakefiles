@@ -1,10 +1,5 @@
 { config, pkgs, lib, modulesPath, ... }:
-let pixieApiContent = pkgs.stdenv.mkDerivation {
-  name = "pixie-api-content";
-  src = ;
-    };
-  in
-  {
+{
   imports = [
     (modulesPath + "/installer/sd-card/sd-image-aarch64-installer.nix")
 
@@ -12,6 +7,7 @@ let pixieApiContent = pkgs.stdenv.mkDerivation {
     ../../packages/basic/common.nix
     ../../packages/basic/services.nix
   ];
+
 
   system.stateVersion = "22.11";
 

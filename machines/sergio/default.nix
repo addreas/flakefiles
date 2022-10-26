@@ -46,7 +46,6 @@
 
     ../../packages/cockpit/module.nix
     ../../packages/pcp/module.nix
-    ../../packages/kubeadm/kubelet.nix
 
   ];
   swapDevices = [ ];

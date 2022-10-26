@@ -1,20 +1,18 @@
 { pkgs, lib, config, ... }:
 let
   cfg = config.services.pixiecore-host-configs;
-  content = pkgs.runCommandLocal "pixiecore-host-configs"
-    {
-      hosts = builtins.mapAttrs
-        (mac: package: builtins.toJson
-          {
-            kernel = "file://${package}/kernel";
-            initrd = [ "file://${package}/initrd" ];
-            cmdline = "cloud-config-url={{ URL \"https://files.local/cloud-config\" }} non-proxied-url=https://files.local/something-else";
-          })
-        cfg.hosts;
-    } ''
-    BOOT=$out/v1/boot
-    mkdir -p $BOOT
 
+  optsToJson = opts: builtins.toJSON {
+    kernel = "file://${opts.nixosSystem.config.system.build.kernel}/kernel";
+    initrd = [ "file://${opts.nixosSystem.config.system.build.netbootRamdisk}/initrd" ];
+    cmdline = builtins.concatStringsSep " " ([ "init=${opts.nixosSystem.config.system.build.toplevel}/init" ] ++ opts.kernelParams);
+    # cmdline = "cloud-config-url={{ URL \"https://files.local/cloud-config\" }} non-proxied-url=https://files.local/something-else";
+  };
+  echoJsonCommands = lib.attrsets.mapAttrsToList (mac: opts: "echo '${optsToJson opts}' > $targetdir/${mac}") cfg.hosts;
+  content = pkgs.runCommandLocal "pixiecore-host-configs" { } ''
+    targetdir=$out/v1/boot
+    mkdir -p $targetdir
+    ${lib.strings.concatStringsSep "\n" echoJsonCommands}
   '';
 in
 {
@@ -23,27 +21,23 @@ in
     hosts = lib.mkOption {
       type = with lib.types; attrsOf (submodule {
         options = {
-          hostname = mkOption { type = str; };
-          kernel = mkOption { type = package; };
-          initrd = mkOption { type = package; };
-          cmdline = mkOption { type = nullOr str; };
+          nixosSystem = lib.mkOption { type = attrs; };
+          kernelParams = lib.mkOption { type = listOf str; default = [ ]; };
         };
       });
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.caddy =
-      {
-        enable = true;
-        configFile = ''
-          http://pixie-host-configs.localhost:8080
-          {
-            root * ${content}
-            file_server
-          }
-        '';
-      };
+    services.caddy = {
+      enable = true;
+      configFile = pkgs.writeText "Caddyfile" ''
+        http://pixie-host-configs.localhost:8080 {
+          root * ${content}
+          file_server
+        }
+      '';
+    };
   };
 
 }

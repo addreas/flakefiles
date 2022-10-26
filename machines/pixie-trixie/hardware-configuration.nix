@@ -2,7 +2,17 @@
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, modulesPath, ... }:
-
+let
+  mkSubvol = subvol: {
+    fsType = "btrfs";
+    device = "/dev/disk/by-label/trixie-persistance";
+    options = [
+      "noatime"
+      "compress=zstd"
+      "subvol=@${subvol}"
+    ];
+  };
+in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -12,15 +22,9 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    fsType = "tmpfs";
-  };
-
-  fileSystems."/nix" = {
-    # TODO: what should be here
-  };
-
-  # TODO: what todo about stuff in setup-persistance.sh?
+  fileSystems."/home" = mkSubvol "home";
+  fileSystems."/var/lib" = mkSubvol "varlib";
+  fileSystems."/var/log" = mkSubvol "varlog";
 
   swapDevices = [ ];
 

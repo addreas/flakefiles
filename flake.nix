@@ -40,9 +40,29 @@
         system = "aarch64-linux";
         modules = [
           "${self}/machines/pixie-pie-host"
-          nixos-hardware.nixosModules.raspberry-pi."4"
+          "${self}/packages/pixie-api/module.nix"
+          nixos-hardware.nixosModules.raspberry-pi-4
           {
-            environment.systemPackages = [ images.pixie-installer ];
+            #https://github.com/NixOS/nixpkgs/issues/154163
+            #https://github.com/NixOS/nixpkgs/issues/109280
+            #https://github.com/NixOS/nixpkgs/issues/126755#issuecomment-869149243
+            nixpkgs.overlays = [
+              (final: super: {
+                makeModulesClosure = x:
+                  super.makeModulesClosure (x // { allowMissing = true; });
+              })
+            ];
+
+            services.pixiecore-host-configs.enable = true;
+            services.pixiecore-host-configs.hosts = {
+              "84:a9:3e:10:c4:66" = {
+                nixosSystem = nixosConfigurations.pixie-installer;
+              };
+              "00:00:00:00:00:00" = {
+                nixosSystem = nixosConfigurations.pixie-trixie;
+                kernelParams = [ "hostname=pixie-trixie-testhost" ];
+              };
+            };
           }
         ];
       };
@@ -52,16 +72,6 @@
         {
           inherit system;
           modules = [ "${self}/machines/pixie-installer" ];
-        };
-      images.pixie-installer = pkgs.symlinkJoin
-        {
-          name = "pixie-installer-netboot";
-          paths = with nixosConfigurations.pixie-installer.config.system.build; [
-            netbootRamdisk
-            kernel
-            netbootIpxeScript
-          ];
-          preferLocalBuild = true;
         };
 
       nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem
