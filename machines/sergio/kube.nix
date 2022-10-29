@@ -23,6 +23,7 @@ in
 
     # sudo mkdir /var/lib/crio
   };
+  system.activationScripts.var-lib-crio = "mkdir -p /var/lib/crio";
 
   services.kubeadm.kubelet = {
     enable = false;

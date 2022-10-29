@@ -94,7 +94,8 @@
       # expecting  MINIO_ROOT_PASSWORD, MINIO_ROOT_USER
       "/home/addem/.minio-env"
     ];
-    user = "addem:addem";
+    user = "1000:1000";
+    ports = [ "9000:9000" "9001:9001" ];
     volumes = [
       "/mnt/minio-objects:/data"
     ];
@@ -107,6 +108,9 @@
     22
     80
     443
+
+    9000 #minio
+    9001 #minio
 
     3005 # plex
     8324 # plex
