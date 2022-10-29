@@ -9,10 +9,26 @@ in
       type = lib.types.package;
       default = pkgs.kubernetes;
     };
-    controlPlane = lib.mkEnableOption "control ports";
+    controlPlane = lib.mkEnableOption "control plane";
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (self: super: {
+        kubernetes = super.kubernetes.overrideAttrs
+          (oldAttrs: rec {
+            version = "1.24.5";
+            src = pkgs.fetchFromGitHub {
+              owner = "kubernetes";
+              repo = "kubernetes";
+              rev = "v${version}";
+              sha256 = "sha256-8fEn2ac6bzqRtDbMzs7ZuUKfaLaJZuPoLQ3LZ/lnmTo=";
+            };
+
+          });
+      })
+    ];
+
     boot.kernelModules = [ "br_netfilter" ];
     boot.kernel.sysctl = {
       "net.bridge.bridge-nf-call-iptables" = 1;

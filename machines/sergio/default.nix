@@ -17,21 +17,7 @@
 { config, pkgs, lib, ... }:
 
 {
-  nixpkgs.overlays = [
-    (self: super: {
-      kubernetes = super.kubernetes.overrideAttrs
-        (oldAttrs: rec {
-          version = "1.24.5";
-          src = pkgs.fetchFromGitHub {
-            owner = "kubernetes";
-            repo = "kubernetes";
-            rev = "v${version}";
-            sha256 = "sha256-8fEn2ac6bzqRtDbMzs7ZuUKfaLaJZuPoLQ3LZ/lnmTo=";
-          };
 
-        });
-    })
-  ];
 
   imports = [
     # Include the results of the hardware scan.
@@ -99,6 +85,19 @@
       "/etc/localtime:/etc/localtime"
     ];
     extraOptions = [ "--network=host" ];
+  };
+
+  virtualisation.oci-containers.containers.minio = {
+    image = "minio/minio";
+    cmd = [ "--console-address" ":9001" ];
+    environmentFiles = [
+      # expecting  MINIO_ROOT_PASSWORD, MINIO_ROOT_USER
+      "/home/addem/.minio-env"
+    ];
+    user = "addem:addem";
+    volumes = [
+      "/mnt/minio-objects:/data"
+    ];
   };
 
 

@@ -31,9 +31,6 @@ in
   fileSystems."/export/pictures" = btrfsDataHDD // {
     options = [ "subvol=pictures" ];
   };
-  fileSystems."/export/minio-objects" = btrfsDataHDD // {
-    options = [ "subvol=minio-objects" ];
-  };
   fileSystems."/export/backups" = btrfsDataHDD // {
     options = [ "subvol=backups" ];
   };
