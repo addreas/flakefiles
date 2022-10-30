@@ -1,7 +1,17 @@
 { config, pkgs, lib, ... }:
 {
   nix.package = pkgs.nixVersions.stable;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+
+    # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
+    trusted-users = [ "root" "@wheel" ];
+    secret-key-files = [ "/var/secret/local-nix-secret-key" ];
+    trusted-public-keys = [
+      # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout
+      "lenny-wsl-0:T6NHA2GC8JwcLTtDMKyl/osBFdk8+gt9o95poXrtmM0="
+    ];
+  };
 
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
@@ -22,7 +32,7 @@
     git
     cntr
   ];
-  
+
   users.defaultUserShell = pkgs.zsh;
 }
 

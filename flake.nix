@@ -3,7 +3,7 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs";
 
-  inputs.nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+  inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
 
   inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
 
@@ -68,16 +68,14 @@
       };
       images.pixie-pie-host = nixosConfigurations.pixie-pie-host.config.system.build.sdImage;
 
-      nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem
-        {
-          inherit system;
-          modules = [ "${self}/machines/pixie-installer" ];
-        };
+      nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/pixie-installer" ];
+      };
 
-      nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem
-        {
-          inherit system;
-          modules = [ "${self}/machines/pixie-trixie" ];
-        };
+      nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/pixie-trixie" ];
+      };
     };
 }

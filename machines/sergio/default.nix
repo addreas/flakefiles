@@ -89,7 +89,7 @@
 
   virtualisation.oci-containers.containers.minio = {
     image = "minio/minio";
-    cmd = [ "--console-address" ":9001" ];
+    cmd = [ "server" "--console-address" ":9001" "/data" ];
     environmentFiles = [
       # expecting  MINIO_ROOT_PASSWORD, MINIO_ROOT_USER
       "/home/addem/.minio-env"

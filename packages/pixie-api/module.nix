@@ -2,22 +2,32 @@
 let
   cfg = config.services.pixiecore-host-configs;
 
-  optsToJson = opts: builtins.toJSON {
-    kernel = "file://${opts.nixosSystem.config.system.build.kernel}/kernel";
-    initrd = [ "file://${opts.nixosSystem.config.system.build.netbootRamdisk}/initrd" ];
-    cmdline = builtins.concatStringsSep " " ([ "init=${opts.nixosSystem.config.system.build.toplevel}/init" ] ++ opts.kernelParams);
-    # cmdline = "cloud-config-url={{ URL \"https://files.local/cloud-config\" }} non-proxied-url=https://files.local/something-else";
+  mkPixiecoreConfig = host: builtins.toJSON {
+    kernel = "file://${host.nixosSystem.config.system.build.kernel}/kernel";
+    initrd = [ "file://${host.nixosSystem.config.system.build.netbootRamdisk}/initrd" ];
+    # pixiecore appends initrd kernel args
+    cmdline = builtins.concatStringsSep " " ([ "init=${host.nixosSystem.config.system.build.toplevel}/init" ] ++ host.kernelParams);
+    # cmdline = "
+    #   cloud-config-url={{ URL \"https://files.local/cloud-config\" }}
+    #   non-proxied-url=https://files.local/something-else
+    # ";
   };
-  echoJsonCommands = lib.attrsets.mapAttrsToList (mac: opts: "echo '${optsToJson opts}' > $targetdir/${mac}") cfg.hosts;
-  content = pkgs.runCommandLocal "pixiecore-host-configs" { } ''
+
+  echo-json-to-dir = lib.attrsets.mapAttrsToList (mac: host: "echo '${mkPixiecoreConfig host}' > ${mac}") cfg.hosts;
+  config-directory = pkgs.runCommandLocal "pixiecore-host-configs" { } ''
     targetdir=$out/v1/boot
     mkdir -p $targetdir
-    ${lib.strings.concatStringsSep "\n" echoJsonCommands}
+    cd $targetdir
+    ${lib.strings.concatStringsSep "\n" echo-json-to-dir}
   '';
 in
 {
   options.services.pixiecore-host-configs = {
     enable = lib.mkEnableOption "pixiecore-host-configs";
+    port = lib.mkOption {
+      default = 9813;
+      type = lib.types.int;
+    };
     hosts = lib.mkOption {
       type = with lib.types; attrsOf (submodule {
         options = {
@@ -29,14 +39,29 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.caddy = {
+    services.pixiecore = {
       enable = true;
-      configFile = pkgs.writeText "Caddyfile" ''
-        http://pixie-host-configs.localhost:8080 {
-          root * ${content}
-          file_server
-        }
-      '';
+      mode = "api";
+      apiServer = "http://localhost:${builtins.toString cfg.port}";
+      openFirewall = true;
+      dhcpNoBind = true;
+    };
+
+    systemd.services.pixiecore-host-configs = {
+      description = "Pixiecore API mode responder";
+      wantedBy = [ "pixiecore.service" ];
+
+      serviceConfig = {
+        Restart = "always";
+        RestartSec = 10;
+
+        ExecStart = ''
+          ${pkgs.python310}/bin/python \
+            -m http.server \
+            --directory ${config-directory} \
+            ${builtins.toString cfg.port}
+        '';
+      };
     };
   };
 
