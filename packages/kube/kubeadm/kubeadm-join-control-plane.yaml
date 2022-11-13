@@ -1,0 +1,9 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: JoinConfiguration
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: nucles.localdomain:6443
+    token: "37ohjj.1e7r92u1yapgpp0i" # from kubeadm-init.yaml or `kubeadm token create`
+    unsafeSkipCAVerification: true
+controlPlane:
+ certificateKey: "c78d0bb0ca65f9e27488cfcb0f63d9dd450f95a6384510854b20ca2f51b19ad5" # from kubeadm-init.yaml or `kubeadm init phase upload-certs --upload-certs`

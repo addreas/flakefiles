@@ -1,26 +1,12 @@
-{ pkgs, ... }:
-let
-  kubernetes = pkgs.kubernetes;
-in
-{
+{ pkgs, ... }: {
   imports = [
-    ../../packages/kubeadm/kubelet.nix
+    ../../packages/kube
   ];
-
-  virtualisation.cri-o = {
-    enable = true;
-    storageDriver = "btrfs";
-    settings.crio.network.plugins_dir = [ "${pkgs.cni-plugins}/bin" "/opt/cni/bin" ];
-
-    # sudo mkdir /var/lib/crio
-  };
 
   services.kubeadm.kubelet = {
     enable = true;
-    package = kubernetes;
+    package = pkgs.kubernetes;
   };
 
-  environment.systemPackages = [
-    kubernetes
-  ];
+  environment.systemPackages = [ pkgs.kubernetes ];
 }
