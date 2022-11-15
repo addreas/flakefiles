@@ -1,4 +1,5 @@
 # links
+
 https://blog.dachary.org/2014/02/09/figuring-out-why-ccache-misses/
 https://nixos.org/guides/nix-pills/index.html
 https://nixos.wiki/wiki/Flakes
@@ -18,8 +19,8 @@ https://cnx.srht.site/blog/butter/index.html
 
 https://wiki.archlinux.org/title/Avahi
 
-
 # nixos
+
 ```sh
 sudo nixos-rebuild switch --flake .#LAPTOP-EK7DRJB8
 ```
@@ -35,10 +36,10 @@ echo "src = $src" && cd $(mktemp -d) && unpackPhase && cd * && patchPhase && con
   nix-diff --character-oriented /run/current-system result
 ```
 
-
 https://nixos.wiki/wiki/Netboot
 https://github.com/danderson/netboot/tree/master/pixiecore
 https://github.com/lucernae/nixos-pi/
+
 ```sh
 # pixie pie host
 # if boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
@@ -56,32 +57,3 @@ nix build .#nixosConfigurations.pixie-trixie.config.system.build.kernel
 nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootRamdisk
 nix build .#nixosConfigurations.pixie-trixie.config.system.build.netbootIpxeScript
 ```
-
-
-
-# Cockpit nix module (experimental/unmaintained)
-
-https://github.com/NixOS/nixpkgs/issues/38161
-https://github.com/repos-holder/nur-packages/blob/master/pkgs/cockpit/default.nix
-
-Since the official release tarball contains pre-packaged web resources we can sidestep the issue of running webpack et. al. by just going for a `make install` in the build phase.
-
-Adding `module.nix` as an import, and `services.cockpit.enabled = true`  in `/etc/nixos/configuration.nix` should be enough to get started.
-
-# Seems to work
-- Overview (except package updates link, usage history)
-- Logs
-- Account (only listing)
-- Systemd services (not user)
-- Terminal
-
-# TODO
-- [ ] networkmanager
-- [ ] packagekit
-- [ ] udisks2
-- [ ] selinux
-- [ ] cockpit-pcp (remove `--disable-pcp`, but first need to create package for https://github.com/performancecopilot/pcp)
-- [ ] cockpit-podman (subpackage https://github.com/cockpit-project/cockpit-podman/)
-- [ ] cockpit-machines (subpackage https://github.com/cockpit-project/cockpit-machines)
-- [ ] don't run as root?
-- [ ] nix flake
