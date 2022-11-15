@@ -28,6 +28,11 @@
         modules = [ "${self}/machines/sergio" ];
       };
 
+      nixosConfigurations.expessy = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/expessy" ];
+      };
+
       nixosConfigurations."LAPTOP-EK7DRJB8" = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
