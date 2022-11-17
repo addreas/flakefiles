@@ -4,35 +4,45 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports =
+    [ (modulesPath + "/installer/scan/not-detected.nix")
+    ];
 
-  boot.initrd.availableKernelModules =
-    [ "ahci" "mpt3sas" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/ecc19012-49de-47fc-869d-d49f432ee6b8";
-    fsType = "btrfs";
-  };
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/ecc19012-49de-47fc-869d-d49f432ee6b8";
+      fsType = "btrfs";
+      options = [ "subvol=@nix" ];
+    };
 
-  fileSystems."/esp" = {
-    device = "/dev/disk/by-uuid/94AE-643B";
-    fsType = "vfat";
-  };
-  
-  fileSystems."/boot" = {
-    device = "/esp/EFI/Nix";
-    fsType = "none";
-    options "bind";
-  }
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/ecc19012-49de-47fc-869d-d49f432ee6b8";
+      fsType = "btrfs";
+      options = [ "subvol=@home" ];
+    };
 
-  swapDevices = [{
-    device = "/dev/nvme0n1p3";
-  }];
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/94AE-643B";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/04d71714-1075-4a8e-8987-a102d1722808"; }
+    ];
+
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlp58s0.useDHCP = lib.mkDefault true;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  # high-resolution display
+  hardware.video.hidpi.enable = lib.mkDefault true;
 }

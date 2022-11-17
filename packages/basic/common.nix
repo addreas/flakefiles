@@ -34,5 +34,7 @@
   ];
 
   users.defaultUserShell = pkgs.zsh;
+
+  system.copySystemConfiguration = true;
 }
 

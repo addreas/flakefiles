@@ -6,6 +6,7 @@
     ../../users/addem.nix
     ../../packages/basic/common.nix
     ../../packages/basic/services.nix
+    ../../packages/basic/desktop.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -23,7 +24,7 @@
 
   # requires manual `sudo btrfs subvolume create /.snapshots`
   services.snapper.snapshotRootOnBoot = true;
-  services.snapper.configs.root.subvolume = "/";
+  services.snapper.configs.root.subvolume = "@nix";
 
   networking.hostName = "expessy";
   networking.domain = "localdomain";
@@ -33,6 +34,6 @@
   systemd.network.networks.lan.dns = [ "192.168.1.1" ];
   systemd.network.wait-online.anyInterface = true;
 
-  services.tailscale.enable = true;
+  # services.tailscale.enable = true;
 }
 
