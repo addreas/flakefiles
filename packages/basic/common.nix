@@ -10,6 +10,7 @@
     trusted-public-keys = [
       # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout
       "lenny-wsl-0:T6NHA2GC8JwcLTtDMKyl/osBFdk8+gt9o95poXrtmM0="
+      "expessy-0:03bM28uM9sIw2pGW4aFqNWPsdVSVZXu9REOMbUnQrLw="
     ];
   };
 
@@ -34,7 +35,5 @@
   ];
 
   users.defaultUserShell = pkgs.zsh;
-
-  system.copySystemConfiguration = true;
 }
 

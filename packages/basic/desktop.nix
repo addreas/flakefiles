@@ -11,47 +11,72 @@
 
     wrapperFeatures.base = true;
     wrapperFeatures.gtk = true;
-
-    extraPackages = with pkgs; [
-      waybar
-      swaylock-effects
-      swaybg
-      swayidle
-      sway-contrib.grimshot
-
-      qt5.qtwayland
-    ];
   };
 
-  programs.xwayland.enable = true;
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        user = "greeter";
+      };
+    };
+  };
 
-  xdg.portal.wlr.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+  };
+  services.dbus.enable = true;
 
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
   services.pipewire.enable = true;
-  services.pipewire.wireplumber.enable = true;
   services.pipewire.pulse.enable = true;
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
   services.hardware.bolt.enable = true;
 
+  # services.ulauncher.enable = true;
+  # services.kanshi.enable = true;
+  # services.swayidle.enable = true;
+  # services.variety.enable = true;
+
   environment.systemPackages = with pkgs; [
+    waybar
+    swaylock-effects
+    swaybg
+    swayidle
+    sway-contrib.grimshot
+    mako
+    qt5.qtwayland
+    wayland
+    glib
+
     firefox
     chromium
     kitty
     wl-clipboard
-    nautilus
+    gnome.nautilus
+    gnome.file-roller
+    gnome.sushi
     evince
-    file-roller
     wireshark
     ulauncher
     wdisplays
     swappy
     pavucontrol
     brightnessctl
+
     usbutils
+    pciutils
+    util-linux
+  ];
+
+  fonts.fonts = with pkgs; [
+    dejavu_fonts
+    font-awesome
   ];
 }
 

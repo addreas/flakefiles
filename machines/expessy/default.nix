@@ -1,3 +1,6 @@
+# ./users/mkshadow.d.sh addem
+# ./users/mkshadow.d.sh addem /mnt
+# sudo nixos-install --root /mnt --flake .#expessy --no-root-password
 { config, pkgs, lib, ... }:
 {
   imports = [
@@ -23,16 +26,17 @@
   system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
 
   # requires manual `sudo btrfs subvolume create /.snapshots`
-  services.snapper.snapshotRootOnBoot = true;
-  services.snapper.configs.root.subvolume = "@nix";
+  # services.snapper.snapshotRootOnBoot = true;
+  # services.snapper.configs.root.subvolume = /;
 
   networking.hostName = "expessy";
   networking.domain = "localdomain";
 
-  systemd.network.enable = true;
-  systemd.network.networks.lan.name = "enp4s0";
-  systemd.network.networks.lan.dns = [ "192.168.1.1" ];
-  systemd.network.wait-online.anyInterface = true;
+  networking.networkmanager.enable = true;
+
+  users.mutableUsers = false;
+
+  environment.pathsToLink = ["/share"];
 
   # services.tailscale.enable = true;
 }
