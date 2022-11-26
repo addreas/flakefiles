@@ -2,12 +2,12 @@
   description = "Just a bunch of stuff";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs";
-
   inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
-
   inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
+  inputs.home-manager.url = "github:nix-community/home-manager";
+  inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, nixos-wsl, nixos-hardware, ... }:
+  outputs = { self, nixpkgs, nixos-wsl, nixos-hardware, home-manager, ... }:
     let system = "x86_64-linux";
     in
     with import nixpkgs { inherit system; }; rec {
@@ -18,6 +18,20 @@
         cockpit-podman = callPackage ./packages/cockpit-podman { };
       };
 
+      homeConfigurations.addem = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        modules = [
+          ./users/addem/home.nix
+          {
+            home = {
+              username = "addem";
+              homeDirectory = "/home/addem";
+              stateVersion = "22.11";
+            };
+          }
+        ];
+      };
+
       nixosModules = {
         pcp = import ./packages/pcp/module.nix;
         cockpit = import ./packages/cockpit/module.nix;
@@ -25,12 +39,16 @@
 
       nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [ "${self}/machines/sergio" ];
+        modules = [
+          "${self}/machines/sergio"
+        ];
       };
 
       nixosConfigurations.expessy = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = [ "${self}/machines/expessy" ];
+        modules = [
+          "${self}/machines/expessy"
+        ];
       };
 
       nixosConfigurations."LAPTOP-EK7DRJB8" = nixpkgs.lib.nixosSystem {

@@ -1,17 +1,5 @@
 { lib, pkgs, config, modulesPath, ... }:
-with lib;
-let
-  zshFastHighlight = (pkgs.zsh-fast-syntax-highlighting.overrideAttrs (_: {
-    installPhase = ''
-      plugindir="$out/share/zsh/plugins/fast-syntax-highlighting"
-      mkdir -p "$plugindir"
-      cp -r -- {,_,-,.}fast-* *chroma themes "$plugindir"/
-    '';
-  })
-  );
-in
 {
-
   users.users.addem = {
     isNormalUser = true;
     uid = 1000;
@@ -37,20 +25,12 @@ in
     nix-index
   ];
 
-  programs.command-not-found.enable = false;
-  programs.zsh.interactiveShellInit = ''
-    source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
-  '';
-
   programs.zsh.enable = true;
-  programs.zsh.ohMyZsh.enable = true;
-  programs.zsh.ohMyZsh.theme = "arrow";
-  programs.zsh.ohMyZsh.customPkgs = [
-    zshFastHighlight
-  ];
-  programs.zsh.ohMyZsh.plugins = [
-    "git"
-    "colored-man-pages"
-    "fzf"
-  ];
+  # programs.zsh.ohMyZsh.enable = true;
+  # programs.zsh.ohMyZsh.theme = "arrow";
+  # programs.zsh.ohMyZsh.plugins = [
+  #   "git"
+  #   "colored-man-pages"
+  #   "fzf"
+  # ];
 }

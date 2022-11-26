@@ -6,7 +6,7 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../../users/addem.nix
+    ../../users/addem/user.nix
     ../../packages/basic/common.nix
     ../../packages/basic/services.nix
     ../../packages/basic/desktop.nix
@@ -22,7 +22,7 @@
   system.stateVersion = "22.05"; # Did you read the comment?
 
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.flake = "/home/addem/flakefiles";
+  system.autoUpgrade.flake = "/home/addem/github.com/addreas/flakefiles";
   system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
 
   # requires manual `sudo btrfs subvolume create /.snapshots`

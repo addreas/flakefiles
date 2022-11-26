@@ -33,6 +33,8 @@
     git
     cntr
   ];
+  
+  programs.command-not-found.enable = false;
 
   users.defaultUserShell = pkgs.zsh;
 }
