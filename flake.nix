@@ -48,6 +48,12 @@
         inherit system;
         modules = [
           "${self}/machines/expessy"
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.addem = import ./users/addem/home.nix;
+          }
         ];
       };
 

@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-
+  home.stateVersion = "22.11";
   programs.home-manager.enable = true;
 
   programs.nix-index.enable = true;
@@ -24,8 +24,8 @@
 
   programs.oh-my-posh.enable = true;
   programs.oh-my-posh.enableZshIntegration = true;
-  programs.oh-my-posh.useTheme = "bubbles";
-  # programs.oh-my-posh.settings = builtins.fromJSON builtins.readFile ./bubbles.omp.json
+  # programs.oh-my-posh.useTheme = "robbyrussel";
+  programs.oh-my-posh.settings = builtins.fromJSON (builtins.readFile ./addem.omp.json);
   
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
