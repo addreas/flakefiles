@@ -36,7 +36,7 @@
 
   users.mutableUsers = false;
 
-  environment.pathsToLink = ["/share"];
+  environment.pathsToLink = [ "/share" ];
 
   # services.tailscale.enable = true;
 }

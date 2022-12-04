@@ -19,18 +19,12 @@
     curl
     fzf
     jq
+    yq
     dig
     git
-    fzf-zsh
-    nix-index
+
+    home-manager
   ];
 
   programs.zsh.enable = true;
-  # programs.zsh.ohMyZsh.enable = true;
-  # programs.zsh.ohMyZsh.theme = "arrow";
-  # programs.zsh.ohMyZsh.plugins = [
-  #   "git"
-  #   "colored-man-pages"
-  #   "fzf"
-  # ];
 }
