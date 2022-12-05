@@ -2,8 +2,12 @@
   description = "Just a bunch of stuff";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs";
+
   inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
+
   inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
+  inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 

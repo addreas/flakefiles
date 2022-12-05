@@ -11,6 +11,15 @@
           "type": "text"
         },
         {
+          "foreground": "#BF616A",
+          "style": "plain",
+          "template": "{{ if gt .Code 0 }}\u2717{{else}} {{end}}",
+          "properties": {
+            "always_show": true
+          },
+          "type": "exit"
+        },
+        {
           "foreground": "#56B6C2",
           "properties": {
             "style": "letter"
@@ -18,12 +27,6 @@
           "style": "plain",
           "template": " {{ .Path }} ",
           "type": "path"
-        },
-        {
-          "foreground": "#BF616A",
-          "style": "plain",
-          "template": " \u2717",
-          "type": "exit"
         }
       ],
       "type": "prompt"

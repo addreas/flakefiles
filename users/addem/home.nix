@@ -2,6 +2,9 @@
 {
   home.stateVersion = "22.11";
   programs.home-manager.enable = true;
+  home.sessionVariables = {
+    EDITOR = "hx";
+  };
 
   imports = [
     ./zsh.nix
@@ -19,14 +22,13 @@
       Documentation = "https://ulauncher.io/";
     };
     Service = {
-      Path = "/run/wrappers/bin:/home/addem/.nix-profile/bin:/etc/profiles/per-user/addem/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
-      # Path = lib.strings.makeBinPath [
-      #   "/run/wrappers"
-      #   "/home/addem/.nix-profile"
-      #   "/etc/profiles/per-user/addem"
-      #   "/nix/var/nix/profiles/default"
-      #   "/run/current-system/sw"
-      # ];
+      Environment = ["PATH=${lib.strings.makeBinPath [
+        "/run/wrappers"
+        "/home/addem/.nix-profile"
+        "/etc/profiles/per-user/addem"
+        "/nix/var/nix/profiles/default"
+        "/run/current-system/sw"
+      ]}"];
       ExecStart = "${pkgs.ulauncher}/bin/ulauncher --hide-window";
     };
     Install = { WantedBy = ["graphical-session.target"]; };
@@ -35,7 +37,10 @@
   systemd.user.services.variety = {
     Unit = { Description = "Variety"; };
     Service = {
-      Path = lib.strings.makeBinPath [pkgs.bash];
+      Environment = ["PATH=${lib.strings.makeBinPath [
+        pkgs.bash
+        "/run/current-system/sw"
+      ]}"];
       ExecStart = "${pkgs.variety}/bin/variety";
     };
     Install = { WantedBy = ["graphical-session.target"]; };

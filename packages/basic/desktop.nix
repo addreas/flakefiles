@@ -50,8 +50,8 @@
     wayland
     glib
 
-    firefox
-    chromium
+    firefox-bin
+    # chromium
     kitty
     wl-clipboard
     gnome.nautilus

@@ -1,9 +1,9 @@
 { pkgs, lib, ... }:
 {
  home.packages = with pkgs; [
-    helix
-    fzf
-    nix-index
+    # helix
+    # fzf
+    # nix-index
   ];
 
   programs.nix-index.enable = true;
@@ -14,7 +14,7 @@
     enable = true;
     # enableAutosuggestions = true;
     # enableSyntaxHighlighting = true;
-    defaultKeymap = "emacs"; #  "vicmd", "viins"
+    # defaultKeymap = "emacs"; #  "vicmd", "viins"
 
     # history.extended = true;
     history.expireDuplicatesFirst = true;

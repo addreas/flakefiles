@@ -133,12 +133,21 @@
   # services.swayidle = let swaylock = "${pkgs.swaylock-effects}/bin/swaylock"; in {
   services.swayidle = {
     enable = true; 
-    events = [{ event = "lock";         command = "swaylock -f"; }
+    # events = [{ event = "lock";         command = "swaylock -f"; }
+    events = [{ event = "lock";         command = "env"; }
               { event = "before-sleep"; command = "swaylock -f"; }];
     timeouts = [{ timeout = 150; command = "swaylock -f --grace 5"; }];
     extraArgs = [ "idlehint 300" ];
   };
-  systemd.user.services.swayidle.Service.Environment = [ "PATH=${lib.strings.makeBinPath [pkgs.swaylock-effects]}" ];
+
+  systemd.user.services.swayidle.Service.Environment = [ "PATH=${lib.strings.makeBinPath [
+    pkgs.swaylock-effects
+    "/run/wrappers"
+    "/home/addem/.nix-profile"
+    "/etc/profiles/per-user/addem"
+    "/nix/var/nix/profiles/default"
+    "/run/current-system/sw"
+  ]}" ];
 
   programs.swaylock.settings = {
     indicator = true;
