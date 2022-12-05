@@ -1,15 +1,5 @@
 { pkgs, lib, ... }:
 {
-
-  home.pointerCursor = {
-    package = pkgs.gnome.adwaita-icon-theme;
-    name = "Adwaita";
-
-    gtk.enable = true;
-    x11.enable = true;
-  };
-  
-
   wayland.windowManager.sway = {
     enable = true;
     package = null; # defer to system config
@@ -20,6 +10,7 @@
       terminal = "kitty";
       menu = "ulauncher-toggle";
 
+      # TODO: made redundant by programs.waybar?
       bars = [{ command = "${pkgs.waybar}/bin/waybar"; }];
 
       keybindings = lib.mkOptionDefault {
@@ -53,7 +44,7 @@
         { criteria = {app_id="wdisplays";}; command = "border none"; }
         { criteria = {title="Variety.*";}; command = "border none"; }
         { criteria = {title=".+[Ss]haring (Indicator|your screen)";}; command = "move to scratchpad"; }
-      
+
       ];
 
       focus.mouseWarping = "container";
@@ -70,7 +61,7 @@
           xkb_options = "grp:win_space_toggle";
         };
       };
-    
+
       workspaceAutoBackAndForth = true;
 
       workspaceOutputAssign = let
@@ -84,80 +75,5 @@
         { workspace = "10"; output = "eDP-1"; }
       ];
     };
-
-  };
-
-  services.kanshi = {
-    enable = true;
-    profiles = {
-      internal = {
-        outputs = [{
-          criteria = "eDP-1";
-          status = "enable";
-        }];
-      };
-
-      thirty-four-inches = {
-        outputs = [{
-          criteria = "Dell Inc. DELL U3421WE 50F6753";
-          status = "enable";
-          mode = "3440x1440";
-          position = "1920,0";
-        }
-        {
-          criteria = "eDP-1";
-          status = "disable";
-          position =  "0,1080";
-        }];
-      };
-
-      home = {
-        outputs = [
-          {
-            criteria = "Unknown 2269WM BCPD59A000079";
-            status = "enable";
-            mode = "1920x1080";
-            position = "0,0";
-          }
-          {
-            criteria = "eDP-1";
-            status = "enable";
-            position = "1920,540";
-          }
-        ];
-      };
-    };
-  };
-
-  # TODO: how to make it worky worky?
-  # services.swayidle = let swaylock = "${pkgs.swaylock-effects}/bin/swaylock"; in {
-  services.swayidle = {
-    enable = true; 
-    # events = [{ event = "lock";         command = "swaylock -f"; }
-    events = [{ event = "lock";         command = "env"; }
-              { event = "before-sleep"; command = "swaylock -f"; }];
-    timeouts = [{ timeout = 150; command = "swaylock -f --grace 5"; }];
-    extraArgs = [ "idlehint 300" ];
-  };
-
-  systemd.user.services.swayidle.Service.Environment = [ "PATH=${lib.strings.makeBinPath [
-    pkgs.swaylock-effects
-    "/run/wrappers"
-    "/home/addem/.nix-profile"
-    "/etc/profiles/per-user/addem"
-    "/nix/var/nix/profiles/default"
-    "/run/current-system/sw"
-  ]}" ];
-
-  programs.swaylock.settings = {
-    indicator = true;
-    clock = true;
-    text-color = "EEEEEE";
-    image = "$(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt)";
-    effect-blur =  "5x1";
-    inside-clear-color =  "000000C0";
-    text-caps-lock-color = "FA0000C0";
-    text-clear-color = "E5A555FF";
-    line-uses-inside = true;
   };
 }

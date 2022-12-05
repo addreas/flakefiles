@@ -6,7 +6,7 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../../users/addem/user.nix
+    ../../users/addem.nix
     ../../packages/basic/common.nix
     ../../packages/basic/services.nix
     ../../packages/basic/desktop.nix
