@@ -41,17 +41,17 @@ in
             };
           })
           (mkSeg "git" {
-            # foreground = "#FC6D27";
             foreground_templates = [
               "{{ if or (.Working.Changed) (.Staging.Changed) }}#FFEB3B{{ end }}"
               "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#FFCC80{{ end }}"
               "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
               "{{ if gt .Behind 0 }}#B388FB{{ end }}"
             ];
-            template = "{{ .HEAD }}{{ if .Working.Changed }}${unicode "F044"}{{ end }}";
+            template = "{{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} ${unicode "F044"} {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} ${unicode "F046"} {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} ${unicode "F692"} {{ .StashCount }}{{ end }}";
             properties = {
               fetch_status = true;
-              # branch_icon = "<#666>${unicode "e725"}</>";
+              fetch_stash_count = true;
+              fetch_upstream_icon = true;
             };
           })
           (mkSeg "kubectl" {
