@@ -41,9 +41,18 @@ in
             };
           })
           (mkSeg "git" {
-            foreground = "#FC6D27";
-            template = "{{ .HEAD }}";
-            properties.branch_icon = "<#666>${unicode "e725"}</>";
+            # foreground = "#FC6D27";
+            foreground_templates = [
+              "{{ if or (.Working.Changed) (.Staging.Changed) }}#FFEB3B{{ end }}"
+              "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#FFCC80{{ end }}"
+              "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
+              "{{ if gt .Behind 0 }}#B388FB{{ end }}"
+            ];
+            template = "{{ .HEAD }}{{ if .Working.Changed }}${unicode "F044"}{{ end }}";
+            properties = {
+              fetch_status = true;
+              # branch_icon = "<#666>${unicode "e725"}</>";
+            };
           })
           (mkSeg "kubectl" {
             foreground = "#3970e4";

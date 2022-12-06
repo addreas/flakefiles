@@ -10,9 +10,27 @@ setopt share_history          # share command history data
 setopt interactivecomments
 setopt long_list_jobs
 
+setopt alwaystoend
+setopt autocd
+setopt autopushd
+setopt completeinword
+setopt extendedhistory
+setopt noflowcontrol
+setopt histverify
+setopt interactivecomments
+setopt login
+setopt longlistjobs
+setopt promptsubst
+setopt pushdignoredups
+setopt pushdminus
 
-env_default 'PAGER' 'less'
-env_default 'LESS' '-R'
+
+
+
+
+
+
+
 autoload -Uz is-at-least
 
 # Edit the current command line in $EDITOR

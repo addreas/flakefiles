@@ -20,6 +20,8 @@
 
   home.sessionVariables = {
     EDITOR = "hx";
+    PAGER = "less";
+    LESS = "-R";
   };
 
   programs.nix-index.enable = true;
