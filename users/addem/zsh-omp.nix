@@ -103,12 +103,11 @@ in
               " ${ucode "fd31"}("
               "<${colors.light_blue}>"
                 "{{if eq .Context \"nucles\"}}${ucode "f015"}"
-                "{{else if eq .Context \"dev.aurora\"}}dev${ucode "f110"}"
-                "{{else if eq .Context \"app.aurora\"}}app${ucode "f110"}"
-                "{{else if eq .Context \"canary.aurora\"}}canary${ucode "f110"}"
-                "{{else if eq .Context \"support.aurora\"}}support${ucode "f110"}"
-                "{{else}}"
-                  "{{.Context}}"
+                  "{{else if eq .Context \"dev.aurora\"}}dev${ucode "f110"}"
+                  "{{else if eq .Context \"app.aurora\"}}app${ucode "f110"}"
+                  "{{else if eq .Context \"canary.aurora\"}}canary${ucode "f110"}"
+                  "{{else if eq .Context \"support.aurora\"}}support${ucode "f110"}"
+                  "{{else}}{{.Context}}"
                 "{{end}}"
               "</>"
               "{{if .Namespace}}"
@@ -119,7 +118,7 @@ in
             parse_kubeconfig = true;
           })
           (mkSeg "session" {
-            foreground = "#c386f1";
+            foreground = colors.orange;
             template = "{{ if .SSHSession }} ${ucode "F817"}{{ .HostName }}{{ end }}";
           })
         ];

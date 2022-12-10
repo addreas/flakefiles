@@ -3,7 +3,11 @@ let
   cfg = config.services.kubeadm;
 in
 {
-  config = lib.mkIf cfg.enable {
+  options.services.kubeadm.kubelet = {
+    enable = lib.mkEnableOption "kubelet";
+  };
+
+  config = lib.mkIf cfg.kubelet.enable {
     systemd.services.kubelet = {
       description = "Kubernetes Kubelet Service";
       wantedBy = [ "multi-user.target" ];
