@@ -88,11 +88,12 @@ in
               "{{ if gt .StashCount 0 }}"
                 "<${colors.faint}>:</>"
                 (ucode "F692")
-                " {{ .StashCount }}"
+                "{{ .StashCount }}"
               "{{ end }}"
             ];
             properties = {
               fetch_status = true;
+              fetch_stash_count = true;
               fetch_upstream_icon = true;
             };
           })
