@@ -15,6 +15,7 @@ in
             repo = "kubernetes";
             rev = "v${version}";
           };
+          WHAT = "cmd/kubeadm cmd/kubelet";
         });
     })
   ];
