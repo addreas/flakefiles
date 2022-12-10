@@ -10,32 +10,29 @@ let
     dark_blue = "#3970e4";
     light_blue = "#9db8e9";
     light_green = "#98C379";
-    path_blue = "#56B6C2";
-    exit_red = "#BF616A";
-    conflict_orange = "#FFCC80";
-    ahead_purple = "#B388FF";
-    behind_purple = "#B388FB";
-    edit_yellow = "#FFEB3B";
-
-    faint = "#AEA4BF";
+    red = "#BF616A";
+    orange = "#FFCC80";
+    yellow = "#FFEB3B";
+    faint = "#666";
   };
 in
 {
   programs.oh-my-posh.enable = true;
   programs.oh-my-posh.enableZshIntegration = true;
-  # programs.oh-my-posh.useTheme = "robbyrussel";
   programs.oh-my-posh.settings = {
     "$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json";
     blocks = [{
         alignment = "left";
         type = "prompt";
         segments = [
-          (mkSeg "text" {
+          (mkSeg "exit" {
             foreground = colors.light_green;
+            foreground_templates = ["{{ if gt .Code 0 }}${colors.red}{{ end }}"];
+            properties.always_enabled = true;
             template = "➜ ";
           })
           (mkSeg "path" {
-            foreground = colors.path_blue;
+            foreground = colors.light_blue;
             properties.style = "letter";
             template = "{{ .Path }}";
           })
@@ -45,7 +42,10 @@ in
         alignment = "right";
         type = "rprompt";
         segments = [
-          (mkSeg "exit" { foreground = colors.exit_red; })
+          (mkSeg "exit" {
+            foreground_templates = ["{{ if gt .Code 0 }}${colors.red}{{ end }}"];
+            template = "{{ if gt .Code 0 }}${ucode "f00d"} {{ trimPrefix \"SIG\" .Meaning }}{{ end }} ";
+          })
           (mkSeg "executiontime" {
             foreground = colors.faint;
             template = "{{ .FormattedMs }} ";
@@ -56,9 +56,9 @@ in
           })
           (mkSeg "git" {
             foreground_templates = [
-              "{{ if and (gt .Ahead 0) (gt .Behind 0) }}${colors.conflict_orange}{{ end }}"
-              "{{ if gt .Ahead 0 }}${colors.ahead_purple}{{ end }}"
-              "{{ if gt .Behind 0 }}${colors.behind_purple}{{ end }}"
+              "{{ if and (gt .Ahead 0) (gt .Behind 0) }}${colors.orange}{{ end }}"
+              "{{ if gt .Ahead 0 }}${colors.yellow}{{ end }}"
+              "{{ if gt .Behind 0 }}${colors.yellow}{{ end }}"
             ];
             template = lib.strings.concatStrings [
               "{{ .UpstreamIcon }}"
@@ -71,7 +71,7 @@ in
 
               "{{ if .Working.Changed }}"
                 "<${colors.faint}>:</>"
-                "<${colors.exit_red}>"
+                "<${colors.red}>"
                 (ucode "F044")
                 "{{ .Working.String }}"
                 "</>"
@@ -100,7 +100,7 @@ in
             foreground = colors.dark_blue;
             template = lib.strings.concatStrings [
               " ${ucode "fd31"}("
-              "<>"
+              "<${colors.light_blue}>"
                 "{{if eq .Context \"nucles\"}}${ucode "f015"}"
                 "{{else if eq .Context \"dev.aurora\"}}dev${ucode "f110"}"
                 "{{else if eq .Context \"app.aurora\"}}app${ucode "f110"}"
@@ -112,7 +112,7 @@ in
               "</>"
               "{{if .Namespace}}"
                 "<${colors.faint}>:</>"
-                "<#9db8e9>{{.Namespace}}</>"
+                "<${colors.light_blue}>{{.Namespace}}</>"
               "{{end}})"
             ];
             parse_kubeconfig = true;
@@ -125,7 +125,6 @@ in
       }
     ];
     secondary_prompt = {
-        background = "transparent";
         foreground = colors.faint;
         template = "➜ ";
     };
