@@ -5,6 +5,20 @@ let
     style = "plain";
   } // opts);
   ucode = code: builtins.fromJSON "\"\\u${code}\"";
+
+  colors = {
+    dark_blue = "#3970e4";
+    light_blue = "#9db8e9";
+    light_green = "#98C379";
+    path_blue = "#56B6C2";
+    exit_red = "#BF616A";
+    conflict_orange = "#FFCC80";
+    ahead_purple = "#B388FF";
+    behind_purple = "#B388FB";
+    edit_yellow = "#FFEB3B";
+
+    faint = "#AEA4BF";
+  };
 in
 {
   programs.oh-my-posh.enable = true;
@@ -17,11 +31,11 @@ in
         type = "prompt";
         segments = [
           (mkSeg "text" {
-            foreground = "#98C379";
+            foreground = colors.light_green;
             template = "➜ ";
           })
           (mkSeg "path" {
-            foreground = "#56B6C2";
+            foreground = colors.path_blue;
             properties.style = "letter";
             template = "{{ .Path }}";
           })
@@ -31,9 +45,9 @@ in
         alignment = "right";
         type = "rprompt";
         segments = [
-          (mkSeg "exit" { foreground = "#BF616A"; })
+          (mkSeg "exit" { foreground = colors.exit_red; })
           (mkSeg "executiontime" {
-            foreground = "#AEA4BF";
+            foreground = colors.faint;
             template = "{{ .FormattedMs }} ";
             properties = {
               style = "austin";
@@ -42,27 +56,37 @@ in
           })
           (mkSeg "git" {
             foreground_templates = [
-              "{{ if or (.Working.Changed) (.Staging.Changed) }}#FFEB3B{{ end }}"
-              "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#FFCC80{{ end }}"
-              "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
-              "{{ if gt .Behind 0 }}#B388FB{{ end }}"
+              "{{ if and (gt .Ahead 0) (gt .Behind 0) }}${colors.conflict_orange}{{ end }}"
+              "{{ if gt .Ahead 0 }}${colors.ahead_purple}{{ end }}"
+              "{{ if gt .Behind 0 }}${colors.behind_purple}{{ end }}"
             ];
             template = lib.strings.concatStrings [
               "{{ .UpstreamIcon }}"
               "{{ .HEAD }}"
-              "{{ if .BranchStatus }}"
-                " {{ .BranchStatus }}"
+
+              "{{ if or (gt .Ahead 0) (gt .Behind 0) }}"
+                "<${colors.faint}>:</>"
+                "{{ .BranchStatus }}"
               "{{ end }}"
+
               "{{ if .Working.Changed }}"
+                "<${colors.faint}>:</>"
+                "<${colors.exit_red}>"
                 (ucode "F044")
-                " {{ .Working.String }}"
+                "{{ .Working.String }}"
+                "</>"
               "{{ end }}"
-              "{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}"
+
               "{{ if .Staging.Changed }}"
+                "<${colors.faint}>:</>"
+                "<${colors.light_green}>"
                 (ucode "F046")
-                " {{ .Staging.String }}"
+                "{{ .Staging.String }}"
+                "</>"
               "{{ end }}"
+
               "{{ if gt .StashCount 0 }}"
+                "<${colors.faint}>:</>"
                 (ucode "F692")
                 " {{ .StashCount }}"
               "{{ end }}"
@@ -73,30 +97,36 @@ in
             };
           })
           (mkSeg "kubectl" {
-            foreground = "#3970e4";
-            template = " <#666>${ucode "fd31"}</>{{.Context}}{{if .Namespace}}<#666>:</><#9db8e9>{{.Namespace}}</>{{end}}";
+            foreground = colors.dark_blue;
+            template = lib.strings.concatStrings [
+              " ${ucode "fd31"}("
+              "<>"
+                "{{if eq .Context \"nucles\"}}${ucode "f015"}"
+                "{{else if eq .Context \"dev.aurora\"}}dev${ucode "f110"}"
+                "{{else if eq .Context \"app.aurora\"}}app${ucode "f110"}"
+                "{{else if eq .Context \"canary.aurora\"}}canary${ucode "f110"}"
+                "{{else if eq .Context \"support.aurora\"}}support${ucode "f110"}"
+                "{{else}}"
+                  "{{.Context}}"
+                "{{end}}"
+              "</>"
+              "{{if .Namespace}}"
+                "<${colors.faint}>:</>"
+                "<#9db8e9>{{.Namespace}}</>"
+              "{{end}})"
+            ];
             parse_kubeconfig = true;
           })
-          (mkSeg "battery" {
-            foreground = "#9B6BDF";
-            foreground_templates = [
-              "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}"
-              "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}"
-              "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
-            ];
-            template = "{{ if not .Error }} {{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }}";
-            properties = {
-              charged_icon = "";
-              charging_icon = ucode "21e1";
-              discharging_icon = ucode "21e3";
-            };
+          (mkSeg "session" {
+            foreground = "#c386f1";
+            template = "{{ if .SSHSession }} ${ucode "F817"}{{ .HostName }}{{ end }}";
           })
         ];
       }
     ];
     secondary_prompt = {
         background = "transparent";
-        foreground = "#666";
+        foreground = colors.faint;
         template = "➜ ";
     };
     final_space = true;

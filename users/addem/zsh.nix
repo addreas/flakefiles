@@ -54,7 +54,8 @@ in
     };
 
     shellAliases = {
-      which = "whence -vaS";
+      k = "kubectl";
+      which = "whence -vas";
     };
 
     shellGlobalAliases = {
