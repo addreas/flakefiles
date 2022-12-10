@@ -1,6 +1,13 @@
 { pkgs, lib, ... }:
+let
+  ulauncher = pkgs.ulauncher.overrideAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      pkgs.python3Packages.pytz
+    ];
+  });
+in
 {
-  home.packages = [ pkgs.ulauncher ];
+  home.packages = [ ulauncher ];
 
   systemd.user.services.ulauncher = {
     Unit = {
@@ -8,14 +15,8 @@
       Documentation = "https://ulauncher.io/";
     };
     Service = {
-      Environment = ["PATH=${lib.strings.makeBinPath [
-        "/run/wrappers"
-        "/home/addem/.nix-profile"
-        "/etc/profiles/per-user/addem"
-        "/nix/var/nix/profiles/default"
-        "/run/current-system/sw"
-      ]}"];
-      ExecStart = "${pkgs.ulauncher}/bin/ulauncher --hide-window";
+      Environment = [ "PATH=${lib.strings.makeBinPath [ "$HOME/.nix-profile" "/run/current-system/sw" ]}" ];
+      ExecStart = "${ulauncher}/bin/ulauncher --hide-window";
     };
     Install = { WantedBy = ["graphical-session.target"]; };
   };

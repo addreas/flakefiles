@@ -27,9 +27,6 @@
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
 
-  programs.fzf.enable = true;
-  programs.fzf.enableZshIntegration = true;
-
   home.pointerCursor = {
     package = pkgs.gnome.adwaita-icon-theme;
     name = "Adwaita";

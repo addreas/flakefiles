@@ -1,10 +1,10 @@
-{ ... }:
+{ lib, ... }:
 let
   mkSeg = (type: opts: {
     type = type;
     style = "plain";
   } // opts);
-  unicode = code: builtins.fromJSON "\"\\u${code}\"";
+  ucode = code: builtins.fromJSON "\"\\u${code}\"";
 in
 {
   programs.oh-my-posh.enable = true;
@@ -47,16 +47,34 @@ in
               "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
               "{{ if gt .Behind 0 }}#B388FB{{ end }}"
             ];
-            template = "{{ .UpstreamIcon }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} ${unicode "F044"} {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} ${unicode "F046"} {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} ${unicode "F692"} {{ .StashCount }}{{ end }}";
+            template = lib.strings.concatStrings [
+              "{{ .UpstreamIcon }}"
+              "{{ .HEAD }}"
+              "{{ if .BranchStatus }}"
+                " {{ .BranchStatus }}"
+              "{{ end }}"
+              "{{ if .Working.Changed }}"
+                (ucode "F044")
+                " {{ .Working.String }}"
+              "{{ end }}"
+              "{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}"
+              "{{ if .Staging.Changed }}"
+                (ucode "F046")
+                " {{ .Staging.String }}"
+              "{{ end }}"
+              "{{ if gt .StashCount 0 }}"
+                (ucode "F692")
+                " {{ .StashCount }}"
+              "{{ end }}"
+            ];
             properties = {
               fetch_status = true;
-              fetch_stash_count = true;
               fetch_upstream_icon = true;
             };
           })
           (mkSeg "kubectl" {
             foreground = "#3970e4";
-            template = " <#666>${unicode "fd31"}</>{{.Context}}{{if .Namespace}}<#666>${unicode "ebbb"}</><#9db8e9>{{.Namespace}}</>{{end}}";
+            template = " <#666>${ucode "fd31"}</>{{.Context}}{{if .Namespace}}<#666>:</><#9db8e9>{{.Namespace}}</>{{end}}";
             parse_kubeconfig = true;
           })
           (mkSeg "battery" {
@@ -66,11 +84,11 @@ in
               "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}"
               "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
             ];
-            template = "{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }}";
+            template = "{{ if not .Error }} {{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }}";
             properties = {
               charged_icon = "";
-              charging_icon = " ${unicode "21e1"}";
-              discharging_icon = " ${unicode "21e3"}";
+              charging_icon = ucode "21e1";
+              discharging_icon = ucode "21e3";
             };
           })
         ];
