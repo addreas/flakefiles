@@ -5,8 +5,9 @@
 USER=$1
 ROOT=$2
 
-sudo mkdir /etc/shadow.d
-sudo chown root:shadow /etc/shadow.d
-sudo chmod 600 /etc/shadow.d
+sudo mkdir -p $ROOT/etc/shadow.d
+sudo chown root:shadow $ROOT/etc/shadow.d
+sudo chmod 600 $ROOT/etc/shadow.d
 
+echo -n $USER ''
 mkpasswd -m sha-512 | sudo tee $ROOT/etc/shadow.d/$USER
