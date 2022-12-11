@@ -62,12 +62,34 @@
         ];
       };
 
+
+      nixosConfigurations.nucle-installer = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/nucle-installer" ];
+      };
+
+      nixosConfigurations.nucle4 = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = ["${self}/machines/nucles/nucle4"];
+      };
+
       nixosConfigurations.expessy = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           "${self}/machines/expessy"
           home-manager.nixosModules.home-manager
           nixosModules.home-manager-addem-desktop
+
+          "${self}/packages/pixie-api/module.nix"
+          {
+            services.pixiecore-host-configs.enable = true;
+            services.pixiecore-host-configs.hosts = {
+              "84:a9:3e:10:c4:66" = {
+                nixosSystem = nixosConfigurations.nucle-installer;
+                kernelParams = [ "hostname=nucle4" ];
+              };
+            };
+          }
         ];
       };
 

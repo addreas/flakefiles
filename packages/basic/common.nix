@@ -25,6 +25,7 @@
   services.xserver.layout = "gb";
 
   fonts.enableDefaultFonts = true;
+  fonts.fonts = with pkgs; [ nerdfonts ];
 
   environment.systemPackages = with pkgs; [
     zsh

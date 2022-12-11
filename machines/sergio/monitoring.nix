@@ -41,5 +41,44 @@
 
   networking.firewall.allowedTCPPorts = [
     3493 # nut/upsd
+    3100 # loki
   ];
+
+  services.loki.enable = true;
+  services.loki.config = {
+    auth_enabled = false;
+
+    server.http_listen_port = 3100;
+
+    ingester = {
+      lifecycler = {
+        address = "0.0.0.0";
+        ring.kvstore.store = "inmemory";
+        ring.replication_factor = 1;
+        final_sleep = "0s";
+      };
+      chunk_idle_period = "5m";
+      chunk_retain_period = "30s";
+    };
+
+    schema_config.configs = [{
+        from = "2020-05-15";
+        store = "boltdb";
+        object_store = "filesystem";
+        schema = "v11";
+        index.prefix = "index_";
+        index.period = "168h";
+    }];
+
+    storage_config = {
+      boltdb.directory = "/tmp/loki/index";
+      filesystem.directory = "/tmp/loki/chunks";
+    }
+
+    limits_config = {
+      enforce_metric_name = false;
+      reject_old_samples = true;
+      reject_old_samples_max_age = "168h";
+    };
+  };
 }

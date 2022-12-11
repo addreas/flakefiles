@@ -1,4 +1,4 @@
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
 certificateKey: "c78d0bb0ca65f9e27488cfcb0f63d9dd450f95a6384510854b20ca2f51b19ad5" # kubeadm certs certificate-key
 bootstrapTokens:
@@ -10,7 +10,7 @@ bootstrapTokens:
   - signing
   - authentication
 ---
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 clusterName: nucles
 controlPlaneEndpoint: nucles.localdomain:6443

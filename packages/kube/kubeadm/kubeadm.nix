@@ -1,6 +1,25 @@
 { pkgs, lib, config, ... }:
 let
   cfg = config.services.kubeadm;
+
+  cp_upgrade = ''
+    KUBEADM_CONFIG_TARGET_VERSION=$(kubectl get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
+    KUBEADM_CLI_VERSION=$(kubeadm version -o short)
+    KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
+    if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
+        kubeadm upgrade plan $KUBEADM_CLI_VERSION \
+        && kubeadm upgrade apply $KUBEADM_CLI_VERSION
+    elif [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBE_APISERVER_MANIFEST_VERSION" ]]; then
+        kubeadm upgrade node $KUBEADM_CONFIG_TARGET_VERSION
+    fi
+    '';
+
+  worker_upgrade = ''
+    KUBEADM_CONFIG_TARGET_VERSION=$(kubectl get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
+    if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBELET_VERSION" ]]; then
+      kubeadm upgrade node $KUBEADM_CONFIG_TARGET_VERSION
+    fi
+    '';
 in
 {
   options.services.kubeadm = {
