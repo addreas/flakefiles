@@ -24,8 +24,9 @@
 
       homeConfigurations.addem = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.${system};
+
         modules = [
-          ./users/addem/home.nix
+          ./users/addem/home.desktop.nix
           {
             home = {
               username = "addem";
@@ -39,12 +40,25 @@
       nixosModules = {
         pcp = import ./packages/pcp/module.nix;
         cockpit = import ./packages/cockpit/module.nix;
+
+        home-manager-addem = {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.addem = import ./users/addem/home.nix;
+        };
+        home-manager-addem-desktop = {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.addem = import ./users/addem/home.desktop.nix;
+        };
       };
 
       nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           "${self}/machines/sergio"
+          home-manager.nixosModules.home-manager
+          nixosModules.home-manager-addem
         ];
       };
 
@@ -53,11 +67,7 @@
         modules = [
           "${self}/machines/expessy"
           home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.addem = import ./users/addem/home.nix;
-          }
+          nixosModules.home-manager-addem-desktop
         ];
       };
 
@@ -66,6 +76,8 @@
         modules = [
           nixos-wsl.nixosModules.wsl
           "${self}/machines/lenny"
+          home-manager.nixosModules.home-manager
+          nixosModules.home-manager-addem
         ];
       };
 

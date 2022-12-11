@@ -53,8 +53,13 @@
   system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
 
   # requires manual `sudo btrfs subvolume create /.snapshots`
-  services.snapper.snapshotRootOnBoot = true;
-  services.snapper.configs.root.subvolume = "/";
+  # services.snapper.snapshotRootOnBoot = true;
+  # services.snapper.configs.root.subvolume = "/";
+  # services.snapper.configs.root.extraConfig = ''
+  #   NUMBER_CLEANUP=yes
+  #   NUMBER_LIMIT=10
+  #   '';
+  # services.locate.prunePaths = ["./snapshots"];
 
   networking.hostName = "sergio";
   networking.domain = "localdomain";
