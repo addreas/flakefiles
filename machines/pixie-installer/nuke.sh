@@ -4,7 +4,7 @@ MNT=/mnt/trash
 
 set -e
 set -x
-sudo umount $MNT/boot $MNT/home $MNT/nix $MNT/var/lib $MNT/var/log $MNT
+sudo umount $MNT/boot $MNT/home $MNT/nix $MNT/var/lib $MNT/var/log $MNT || true
 
 sudo parted --script ${DEVICE} \
                 mklabel gpt \
