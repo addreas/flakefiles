@@ -26,6 +26,8 @@
     '';
   };
 
+  system.activationScripts.var-lib-nut = "mkdir -p /var/lib/nut; chmod o-r /var/lib/nut";
+
   #services.apcupsd.enable = true;
   #services.prometheus.exporters.apcupsd.enable = true;
   # power.ups.ups.ups = {
