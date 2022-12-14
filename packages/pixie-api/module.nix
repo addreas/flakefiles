@@ -2,7 +2,7 @@
 let
   cfg = config.services.pixiecore-host-configs;
 
-  api = pkgs.writeText "api.ts" (builtins.readFile ./api.ts);
+  api-ts = pkgs.writeText "api.ts" (builtins.readFile ./api.ts);
 
   host-configs = pkgs.writeText "host-configs.json" (builtins.toJSON (lib.attrsets.mapAttrs mkPixiecoreConfig cfg.hosts));
 
@@ -45,6 +45,8 @@ in
       dhcpNoBind = true;
     };
 
+    networking.firewall.allowedTCPPorts = [cfg.port];
+
     systemd.services.pixiecore-host-configs = {
       description = "Pixiecore API mode responder";
       wantedBy = [ "pixiecore.service" ];
@@ -53,14 +55,16 @@ in
         Restart = "always";
         RestartSec = 10;
 
-        ExecStart = ''
-          ${pkgs.deno}/bin/deno run \
-            --allow-net \
-            --allow-read=${host-configs}
-            ${api}/api.ts \
-              --port ${builtins.toString cfg.port} \
-              --configs ${host-configs}
-        '';
+        ExecStart = lib.strings.concatStringsSep " " [
+          "${pkgs.deno}/bin/deno"
+          "run"
+          "--log-level=debug"
+          "--allow-net"
+          "--allow-read=${host-configs}"
+          "${api-ts}"
+          "--port=${builtins.toString cfg.port}"
+          "--configs=${host-configs}"
+        ];
       };
     };
   };

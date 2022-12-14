@@ -40,6 +40,10 @@ let
 in
 {
 
+  home.packages = with pkgs; [
+    zsh-completions
+  ];
+
   programs.fzf.enable = true;
   programs.zsh = {
     enable = true;

@@ -3,8 +3,10 @@ import { parse } from "https://deno.land/std@0.167.0/flags/mod.ts";
 
 const args = parse(Deno.args)
 
-const hostConfigs = JSON.parse(await Deno.readTextFile(args.configs))
+if (!args.configs) console.error("Missing --configs arg")
 
+const hostConfigs = JSON.parse(await Deno.readTextFile(args.configs))
+console.log(hostConfigs)
 serve(async (req) => {
   const pathname = new URL(req.url).pathname;
 
