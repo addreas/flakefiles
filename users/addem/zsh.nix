@@ -39,6 +39,7 @@ let
   };
 in
 {
+
   programs.fzf.enable = true;
   programs.zsh = {
     enable = true;
@@ -64,6 +65,9 @@ in
       "....." = "../../../..";
       "......" = "../../../../..";
     };
+
+    #TODO: kubectl completions
+    #TODO: kubens kubectx kubie
 
     plugins = [{
       name = "zsh-fzf-tab";
