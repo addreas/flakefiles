@@ -1,11 +1,16 @@
 { config, pkgs, lib, modulesPath, ... }:
 let
-  nukeAndInstall = pkgs.writeShellApplication
-    {
+  nuke = pkgs.writeShellApplication {
       name = "nuke-nvme0n1-and-install";
-      runtimeInputs = [ pkgs.parted ];
+      runtimeInputs = [ pkgs.parted pkgs.curl ];
       text = builtins.readFile ./nuke.sh;
     };
+  cmdline = pkgs.writeScriptBin "cmdline" (
+      builtins.replaceStrings
+        ["/usr/bin/env python3"]
+        ["${pkgs.python3}/bin/python"]
+        (builtins.readFile ./cmdline.py)
+    );
 in
 {
   imports = [
@@ -21,11 +26,7 @@ in
   networking.hostName = ""; # these have ot be set via kernel cmdline
 
   system.activationScripts.cmdline-setup = ''
-    function get_cmd_val() {
-      cat /proc/cmdline | tr " " "\n" | grep $1 | sed 's/.*=\(.*\)/\1/'
-    }
-
-    HOSTNAME=$(get_cmd_val hostname)
+    HOSTNAME=$(${cmdline}/bin/cmdline hostname)
     if [[ "$HOSTNAME" != "" ]]; then
       hostname $HOSTNAME
       echo $HOSTNAME > /etc/hostname
@@ -35,32 +36,13 @@ in
   services.getty.autologinUser = lib.mkForce "root";
 
   environment.systemPackages = [
-    nukeAndInstall
+    nuke
+    cmdline
   ];
-
-  services.promtail.enable = true;
-  services.promtail.configuration = {
-    positions.filename = "/tmp/promtail-positions.yaml";
-    clients = [{
-      url = "http://sergio.localdomain:3100";
-    }];
-    scrape_configs = [{
-      job_name = "journal";
-      journal = {
-        json = true;
-        labels.nix-host = "nucle-installer";
-      };
-      relabel_configs = [{
-        source_labels = ["__journal__systemd_unit"];
-        target_label = "unit";
-      }];
-    }];
-  };
 
   systemd.services.nuke-and-install = {
     description = "Nuke /dev/nvme0n1 and install nucle";
     wantedBy = [ "multi-user.target" ];
-    serviceConfig.ExecStart = "${nukeAndInstall}/nuke.sh";
+    serviceConfig.ExecStart = "${nuke}/bin/nuke-nvme0n1-and-install";
   };
 }
-

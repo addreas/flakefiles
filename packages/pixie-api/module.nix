@@ -2,24 +2,22 @@
 let
   cfg = config.services.pixiecore-host-configs;
 
-  mkPixiecoreConfig = host: builtins.toJSON {
+  api = pkgs.writeText "api.ts" (builtins.readFile ./api.ts);
+
+  host-configs = pkgs.writeText "host-configs.json" (builtins.toJSON (lib.attrsets.mapAttrs mkPixiecoreConfig cfg.hosts));
+
+  mkPixiecoreConfig = mac: host: {
     kernel = "file://${host.nixosSystem.config.system.build.kernel}/kernel";
     initrd = [ "file://${host.nixosSystem.config.system.build.netbootRamdisk}/initrd" ];
-    # pixiecore appends initrd kernel args
-    cmdline = builtins.concatStringsSep " " ([ "init=${host.nixosSystem.config.system.build.toplevel}/init" ] ++ host.kernelParams);
-    # cmdline = "
-    #   cloud-config-url={{ URL \"https://files.local/cloud-config\" }}
-    #   non-proxied-url=https://files.local/something-else
-    # ";
+      # pixiecore appends initrd kernel args
+    cmdline = builtins.concatStringsSep " " (builtins.concatLists [
+          [
+            "init=${host.nixosSystem.config.system.build.toplevel}/init"
+            "pixie-logger={{ URL \"/v1/log-dump\" }}"
+          ]
+          host.kernelParams
+        ]);
   };
-
-  echo-json-to-dir = lib.attrsets.mapAttrsToList (mac: host: "echo '${mkPixiecoreConfig host}' > ${mac}") cfg.hosts;
-  config-directory = pkgs.runCommandLocal "pixiecore-host-configs" { } ''
-    targetdir=$out/v1/boot
-    mkdir -p $targetdir
-    cd $targetdir
-    ${lib.strings.concatStringsSep "\n" echo-json-to-dir}
-  '';
 in
 {
   options.services.pixiecore-host-configs = {
@@ -56,10 +54,12 @@ in
         RestartSec = 10;
 
         ExecStart = ''
-          ${pkgs.python310}/bin/python \
-            -m http.server \
-            --directory ${config-directory} \
-            ${builtins.toString cfg.port}
+          ${pkgs.deno}/bin/deno run \
+            --allow-net \
+            --allow-read=${host-configs}
+            ${api}/api.ts \
+              --port ${builtins.toString cfg.port} \
+              --configs ${host-configs}
         '';
       };
     };
