@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 {
   services.openssh.enable = true;
-  services.kmscon.enable = true;
-  systemd.services.reload-systemd-vconsole-setup.enable = false;
   services.locate.enable = true;
   services.locate.locate = pkgs.plocate;
   services.locate.localuser = null;

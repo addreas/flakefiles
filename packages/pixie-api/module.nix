@@ -7,13 +7,14 @@ let
   host-configs = pkgs.writeText "host-configs.json" (builtins.toJSON (lib.attrsets.mapAttrs mkPixiecoreConfig cfg.hosts));
 
   mkPixiecoreConfig = mac: host: {
-    kernel = "file://${host.nixosSystem.config.system.build.kernel}/kernel";
+    kernel = "file://${host.nixosSystem.config.system.build.kernel}/bzImage";
     initrd = [ "file://${host.nixosSystem.config.system.build.netbootRamdisk}/initrd" ];
       # pixiecore appends initrd kernel args
     cmdline = builtins.concatStringsSep " " (builtins.concatLists [
           [
             "init=${host.nixosSystem.config.system.build.toplevel}/init"
-            "pixie-logger={{ URL \"/v1/log-dump\" }}"
+            "pixie-api=http://${config.networking.fqdn}:${builtins.toString cfg.port}"
+            "journald=http://${config.networking.fqdn}:19532"
           ]
           host.kernelParams
         ]);
@@ -25,6 +26,10 @@ in
     port = lib.mkOption {
       default = 9813;
       type = lib.types.int;
+    };
+    github-client-id = lib.mkOption {
+      default = "01ca7d6823ac66b96743";
+      type = lib.types.str;
     };
     hosts = lib.mkOption {
       type = with lib.types; attrsOf (submodule {
@@ -41,11 +46,18 @@ in
       enable = true;
       mode = "api";
       apiServer = "http://localhost:${builtins.toString cfg.port}";
-      openFirewall = true;
+      openFirewall = true; #opens 4011 on TCP
       dhcpNoBind = true;
     };
 
     networking.firewall.allowedTCPPorts = [cfg.port];
+    networking.firewall.allowedUDPPorts = [4011];
+
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-journal-remote.service"
+      "systemd-journal-remote.socket"
+    ];
+    systemd.sockets.systemd-journal-remote.enable = true;
 
     systemd.services.pixiecore-host-configs = {
       description = "Pixiecore API mode responder";
@@ -58,12 +70,13 @@ in
         ExecStart = lib.strings.concatStringsSep " " [
           "${pkgs.deno}/bin/deno"
           "run"
-          "--log-level=debug"
           "--allow-net"
           "--allow-read=${host-configs}"
           "${api-ts}"
           "--port=${builtins.toString cfg.port}"
+          "--host=0.0.0.0"
           "--configs=${host-configs}"
+          "--github-client-id=${cfg.github-client-id}"
         ];
       };
     };

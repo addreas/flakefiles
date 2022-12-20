@@ -5,7 +5,7 @@ with open('/proc/cmdline', 'r') as cmdline:
     items = shlex.split(cmdline)
 
 item_map = {
-    kv[0]: kv[1] if len(kv) > 1 else True
+    kv[0]: "=".join(kv[1:]) if len(kv) > 1 else True
     for kv in [i.split("=") for i in items]
 }
 

@@ -24,8 +24,21 @@
   console.keyMap = "uk";
   services.xserver.layout = "gb";
 
-  fonts.enableDefaultFonts = true;
-  fonts.fonts = with pkgs; [ nerdfonts ];
+  # services.kmscon.enable = true;
+  # systemd.services.reload-systemd-vconsole-setup.enable = false;
+  # environment.etc = let cfg = config.services.xserver; in {
+  #     "X11/xorg.conf.d/00-keyboard.conf".text = ''
+  #       Section "InputClass"
+  #         Identifier "Keyboard catchall"
+  #         MatchIsKeyboard "on"
+  #         Option "XkbModel" "${cfg.xkbModel}"
+  #         Option "XkbLayout" "${cfg.layout}"
+  #         Option "XkbOptions" "${cfg.xkbOptions}"
+  #         Option "XkbVariant" "${cfg.xkbVariant}"
+  #       EndSection
+  #     '';
+  #   }
+
 
   environment.systemPackages = with pkgs; [
     zsh

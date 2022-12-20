@@ -31,7 +31,8 @@
   networking.domain = "localdomain";
 
   systemd.network.enable = true;
-  systemd.network.networks.lan.name = "eno1";
-  systemd.network.networks.lan.dns = [ "192.168.1.1" ];
+  systemd.network.networks.lan.name = "en*";
+  systemd.network.networks.lan.DHCP = true;
+  # systemd.network.networks.lan.dns = [ "192.168.1.1" ];
   systemd.network.wait-online.anyInterface = true;
 }

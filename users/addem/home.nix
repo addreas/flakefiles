@@ -14,6 +14,10 @@
     LESS = "-R";
   };
 
+  home.packages = with pkgs; [
+    go
+  ];
+
   programs.home-manager.enable = true;
 
   programs.nix-index.enable = true;

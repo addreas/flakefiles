@@ -42,6 +42,7 @@ in
 
   home.packages = with pkgs; [
     zsh-completions
+    nix-zsh-completions
   ];
 
   programs.fzf.enable = true;

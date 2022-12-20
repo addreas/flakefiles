@@ -5,7 +5,15 @@ MNT=/mnt
 set -e
 set -x
 
-sudo umount $MNT/boot $MNT/home $MNT/nix $MNT/var/lib $MNT/var/log $MNT
+sudo umount $MNT/boot $MNT/home $MNT/nix $MNT/var/lib $MNT/var/log $MNT/var/longhorn $MNT || true
+
+echo
+echo "Nuking $DEVICE in 10 seconds"
+echo "Yank power cord to abort"
+echo
+
+sleep 10
+
 
 sudo parted --script ${DEVICE} \
                 mklabel gpt \
@@ -29,34 +37,39 @@ sudo btrfs subvolume create "$MNT/@varlib"
 sudo umount "$MNT"
 
 sudo mount -t btrfs -o noatime,compress=zstd,subvol=@ "$P2" "$MNT"
-sudo mkdir -p $MNT/{boot,home,nix,var/log,var/lib,var/lib/longhorn}
+sudo mkdir -p $MNT/{boot,home,nix,var/log,var/lib,var/longhorn}
 sudo mount -t vfat  -o noatime,defaults ${DEVICE}p1 "$MNT/boot"
 sudo mount -t btrfs -o noatime,compress=zstd,subvol=@home "$P2" "$MNT/home"
 sudo mount -t btrfs -o noatime,compress=zstd,subvol=@nix "$P2" "$MNT/nix"
 sudo mount -t btrfs -o noatime,compress=zstd,subvol=@varlib "$P2" "$MNT/var/lib"
 sudo mount -t btrfs -o noatime,compress=zstd,subvol=@varlog "$P2" "$MNT/var/log"
-sudo mount -t ext4  -o noatime,defaults ${DEVICE}p3 "$MNT/var/lib/longhorn"
+sudo mount -t ext4  -o noatime,defaults ${DEVICE}p3 "$MNT/var/longhorn"
 
 sudo nixos-generate-config --root $MNT
 
-sudo mkdir -p "$MNT/home/addem"
+sudo mkdir -p "$MNT/home/addem/.ssh"
 ssh-keygen -t ed25519 -C "addem@$(hostname)" -f "$MNT/home/addem/.ssh/id_ed25519" -N ""
 
-until git clone git@github.com:addreas/flakefiles.git $MNT/home/addem; do
+cat $MNT/home/addem/.ssh/id_ed25519.pub \
+| curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
+  --silent \
+  --upload-file - \
+  --request POST
+
+until git clone git@github.com:addreas/flakefiles.git $MNT/home/addem/flakefiles; do
   echo
   echo Need to add deploy key to https://github.com/addreas/flakefiles.git
   echo =============================================================================================
-  echo $MNT/home/addem/id_ed25519.pub
+  cat $MNT/home/addem/.ssh/id_ed25519.pub
   echo =============================================================================================
-  echo If this was syslogged it would be very easy to copy...
+
+  cat $MNT/home/addem/.ssh/id_ed25519.pub \
+  | curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
+    --silent \
+    --upload-file - \
+    --request POST
+
   sleep 60
-  #curl \
-  #  -X POST \
-  #  -H "Accept: application/vnd.github+json" \
-  #  -H "Authorization: Bearer <YOUR-TOKEN>"\
-  #  -H "X-GitHub-Api-Version: 2022-11-28" \
-  #  https://api.github.com/repos/OWNER/REPO/keys \
-  #  -d '{"title":"octocat@octomac","key":"ssh-rsa AAA...","read_only":true}'
 done
 
 cp "$MNT/etc/nixos/hardware-configuration.nix" "$MNT/home/addem/flakefiles/machines/nucles/$(hostname)"

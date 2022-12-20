@@ -123,7 +123,8 @@
             services.pixiecore-host-configs.enable = true;
             services.pixiecore-host-configs.hosts = {
               "84:a9:3e:10:c4:66" = {
-                nixosSystem = nixosConfigurations.pixie-installer;
+                nixosSystem = nixosConfigurations.nucle-installer;
+                kernelParams = [ "hostname=nucle4" ];
               };
               "00:00:00:00:00:00" = {
                 nixosSystem = nixosConfigurations.pixie-trixie;

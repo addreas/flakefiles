@@ -38,6 +38,17 @@
   services.blueman.enable = true;
   services.hardware.bolt.enable = true;
 
+  fonts.enableDefaultFonts = true;
+  fonts.fonts = with pkgs; [
+    nerdfonts
+    nerdfonts
+    hack-font
+    noto-fonts
+    noto-fonts-extra
+    noto-fonts-emoji
+    noto-fonts-emoji-blob-bin
+  ];
+
   environment.systemPackages = with pkgs; [
     waybar
     sway
@@ -69,15 +80,6 @@
     usbutils
     pciutils
     util-linux
-  ];
-
-  fonts.fonts = with pkgs; [
-    nerdfonts
-    hack-font
-    noto-fonts
-    noto-fonts-extra
-    noto-fonts-emoji
-    noto-fonts-emoji-blob-bin
   ];
 }
 
