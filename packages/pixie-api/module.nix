@@ -14,7 +14,6 @@ let
           [
             "init=${host.nixosSystem.config.system.build.toplevel}/init"
             "pixie-api=http://${config.networking.fqdn}:${builtins.toString cfg.port}"
-            "journald=http://${config.networking.fqdn}:19532"
           ]
           host.kernelParams
         ]);
@@ -46,18 +45,12 @@ in
       enable = true;
       mode = "api";
       apiServer = "http://localhost:${builtins.toString cfg.port}";
-      openFirewall = true; #opens 4011 on TCP
+      openFirewall = true; #incorrectly opens 4011 on TCP
       dhcpNoBind = true;
     };
 
     networking.firewall.allowedTCPPorts = [cfg.port];
     networking.firewall.allowedUDPPorts = [4011];
-
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-journal-remote.service"
-      "systemd-journal-remote.socket"
-    ];
-    systemd.sockets.systemd-journal-remote.enable = true;
 
     systemd.services.pixiecore-host-configs = {
       description = "Pixiecore API mode responder";
@@ -71,7 +64,8 @@ in
           "${pkgs.deno}/bin/deno"
           "run"
           "--allow-net"
-          "--allow-read=${host-configs}"
+          "--allow-read"
+          "--allow-write=/tmp/pixie-api-github-token"
           "${api-ts}"
           "--port=${builtins.toString cfg.port}"
           "--host=0.0.0.0"

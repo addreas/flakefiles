@@ -5,7 +5,8 @@ MNT=/mnt
 set -e
 set -x
 
-sudo umount $MNT/boot $MNT/home $MNT/nix $MNT/var/lib $MNT/var/log $MNT/var/longhorn $MNT || true
+umount $MNT/{boot,home,nix,var/log,var/lib,var/longhorn} || true
+umount $MNT || true
 
 echo
 echo "Nuking $DEVICE in 10 seconds"
@@ -14,8 +15,7 @@ echo
 
 sleep 10
 
-
-sudo parted --script ${DEVICE} \
+parted --script ${DEVICE} \
                 mklabel gpt \
                 mkpart esp fat32 1MiB 512MiB \
                 mkpart os btrfs 512MiB 20GiB \
@@ -23,64 +23,70 @@ sudo parted --script ${DEVICE} \
                 set 1 esp on \
                 set 1 boot on
 
-sudo mkfs.fat -F 32 ${DEVICE}p1
-sudo mkfs.btrfs ${DEVICE}p2 -f
-sudo mkfs.ext4 ${DEVICE}p3
+mkfs.fat -F 32 ${DEVICE}p1
+mkfs.btrfs ${DEVICE}p2 -f
+mkfs.ext4 ${DEVICE}p3
 
 P2=${DEVICE}p2
-sudo mount -t btrfs "$P2" $MNT/
-sudo btrfs subvolume create "$MNT/@"
-sudo btrfs subvolume create "$MNT/@home"
-sudo btrfs subvolume create "$MNT/@nix"
-sudo btrfs subvolume create "$MNT/@varlog"
-sudo btrfs subvolume create "$MNT/@varlib"
-sudo umount "$MNT"
+mount -t btrfs "$P2" $MNT/
+btrfs subvolume create "$MNT/@"
+btrfs subvolume create "$MNT/@home"
+btrfs subvolume create "$MNT/@nix"
+btrfs subvolume create "$MNT/@varlog"
+btrfs subvolume create "$MNT/@varlib"
+umount "$MNT"
 
-sudo mount -t btrfs -o noatime,compress=zstd,subvol=@ "$P2" "$MNT"
-sudo mkdir -p $MNT/{boot,home,nix,var/log,var/lib,var/longhorn}
-sudo mount -t vfat  -o noatime,defaults ${DEVICE}p1 "$MNT/boot"
-sudo mount -t btrfs -o noatime,compress=zstd,subvol=@home "$P2" "$MNT/home"
-sudo mount -t btrfs -o noatime,compress=zstd,subvol=@nix "$P2" "$MNT/nix"
-sudo mount -t btrfs -o noatime,compress=zstd,subvol=@varlib "$P2" "$MNT/var/lib"
-sudo mount -t btrfs -o noatime,compress=zstd,subvol=@varlog "$P2" "$MNT/var/log"
-sudo mount -t ext4  -o noatime,defaults ${DEVICE}p3 "$MNT/var/longhorn"
+mount -t btrfs -o noatime,compress=zstd,subvol=@ "$P2" "$MNT"
 
-sudo nixos-generate-config --root $MNT
+mkdir -p $MNT/{boot,home,nix,var/log,var/lib,var/longhorn}
 
-sudo mkdir -p "$MNT/home/addem/.ssh"
-ssh-keygen -t ed25519 -C "addem@$(hostname)" -f "$MNT/home/addem/.ssh/id_ed25519" -N ""
+mount -t vfat  -o noatime,defaults ${DEVICE}p1 "$MNT/boot"
 
-cat $MNT/home/addem/.ssh/id_ed25519.pub \
-| curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
+mount -t btrfs -o noatime,compress=zstd,subvol=@home "$P2" "$MNT/home"
+mount -t btrfs -o noatime,compress=zstd,subvol=@nix "$P2" "$MNT/nix"
+mount -t btrfs -o noatime,compress=zstd,subvol=@varlib "$P2" "$MNT/var/lib"
+mount -t btrfs -o noatime,compress=zstd,subvol=@varlog "$P2" "$MNT/var/log"
+
+mount -t ext4  -o noatime,defaults ${DEVICE}p3 "$MNT/var/longhorn"
+
+mkdir -p "$MNT/home/addem/.ssh"
+ssh-keygen \
+  -t ed25519 \
+  -C "addem@$(hostname)" \
+  -f "$MNT/home/addem/.ssh/id_ed25519" \
+  -N ""
+
+chmod 600 "$MNT/home/addem/.ssh/id_ed25519.pub"
+
+cat "$MNT/home/addem/.ssh/id_ed25519.pub" \
+  | curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
   --silent \
   --upload-file - \
   --request POST
 
-until git clone git@github.com:addreas/flakefiles.git $MNT/home/addem/flakefiles; do
-  echo
-  echo Need to add deploy key to https://github.com/addreas/flakefiles.git
-  echo =============================================================================================
-  cat $MNT/home/addem/.ssh/id_ed25519.pub
-  echo =============================================================================================
 
-  cat $MNT/home/addem/.ssh/id_ed25519.pub \
-  | curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
-    --silent \
-    --upload-file - \
-    --request POST
+export GIT_SSH_COMMAND="ssh -o UpdateHostKeys=yes -i $MNT/home/addem/.ssh/id_ed25519"
 
-  sleep 60
-done
+git clone git@github.com:addreas/flakefiles.git $MNT/home/addem/flakefiles
 
-cp "$MNT/etc/nixos/hardware-configuration.nix" "$MNT/home/addem/flakefiles/machines/nucles/$(hostname)"
-sudo ln -s -r "$MNT/home/addem/flakefiles/flake.nix" "/etc/nixos"
+nixos-generate-config --root $MNT
 
-sudo nixos-install --flake "$MNT/home/addem/flakefiles#$(hostname)" --root $MNT --no-root-password
+cp \
+  "$MNT/etc/nixos/hardware-configuration.nix" \
+  "$MNT/home/addem/flakefiles/machines/nucles/$(hostname)"
 
-(
-  cd $MNT/home/addem
-  git commit -am "add newly generated hardware-configuration.nix for $(hostname)"
-  git push
-)
+ln -s -r \
+  "$MNT/home/addem/flakefiles/flake.nix" \
+  "$MNT/etc/nixos"
+cd $MNT/home/addem/flakefiles
+git add machines/nucles
+
+nixos-install \
+  --root $MNT \
+  --no-root-password \
+  --flake "$MNT/home/addem/flakefiles#$(hostname)"
+
+git commit -am "add newly generated hardware-configuration.nix for $(hostname)"
+git push
 
 reboot

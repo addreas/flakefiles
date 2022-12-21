@@ -31,20 +31,7 @@ in
       hostname $HOSTNAME
       echo $HOSTNAME > /etc/hostname
     fi
-
-    echo $(${cmdline}/bin/cmdline pixie-logger)
-
-    JOURNALD_UPLOAD_URL=$(${cmdline}/bin/cmdline journald)
-    echo $JOURNALD_UPLOAD_URL
-
-    mkdir -p /run/systemd/journal-upload.conf.d
-    echo "URL=$JOURNALD_UPLOAD_URL" > /run/systemd/journal-upload.conf.d/url.conf
-    systemctl reload systemd-journal-upload
   '';
-
-  systemd.additionalUpstreamSystemUnits = ["systemd-journal-upload.service"];
-  systemd.services.systemd-journal-upload.enable = true;
-
 
   services.getty.autologinUser = lib.mkForce "root";
   services.kmscon.autologinUser = lib.mkForce "root";

@@ -1,4 +1,4 @@
-{}: {
+{
   imports = [
     ./kube.nix
 
