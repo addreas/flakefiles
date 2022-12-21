@@ -5,6 +5,5 @@
     ../default.nix
   ];
   networking.hostName = "nucle4";
-  systemd.network.networks.lan.name = "eno1";
 }
 
