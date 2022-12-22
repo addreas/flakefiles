@@ -79,12 +79,20 @@ ln -s -r \
   "$MNT/home/addem/flakefiles/flake.nix" \
   "$MNT/etc/nixos"
 cd $MNT/home/addem/flakefiles
-git add machines/nucles
+
+nix-store \
+  --generate-binary-cache-key $(hostname)-0 \
+  $MNT/var/secret/local-nix-secret-key \
+  /dev/stdout \
+  >> ./packages/basic/pubkeys.txt
+
+git add .
 
 nixos-install \
   --root $MNT \
   --no-root-password \
   --flake "$MNT/home/addem/flakefiles#$(hostname)"
+
 
 git commit -am "add newly generated hardware-configuration.nix for $(hostname)"
 git push

@@ -7,12 +7,8 @@
     # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
     trusted-users = [ "root" "@wheel" ];
     secret-key-files = [ "/var/secret/local-nix-secret-key" ];
-    trusted-public-keys = [
-      # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout
-      "lenny-wsl-0:T6NHA2GC8JwcLTtDMKyl/osBFdk8+gt9o95poXrtmM0="
-      "expessy-0:03bM28uM9sIw2pGW4aFqNWPsdVSVZXu9REOMbUnQrLw="
-      "sergio-0:iLOUuTIPPeJARAemTdAhD4y0Yi+/luB52jiQhMYBwVE="
-    ];
+    # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout > ./pubkeys.txt
+    trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
   };
 
   nix.gc.automatic = true;
