@@ -58,42 +58,44 @@ ssh-keygen \
 
 chmod 600 "$MNT/home/addem/.ssh/id_ed25519.pub"
 
-cat "$MNT/home/addem/.ssh/id_ed25519.pub" \
-  | curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
+curl "$(cmdline pixie-api)/v1/ssh-key/addem@$(hostname)" \
   --silent \
-  --upload-file - \
-  --request POST
+  --request POST \
+  --upload-file - < "$MNT/home/addem/.ssh/id_ed25519.pub"
 
-
-export GIT_SSH_COMMAND="ssh -o UpdateHostKeys=yes -i $MNT/home/addem/.ssh/id_ed25519"
+export GIT_SSH_COMMAND="ssh -i $MNT/home/addem/.ssh/id_ed25519"
 
 git clone git@github.com:addreas/flakefiles.git $MNT/home/addem/flakefiles
 
 nixos-generate-config --root $MNT
 
-cp \
-  "$MNT/etc/nixos/hardware-configuration.nix" \
-  "$MNT/home/addem/flakefiles/machines/nucles/$(hostname)"
+cd $MNT/home/addem/flakefiles
+cp "$MNT/etc/nixos/hardware-configuration.nix" \
+  "./machines/nucles/$(hostname)"
+git add "./machines/nucles/$(hostname)"
 
 ln -s -r \
   "$MNT/home/addem/flakefiles/flake.nix" \
   "$MNT/etc/nixos"
-cd $MNT/home/addem/flakefiles
 
+mkdir -p "$MNT/var/secret/" "/var/secret"
 nix-store \
-  --generate-binary-cache-key $(hostname)-0 \
-  $MNT/var/secret/local-nix-secret-key \
+  --generate-binary-cache-key "$(hostname)-0" \
+  "/var/secret/local-nix-secret-key" \
   /dev/stdout \
   >> ./packages/basic/pubkeys.txt
 
-git add .
+cp "/var/secret/local-nix-secret-key" "$MNT/var/secret/local-nix-secret-key"
+
 
 nixos-install \
   --root $MNT \
   --no-root-password \
   --flake "$MNT/home/addem/flakefiles#$(hostname)"
 
-
+git add .
+git config user.email "$(hostname)@addem.se"
+git config user.name "$(hostname)"
 git commit -am "add newly generated hardware-configuration.nix for $(hostname)"
 git push
 
