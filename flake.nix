@@ -62,15 +62,13 @@
         ];
       };
 
-
-      nixosConfigurations.nucle-installer = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/nucle-installer" ];
-      };
-
       nixosConfigurations.nucle4 = nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = ["${self}/machines/nucles/nucle4"];
+        modules = [
+          "${self}/machines/nucles/nucle4"
+          home-manager.nixosModules.home-manager
+          nixosModules.home-manager-addem
+        ];
       };
 
       nixosConfigurations.expessy = nixpkgs.lib.nixosSystem {
@@ -80,16 +78,16 @@
           home-manager.nixosModules.home-manager
           nixosModules.home-manager-addem-desktop
 
-          "${self}/packages/pixie-api/module.nix"
-          {
-            services.pixiecore-host-configs.enable = true;
-            services.pixiecore-host-configs.hosts = {
-              "84:a9:3e:10:c4:66" = {
-                nixosSystem = nixosConfigurations.nucle-installer;
-                kernelParams = [ "hostname=nucle4" ];
-              };
-            };
-          }
+          # "${self}/packages/pixie-api/module.nix"
+          # {
+          #   services.pixiecore-host-configs.enable = true;
+          #   services.pixiecore-host-configs.hosts = {
+          #     "84:a9:3e:10:c4:66" = {
+          #       nixosSystem = nixosConfigurations.nucle-installer;
+          #       kernelParams = [ "hostname=nucle4" ];
+          #     };
+          #   };
+          # }
         ];
       };
 
@@ -145,5 +143,11 @@
         inherit system;
         modules = [ "${self}/machines/pixie-trixie" ];
       };
+
+      nixosConfigurations.nucle-installer = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [ "${self}/machines/nucle-installer" ];
+      };
+
     };
 }

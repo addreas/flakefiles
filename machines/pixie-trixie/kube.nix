@@ -3,7 +3,7 @@
     ../../packages/kube
   ];
 
-  services.kubeadm.kubelet = {
+  services.kubeadm = {
     enable = true;
     package = pkgs.kubernetes;
   };

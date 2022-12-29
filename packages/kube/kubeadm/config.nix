@@ -1,9 +1,11 @@
 { pkgs, lib, config, ... }:
 let
-  cfg = config.services.kubeadm.init;
-
   subType = options: lib.types.submodule { inherit options; };
   opt = type: description: lib.mkOption { inherit type description; };
+  mkStrDefault = str: lib.mkOption {
+    type = lib.types.str;
+    default = str;
+  };
 
   Taint = with lib.types; subType {
     effect = opt str "The effect of the taint on pods that do not tolerate the taint. Valid effects are NoSchedule, PreferNoSchedule and NoExecute. Possible enum values: - `\" NoExecute \"` Evict any already-running pods that do not tolerate the taint. Currently enforced by NodeController. - `\" NoSchedule \"` Do not allow new pods to schedule onto the node unless they tolerate the taint, but allow all pods submitted to Kubelet without going through the scheduler to start, and allow all already-running pods to continue running. Enforced by the scheduler. - `\" PreferNoSchedule \"` Like TaintEffectNoSchedule, but the scheduler tries not to schedule new pods onto the node, rather than prohibiting new pods from scheduling onto the node entirely. Enforced by the scheduler.";
@@ -79,16 +81,23 @@ let
     };
   };
   DNS = with lib.types; submodule { imports = [ ImageMeta ]; };
-
-
 in
 {
-  options.services.kubeadm.init = with lib, lib.types;
+  options.services.kubeadm.init = with lib; with lib.types;
     {
       enable = mkEnableOption "kubeadm init";
-      initConfig = {
-        apiVersion = "kubeadm.k8s.io/v1beta3";
-        kind = "InitConfiguration";
+      bootstrapTokenFile = mkOption {
+        type = path;
+        description = "Should contain the output from `kubeadm token create`";
+      };
+      certificateKeyFile = mkOption {
+        type = path;
+        description = "Should contain the output from `kubeadm init phase upload-certs --upload-certs`";
+      };
+
+      initConfig = opt (subType {
+        apiVersion = mkStrDefault "kubeadm.k8s.io/v1beta3";
+        kind = mkStrDefault "InitConfiguration";
 
         bootstrapTokens = opt (listOf BootstrapToken) "bootstrapTokens is respected at kubeadm init time and describes a set of Bootstrap Tokens to create. This information IS NOT uploaded to the kubeadm cluster configmap, partly because of its sensitive nature";
         nodeRegistration = opt NodeRegistrationOptions "nodeRegistration holds fields that relate to registering the new control-plane node to the cluster.";
@@ -96,11 +105,11 @@ in
         certificateKey = opt str "certificateKey sets the key with which certificates and keys are encrypted prior to being uploaded in a Secret in the cluster during the uploadcerts init phase.";
         skipPhases = opt (listOf str) "skipPhases is a list of phases to skip during command execution. The list of phases can be obtained with the kubeadm init --help command. The flag \"--skip-phases\" takes precedence over this field.";
         patches = opt Patches "patches contains options related to applying patches to components deployed by kubeadm during kubeadm init.";
-      };
+      }) "InitConfiguration";
 
-      clusterConfig = {
-        apiVersion = "kubeadm.k8s.io/v1beta3";
-        kind = "ClusterConfiguration";
+      clusterConfig = opt (subType {
+        apiVersion = mkStrDefault "kubeadm.k8s.io/v1beta3";
+        kind = mkStrDefault "ClusterConfiguration";
 
         etcd = opt Etcd "etcd holds the configuration for etcd.";
         networking = opt Networking "networking holds configuration for the networking topology of the cluster.";
@@ -119,22 +128,20 @@ in
         imageRepository = opt str "imageRepository sets the container registry to pull images from. If empty, registry.k8s.io will be used by default. In case of kubernetes version is a CI build (kubernetes version starts with ci/) gcr.io/k8s-staging-ci-images will be used as a default for control plane components and for kube-proxy, while registry.k8s.io will be used for all the other images.";
         featureGates = opt (attrsOf bool) "featureGates contains the feature gates enabled by the user.";
         clusterName = opt str "The cluster name.";
-      };
+      }) "ClusterConfiguration";
 
-      proxyConfig = {
-        apiVersion = "kubeproxy.config.k8s.io/v1alpha1";
-        kind = "KubeProxyConfiguration";
-
-        #  TODO: automate this ffs
-      };
-
-      kubeletConfig = {
-        apiVersion = "kubelet.config.k8s.io/v1beta1";
-        kind = "KubeletConfiguration";
+      proxyConfig = opt (subType {
+        apiVersion = mkStrDefault "kubeproxy.config.k8s.io/v1alpha1";
+        kind = mkStrDefault "KubeProxyConfiguration";
 
         #  TODO: automate this ffs
-      };
+      }) "KubeProxyConfiguration";
+
+      kubeletConfig = opt (subType {
+        apiVersion = mkStrDefault "kubelet.config.k8s.io/v1beta1";
+        kind = mkStrDefault "KubeletConfiguration";
+
+        #  TODO: automate this ffs
+      }) "KubeletConfiguration";
     };
-
-  config = lib.mkIf cfg.enable { };
 }

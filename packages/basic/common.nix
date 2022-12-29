@@ -7,9 +7,20 @@
     # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
     trusted-users = [ "root" "@wheel" ];
     secret-key-files = [ "/var/secret/local-nix-secret-key" ];
-    # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout > ./pubkeys.txt
+    # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout >> ./pubkeys.txt
+    subs = [
+      "http://sergio.localdomain:${toString config.services.nix-serve.port}"
+      "https://nix-community.cachix.org"
+      "https://cache.nixos.org/"
+    ];
     trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
   };
+
+  services.nix-serve = {
+    enable = true;
+    secretKeyFile = "/var/secret/local-nix-secret-key";
+  };
+  networking.firewall.allowedTCPPorts = [config.services.nix-serve.port];
 
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";

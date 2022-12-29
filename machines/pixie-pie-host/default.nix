@@ -14,6 +14,7 @@
   sdImage.compressImage = false;
 
   networking.hostName = "pixie-pie";
+  networking.domain = "localdomain";
 
   networking.firewall.enable = true;
   networking.interfaces.eth0.useDHCP = true;
