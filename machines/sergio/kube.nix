@@ -10,7 +10,7 @@
     init = {
       enable = true;
       bootstrapTokenFile = "/tmp/kube-bootstrap-token";
-       clusterConfig.controlPlaneEndpoint = "nucles.localdomain:6443";
+      clusterConfig.controlPlaneEndpoint = "nucles.localdomain:6443";
     };
   };
 

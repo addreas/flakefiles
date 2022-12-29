@@ -4,15 +4,16 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
 
-    # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
-    trusted-users = [ "root" "@wheel" ];
-    secret-key-files = [ "/var/secret/local-nix-secret-key" ];
-    # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout >> ./pubkeys.txt
-    subs = [
+    substituters = [
       "http://sergio.localdomain:${toString config.services.nix-serve.port}"
       "https://nix-community.cachix.org"
       "https://cache.nixos.org/"
     ];
+
+    # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
+    trusted-users = [ "root" "@wheel" ];
+    secret-key-files = [ "/var/secret/local-nix-secret-key" ];
+    # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout >> ./pubkeys.txt
     trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
   };
 
