@@ -59,6 +59,19 @@ in
     systemd.services.kubeadm-init = lib.mkIf (cfg.init.enable && cfg.controlPlane) {
       description = "kubeadm init";
 
+      path = with pkgs; [
+        gitMinimal
+        openssh
+        docker
+        utillinux
+        iproute
+        ethtool
+        thin-provisioning-tools
+        iptables
+        socat
+        cni
+      ];
+
       serviceConfig.Type = "oneshot";
       unitConfig.ConditionPathExists = "!/etc/kubernetes";
 
@@ -74,6 +87,19 @@ in
 
     systemd.services.kubeadm-join = lib.mkIf (cfg.init.enable) {
       description = "kubeadm join";
+
+      path = with pkgs; [
+        gitMinimal
+        openssh
+        docker
+        utillinux
+        iproute
+        ethtool
+        thin-provisioning-tools
+        iptables
+        socat
+        cni
+      ];
 
       serviceConfig.Type = "oneshot";
       unitConfig.ConditionPathExists = "!/etc/kubernetes";
@@ -95,6 +121,19 @@ in
 
     systemd.services.kubeadm-upgrade = {
       description = "kubeadm upgrade";
+
+      path = with pkgs; [
+        gitMinimal
+        openssh
+        docker
+        utillinux
+        iproute
+        ethtool
+        thin-provisioning-tools
+        iptables
+        socat
+        cni
+      ];
 
       serviceConfig.Type = "oneshot";
       unitConfig.ConditionPathExists = "/etc/kubernetes";
