@@ -39,11 +39,11 @@ in
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
-    systemd.tmpfiles.rules = [
-      "d /opt/cni/bin 0755 root root -"
-      "d /run/kubernetes 0755 kubernetes kubernetes -"
-      "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
-    ];
+    # systemd.tmpfiles.rules = [
+    #   "d /opt/cni/bin 0755 root root -"
+    #   "d /run/kubernetes 0755 kubernetes kubernetes -"
+    #   "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
+    # ];
 
     networking.firewall.allowedTCPPorts = [
       10250
@@ -97,39 +97,39 @@ in
     };
 
 
-    # systemd.services.kubeadm-upgrade = {
-    #   description = "kubeadm upgrade";
+    systemd.services.kubeadm-upgrade = {
+      description = "kubeadm upgrade";
 
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     ConditionPathExists = "/etc/kubernetes";
-    #   };
+      serviceConfig = {
+        Type = "oneshot";
+        ConditionPathExists = "/etc/kubernetes";
+      };
 
-    #   script = let
-    #     kubeadm = "${cfg.package}/bin/kubeadm";
-    #     kubectl = "${cfg.package}/bin/kubectl";
-    #     jd = "${pkgs.jd-diff-patch}/bin/jd";
-    #   in
-    #   if cfg.controlPlane
-    #   then ''
-    #     KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl} get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
-    #     KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
-    #     KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
-    #     if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
-    #         ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
-    #         && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
-    #     elif [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBE_APISERVER_MANIFEST_VERSION" ]]; then
-    #         ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
-    #     fi
-    #     ''
-    #   else ''
-    #     KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl} get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
-    #     ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
-    #     '';
+      script = let
+        kubeadm = "${cfg.package}/bin/kubeadm";
+        kubectl = "${cfg.package}/bin/kubectl";
+        jd = "${pkgs.jd-diff-patch}/bin/jd";
+      in
+      if cfg.controlPlane
+      then ''
+        KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl} get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
+        KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
+        KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
+        if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
+            ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
+            && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
+        elif [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBE_APISERVER_MANIFEST_VERSION" ]]; then
+            ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
+        fi
+        ''
+      else ''
+        KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl} get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
+        ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
+        '';
 
-    #   after = [ "network-online.target" "kubelet.service" ];
-    #   wants = [ "network-online.target" ];
-    # };
+      after = [ "network-online.target" "kubelet.service" ];
+      wants = [ "network-online.target" ];
+    };
 
   };
 }
