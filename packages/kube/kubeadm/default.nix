@@ -112,6 +112,7 @@ in
 
       script = ''
         ${cfg.package}/bin/kubeadm join ${cfg.init.clusterConfig.controlPlaneEndpoint} \
+          --v=5 \
           --token $(cat ${cfg.init.bootstrapTokenFile}) \
           --discovery-token-unsafe-skip-ca-verification \
           ${lib.strings.optionalString (cfg.controlPlane && cfg.init.certificateKeyFile) ''
