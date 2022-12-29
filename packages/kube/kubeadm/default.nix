@@ -70,6 +70,9 @@ in
         iptables
         socat
         cni
+        cri-tools
+        conntrack-tools
+        cfg.package
       ];
 
       serviceConfig.Type = "oneshot";
@@ -99,6 +102,9 @@ in
         iptables
         socat
         cni
+        cri-tools
+        conntrack-tools
+        cfg.package
       ];
 
       serviceConfig.Type = "oneshot";
@@ -133,6 +139,9 @@ in
         iptables
         socat
         cni
+        cri-tools
+        conntrack-tools
+        cfg.package
       ];
 
       serviceConfig.Type = "oneshot";
