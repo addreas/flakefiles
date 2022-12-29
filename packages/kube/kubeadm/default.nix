@@ -59,10 +59,8 @@ in
     systemd.services.kubeadm-init = lib.mkIf (cfg.init.enable && cfg.controlPlane) {
       description = "kubeadm init";
 
-      serviceConfig = {
-        Type = "oneshot";
-        ConditionPathExists = "!/etc/kubernetes";
-      };
+      serviceConfig.Type = "oneshot";
+      unitConfig.ConditionPathExists = "!/etc/kubernetes";
 
       script = ''
         if ! ${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}; then
@@ -77,10 +75,8 @@ in
     systemd.services.kubeadm-join = lib.mkIf (cfg.init.enable) {
       description = "kubeadm join";
 
-      serviceConfig = {
-        Type = "oneshot";
-        ConditionPathExists = "!/etc/kubernetes";
-      };
+      serviceConfig.Type = "oneshot";
+      unitConfig.ConditionPathExists = "!/etc/kubernetes";
 
       script = ''
         ${cfg.package}/bin/kubeadm join ${cfg.init.clusterConfig.controlPlaneEndpoint} \
@@ -100,10 +96,8 @@ in
     systemd.services.kubeadm-upgrade = {
       description = "kubeadm upgrade";
 
-      serviceConfig = {
-        Type = "oneshot";
-        ConditionPathExists = "/etc/kubernetes";
-      };
+      serviceConfig.Type = "oneshot";
+      unitConfig.ConditionPathExists = "/etc/kubernetes";
 
       script = let
         kubeadm = "${cfg.package}/bin/kubeadm";
