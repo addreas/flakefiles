@@ -39,6 +39,9 @@ in
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
+    networking.nftables.enable = false;
+    networking.firewall.package = pkgs.iptables-legacy;
+
     # systemd.tmpfiles.rules = [
     #   "d /opt/cni/bin 0755 root root -"
     #   "d /run/kubernetes 0755 kubernetes kubernetes -"
