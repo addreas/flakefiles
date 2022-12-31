@@ -17,11 +17,6 @@
     trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
   };
 
-  services.nix-serve = {
-    enable = true;
-    secretKeyFile = "/var/secret/local-nix-secret-key";
-  };
-  networking.firewall.allowedTCPPorts = [config.services.nix-serve.port];
 
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";

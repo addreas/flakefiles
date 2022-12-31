@@ -37,8 +37,11 @@ in
     interop.register = true;
 
     # Enable integration with Docker Desktop (needs to be installed)
-    docker-desktop.enable = true;
+    # docker-desktop.enable = true;
   };
+
+  systemd.services.systemd-tmpfiles-setup-dev.enable = false;
+  systemd.services.systemd-sysctl.enable = false;
 
   # virtualisation.podman.enable = true;
 }

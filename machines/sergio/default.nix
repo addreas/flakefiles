@@ -108,12 +108,19 @@
   };
 
 
+  services.nix-serve = {
+    enable = true;
+    secretKeyFile = "/var/secret/local-nix-secret-key";
+  };
+
   networking.firewall.checkReversePath = "loose";
 
   networking.firewall.allowedTCPPorts = [
     22
     80
     443
+
+    config.services.nix-serve.port
 
     9000 #minio
     9001 #minio
