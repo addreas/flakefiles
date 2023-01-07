@@ -123,6 +123,9 @@ in
             --control-plane \
             --certificate-key $(cat ${cfg.init.certificateKeyFile})
             ''}
+
+
+        rm ${cfg.init.bootstrapTokenFile} ${lib.strings.optionalString cfg.controlPlane cfg.init.certificateKeyFile}
       '';
 
       wantedBy = [ "kubelet.service" ];

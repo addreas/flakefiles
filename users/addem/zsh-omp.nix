@@ -4,6 +4,7 @@ let
     type = type;
     style = "plain";
   } // opts);
+
   ucode = code: builtins.fromJSON "\"\\u${code}\"";
 
   colors = {
@@ -21,6 +22,8 @@ in
   programs.oh-my-posh.enableZshIntegration = true;
   programs.oh-my-posh.settings = {
     "$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json";
+    version = 2;
+    final_space = true;
     blocks = [{
         alignment = "left";
         type = "prompt";
@@ -121,6 +124,10 @@ in
             foreground = colors.orange;
             template = "{{ if .SSHSession }} ${ucode "F817"}{{ .HostName }}{{ end }}";
           })
+          (mkSeg "time" {
+            foreground = colors.faint;
+            properties.time_format = "15:04:05";
+          })
         ];
       }
     ];
@@ -128,7 +135,5 @@ in
         foreground = colors.faint;
         template = "➜ ";
     };
-    final_space = true;
-    version = 2;
   };
 }
