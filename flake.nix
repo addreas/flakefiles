@@ -59,6 +59,17 @@
           "${self}/machines/sergio"
           home-manager.nixosModules.home-manager
           nixosModules.home-manager-addem
+
+          "${self}/packages/pixie-api/module.nix"
+          {
+            services.pixiecore-host-configs.enable = true;
+            services.pixiecore-host-configs.hosts = {
+              "84:a9:3e:10:c4:66" = {
+                nixosSystem = nixosConfigurations.nucle-installer;
+                kernelParams = [ "hostname=nucle4" ];
+              };
+            };
+          }
         ];
       };
 
@@ -77,17 +88,6 @@
           "${self}/machines/expessy"
           home-manager.nixosModules.home-manager
           nixosModules.home-manager-addem-desktop
-
-          # "${self}/packages/pixie-api/module.nix"
-          # {
-          #   services.pixiecore-host-configs.enable = true;
-          #   services.pixiecore-host-configs.hosts = {
-          #     "84:a9:3e:10:c4:66" = {
-          #       nixosSystem = nixosConfigurations.nucle-installer;
-          #       kernelParams = [ "hostname=nucle4" ];
-          #     };
-          #   };
-          # }
         ];
       };
 

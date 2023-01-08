@@ -1,45 +1,42 @@
 import { serve } from "https://deno.land/std@0.167.0/http/mod.ts";
 import { parse } from "https://deno.land/std@0.167.0/flags/mod.ts";
+import { router } from "https://deno.land/x/rutt/mod.ts";
+
+const routeHandler = router<{hostConfigs: Record<string, any>, githubToken: string}>({
+    "/v1/boot/:mac": (req, {hostConfigs}, match) => {
+      const mac = match.mac;
+      if (mac in hostConfigs) {
+        console.log(hostConfigs[mac]);
+        return Response.json(hostConfigs[mac]);
+      } else {
+        return new Response(404)
+      }
+    },
+    "/v1/ssh-key/:title": async (req, {githubToken}, match) => {
+      const title = match.title;
+      const key = await req.text();
+
+      return await fetchGithub("/repos/addreas/flakefiles/keys", {
+        githubToken,
+        method: "POST",
+        body: JSON.stringify({ key: key.trim(), title, read_only: false }),
+      });
+    },
+  })
 
 const args = parse(Deno.args);
 
 if (!args.configs) console.error("Missing --configs arg");
 
 const hostConfigs = JSON.parse(await Deno.readTextFile(args.configs));
-console.log(hostConfigs);
-
 const githubToken = await githubDeviceFlow(args["github-client-id"]);
 
 serve(
-  async (req) => {
-    const pathname = new URL(req.url).pathname;
-
-    console.log();
-    console.log(req.method, req.url);
-
-    if (req.method === "GET" && pathname.startsWith("/v1/boot")) {
-      const mac = pathname.replace("/v1/boot/", "");
-      if (mac in hostConfigs) {
-        console.log(hostConfigs[mac]);
-        return Response.json(hostConfigs[mac]);
-      }
-    }
-
-    if (req.method === "POST" && pathname.startsWith("/v1/ssh-key")) {
-      const key = await (await req.text()).trim();
-      const title = pathname.replace("/v1/ssh-key/", "");
-
-      const res = await fetchGithub("/repos/addreas/flakefiles/keys", {
-        githubToken,
-        method: "POST",
-        body: JSON.stringify({ key, title, read_only: false }),
-      });
-
-      return res;
-    } else {
-      console.log(await req.text());
-      return new Response();
-    }
+  async req => {
+    new
+    const res = await routeHandler(req, { hostConfigs, githubToken })
+    console.log(req.method, req.url, res.status)
+    return res
   },
   {
     port: parseInt(args.port),
