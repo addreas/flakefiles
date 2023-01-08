@@ -15,6 +15,8 @@
     secret-key-files = [ "/var/secret/local-nix-secret-key" ];
     # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout >> ./pubkeys.txt
     trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
+
+    max-jobs = lib.mkDefault 1;
   };
 
 

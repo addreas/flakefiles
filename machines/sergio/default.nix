@@ -66,8 +66,9 @@
 
   systemd.network.enable = true;
   systemd.network.networks.lan.name = "eno1";
-  systemd.network.networks.lan.dns = [ "192.168.1.1" ];
-  systemd.network.wait-online.anyInterface = true;
+  # systemd.network.networks.lan.dns = ["192.168.1.1"];
+  systemd.network.networks.lan.DHCP = "yes";
+  networking.dhcpcd.enable = false;
   services.resolved.dnssec = "false"; # dnssec fails for localdomain and breaks stuff
 
   services.tailscale.enable = true;
