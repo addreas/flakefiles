@@ -4,6 +4,7 @@
     ./hardware-configuration.nix
     ../default.nix
   ];
+
   networking.hostName = "nucle4";
 }
 
