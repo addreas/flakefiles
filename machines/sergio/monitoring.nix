@@ -35,10 +35,6 @@
   #   driver = "apcupsd-ups";
   # };
 
-  services.prometheus.exporters.node.enable = true;
-  services.prometheus.exporters.node.openFirewall = true;
-
-
   networking.firewall.allowedTCPPorts = [
     3493 # nut/upsd
     3100 # loki

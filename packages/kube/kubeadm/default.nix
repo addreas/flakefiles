@@ -33,14 +33,12 @@ in
     boot.kernelModules = [ "br_netfilter" ];
 
     boot.kernel.sysctl = {
-      "net.bridge.bridge-nf-call-iptables" = 1;
+      # idk why i have these 
+      # "net.bridge.bridge-nf-call-iptables" = 1;
+      # "net.bridge.bridge-nf-call-ip6tables" = 1;
       "net.ipv4.ip_forward" = 1;
-      "net.bridge.bridge-nf-call-ip6tables" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
     };
-
-    networking.nftables.enable = false;
-    networking.firewall.package = pkgs.iptables-legacy;
 
     # systemd.tmpfiles.rules = [
     #   "d /opt/cni/bin 0755 root root -"
@@ -71,6 +69,7 @@ in
         ethtool
         thin-provisioning-tools
         iptables
+        nftables
         socat
         cni
         cri-tools
@@ -103,6 +102,7 @@ in
         ethtool
         thin-provisioning-tools
         iptables
+        nftables
         socat
         cni
         cri-tools
@@ -141,6 +141,7 @@ in
         ethtool
         thin-provisioning-tools
         iptables
+        nftables
         socat
         cni
         cri-tools

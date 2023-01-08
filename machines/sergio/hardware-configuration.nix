@@ -48,6 +48,11 @@
       options = [ "subvol=@varlog" ];
     };
 
+  fileSystems."/var/lib/longhorn" =
+    { device = "UUID=ff765678-1e5a-4496-aa0c-0f763dc6c9b1";
+      fsType = "ext4";
+    };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
