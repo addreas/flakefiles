@@ -16,6 +16,7 @@
 
   home.packages = with pkgs; [
     go
+    deno
   ];
 
   programs.home-manager.enable = true;

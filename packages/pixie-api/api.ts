@@ -1,18 +1,19 @@
 import { serve } from "https://deno.land/std@0.167.0/http/mod.ts";
 import { parse } from "https://deno.land/std@0.167.0/flags/mod.ts";
-import { router } from "https://deno.land/x/rutt/mod.ts";
+import * as colors from "https://deno.land/std@0.167.0/fmt/colors.ts";
+import { router } from "https://deno.land/x/rutt@0.0.14/mod.ts";
 
-const routeHandler = router<{hostConfigs: Record<string, any>, githubToken: string}>({
-    "/v1/boot/:mac": (req, {hostConfigs}, match) => {
+const routeHandler = router<{hostConfigs: Record<string, unknown>, githubToken: string}>({
+    "/v1/boot/:mac": (_req, {hostConfigs}, match) => {
       const mac = match.mac;
       if (mac in hostConfigs) {
         console.log(hostConfigs[mac]);
         return Response.json(hostConfigs[mac]);
       } else {
-        return new Response(404)
+        return new Response(null, {status: 404})
       }
     },
-    "/v1/ssh-key/:title": async (req, {githubToken}, match) => {
+    "POST@/v1/ssh-key/:title": async (req, {githubToken}, match) => {
       const title = match.title;
       const key = await req.text();
 
@@ -26,23 +27,71 @@ const routeHandler = router<{hostConfigs: Record<string, any>, githubToken: stri
 
 const args = parse(Deno.args);
 
-if (!args.configs) console.error("Missing --configs arg");
+if (!("configs" in args)) throw new Error("Missing --configs arg");
+if (!("github-client-id" in args)) throw new Error("Missing --github-client-id arg");
 
 const hostConfigs = JSON.parse(await Deno.readTextFile(args.configs));
 const githubToken = await githubDeviceFlow(args["github-client-id"]);
 
 serve(
-  async req => {
-    new
-    const res = await routeHandler(req, { hostConfigs, githubToken })
-    console.log(req.method, req.url, res.status)
-    return res
+  async (req, conn) => {
+    const before = window.performance.now()
+    try {
+      const res = await routeHandler(req, { ...conn, hostConfigs, githubToken })
+      const durationMs = window.performance.now() - before
+      console.log(`${new Date().toISOString()} | ${statusColor(res.status)(`${res.status}`)} | ${durationMs}ms | ${formatAddr(conn.remoteAddr)} | ${methodColor(req.method)(req.method)} | ${req.url}`)
+      return res
+    } catch(e) {
+      const durationMs = window.performance.now() - before
+      console.log(`${new Date().toISOString()} | EXCEPTION THROWN | ${durationMs}ms | ${formatAddr(conn.remoteAddr)} | ${methodColor(req.method)(req.method)} | ${req.url}`)
+      throw e
+    }
   },
   {
     port: parseInt(args.port),
     hostname: args.host,
   }
 );
+
+function statusColor(code: number,) {
+  if (code < 200) {
+    return colors.bgBlue
+  } else if (code >= 200 && code < 300) {
+    return colors.bgGreen
+  } else if (code >= 300 && code < 500) {
+    return colors.bgYellow
+    } else {
+    return colors.bgRed
+  }
+}
+
+function methodColor(method: string) {
+  switch (method) {
+    case "HEAD":
+    case "OPTIONS":
+    case "GET": return colors.bgBlue
+
+    case "PUT":
+    case "PATCH":
+    case "POST": return colors.bgBrightGreen
+
+    case "DELETE": return colors.bgRed
+
+    default: return colors.bgYellow
+  }
+}
+
+function formatAddr(addr: Deno.Addr): string {
+  switch(addr.transport) {
+    case "tcp":
+    case "udp":
+        return `${addr.transport}://${addr.hostname}:${addr.port}`
+
+    case "unix":
+    case "unixpacket":
+        return addr.path
+  }
+}
 
 async function githubDeviceFlow(client_id: string): Promise<string> {
   const tokenPath = "/tmp/pixie-api-github-token";
@@ -56,7 +105,7 @@ async function githubDeviceFlow(client_id: string): Promise<string> {
   }
 
   while (true) {
-    const device_code_req = await fetch(
+    const deviceCodeRes = await fetch(
       "https://github.com/login/device/code",
       {
         method: "POST",
@@ -71,17 +120,21 @@ async function githubDeviceFlow(client_id: string): Promise<string> {
       }
     ).then((r) => r.json());
 
+    if(!deviceCodeRes.user_code) {
+      throw new Error(`Missing user_code in ${JSON.stringify(deviceCodeRes)}`)
+    }
+
     const expiry = Date.now() + 900 * 1000;
 
     while (Date.now() < expiry) {
       console.log(
         "You should enter the code",
-        device_code_req.user_code,
+        deviceCodeRes.user_code,
         "at",
-        device_code_req.verification_uri
+        deviceCodeRes.verification_uri
       );
 
-      const access_token_req = await fetch(
+      const accessTokenRes = await fetch(
         "https://github.com/login/oauth/access_token",
         {
           method: "POST",
@@ -92,19 +145,19 @@ async function githubDeviceFlow(client_id: string): Promise<string> {
           body: JSON.stringify({
             client_id,
             grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-            device_code: device_code_req.device_code,
+            device_code: deviceCodeRes.device_code,
           }),
         }
       ).then((r) => r.json());
 
-      if (access_token_req.access_token) {
-        const token = access_token_req.access_token;
+      if (accessTokenRes.access_token) {
+        const token = accessTokenRes.access_token;
         await Deno.writeTextFile(tokenPath, token);
         return token;
       }
 
       await new Promise((resolve) =>
-        setTimeout(resolve, device_code_req.interval * 1000)
+        setTimeout(resolve, deviceCodeRes.interval * 1000)
       );
     }
   }
