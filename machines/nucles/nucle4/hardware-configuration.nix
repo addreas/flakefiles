@@ -14,42 +14,42 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4F5E-A2FA";
+    { device = "/dev/disk/by-uuid/586E-6973";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/var/lib" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@varlib" ];
     };
 
   fileSystems."/var/log" =
-    { device = "/dev/nvme0n1p2";
+    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@varlog" ];
     };
 
   fileSystems."/var/longhorn" =
-    { device = "/dev/disk/by-uuid/49bc363e-c2e5-44ff-bc79-8e63d85527f2";
+    { device = "/dev/disk/by-uuid/0de32061-dedc-447e-b71c-6da698db33dd";
       fsType = "ext4";
     };
 
