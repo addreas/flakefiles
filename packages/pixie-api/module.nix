@@ -14,6 +14,8 @@ let
           [
             "init=${host.nixosSystem.config.system.build.toplevel}/init"
             "pixie-api=http://${config.networking.fqdn}:${builtins.toString cfg.port}"
+            # TODO: serve nuke.sh from instead of baking into nucle-installer
+            "mac=${mac}"
           ]
           host.kernelParams
         ]);
@@ -65,11 +67,12 @@ in
           "run"
           "--allow-net"
           "--allow-read"
-          "--allow-write=/tmp/pixie-api-github-token"
+          "--allow-write=/tmp/pixie-api"
           "${api-ts}"
           "--port=${builtins.toString cfg.port}"
           "--host=0.0.0.0"
           "--configs=${host-configs}"
+          "--persist=/tmp/pixie-api"
           "--github-client-id=${cfg.github-client-id}"
         ];
       };

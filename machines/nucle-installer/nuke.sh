@@ -87,10 +87,11 @@ nix-store \
 
 cp "/var/secret/local-nix-secret-key" "$MNT/var/secret/local-nix-secret-key"
 
-
 nixos-install \
   --root $MNT \
   --no-root-password \
+  --option extra-experimental-features auto-allocate-uids \
+  --option extra-experimental-features cgroups \
   --flake "$MNT/home/addem/flakefiles#$(hostname)"
 
 git add .
@@ -100,5 +101,9 @@ git commit -am "add newly generated hardware-configuration.nix for $(hostname)"
 git push
 
 chown --recursive 1000:users $MNT/home/addem/flakefiles
+
+curl "$(cmdline pixie-api)/v1/install-finished/$(cmdline mac)" \
+  --silent \
+  --request POST
 
 reboot
