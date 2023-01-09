@@ -2,7 +2,17 @@
 {
   nix.package = pkgs.nixVersions.stable;
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+
+      # https://github.com/NixOS/nix/pull/3600
+      "auto-allocate-uids"
+      "cgroups"
+    ];
+    system-features = [ "uid-range" ];
+    auto-allocate-uids = true;
+    use-cgroups = true;
 
     substituters = [
       "http://sergio.localdomain:${toString config.services.nix-serve.port}"
@@ -17,6 +27,14 @@
     trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
 
     max-jobs = lib.mkDefault 1;
+    cores = lib.mkDefault 4;
+  };
+
+  nix.daemonCPUSchedPolicy = lib.mkDefault "idle";
+
+  systemd.services.nix-daemon.serviceConfig = {
+    CPUQuota = "400%";
+    MemoryHigh = "4G";
   };
 
 
