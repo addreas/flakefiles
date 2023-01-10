@@ -1,4 +1,13 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+let
+  hosts = [
+    "nucles.localdomain"
+    "nucle1.localdomain"
+    "nucle2.localdomain"
+    "nucle3.localdomain"
+  ];
+in
+{
   imports = [
     ../../packages/kube
   ];
@@ -12,16 +21,17 @@
       clusterName = "nucles";
       controlPlaneEndpoint = "nucles.localdomain:6443";
       apiServer = {
-        certSANs = [
-          "nucles.localdomain"
-          "sergio.localdomain"
-          "nucle1.localdomain"
-          "nucle2.localdomain"
-          "nucle3.localdomain"
-        ];
+        certSANs = hosts;
         extraArgs.feature-gates = "MixedProtocolLBService=true";
       };
     };
+
+    init.clusterConfig = {
+      clusterName = "nucles";
+      apiServer.certSANs = hosts;
+      controlPlaneEndpoint = "nucles.localdomain:6443";
+    };
+
     init.kubeletConfig = {
       allowedUnsafeSysctls = [
         "net.ipv4.conf.all.src_valid_mark"
