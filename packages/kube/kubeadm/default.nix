@@ -86,6 +86,7 @@ in
         end
       '';
 
+      wantedBy = [ "kubelet.service" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
     };
@@ -124,6 +125,7 @@ in
             ''}
       '';
 
+      wantedBy = [ "kubelet.service" ];
       after = [ "network-online.target" ] ++ (lib.lists.optionals cfg.controlPlane ["kubeadm-init.service"]);
       wants = [ "network-online.target" ];
     };
@@ -174,7 +176,8 @@ in
         ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
         '';
 
-      after = [ "network-online.target" "kubelet.service" ];
+      wantedBy = [ "kubelet.service" ];
+      after = [ "network-online.target" "kubelet.service" ] ++ (lib.lists.optionals cfg.init (["kubeadm-join.service"] ++ (lib.lists.optionals cfg.controlPlane ["kubeadm-init.service"]));
       wants = [ "network-online.target" ];
     };
 
