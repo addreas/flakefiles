@@ -177,7 +177,7 @@ in
         '';
 
       wantedBy = [ "kubelet.service" ];
-      after = [ "network-online.target" "kubelet.service" ] ++ (lib.lists.optionals cfg.init (["kubeadm-join.service"] ++ (lib.lists.optionals cfg.controlPlane ["kubeadm-init.service"]));
+      after = [ "network-online.target" "kubelet.service" ] ++ (lib.lists.optionals cfg.init (["kubeadm-join.service"] ++ (lib.lists.optionals cfg.controlPlane ["kubeadm-init.service"])));
       wants = [ "network-online.target" ];
     };
 
