@@ -48,7 +48,7 @@
       options = [ "subvol=@varlog" ];
     };
 
-  fileSystems."/var/longhorn" =
+  fileSystems."/var/lib/longhorn" =
     { device = "/dev/disk/by-uuid/0de32061-dedc-447e-b71c-6da698db33dd";
       fsType = "ext4";
     };

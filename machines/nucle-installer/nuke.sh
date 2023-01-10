@@ -5,7 +5,8 @@ MNT=/mnt
 set -e
 set -x
 
-umount $MNT/{boot,home,nix,var/log,var/lib,var/longhorn} || true
+umount $MNT/var/lib/longhorn
+umount $MNT/{boot,home,nix,var/log,var/lib} || true
 umount $MNT || true
 
 echo
@@ -38,7 +39,7 @@ umount "$MNT"
 
 mount -t btrfs -o noatime,compress=zstd,subvol=@ "$P2" "$MNT"
 
-mkdir -p $MNT/{boot,home,nix,var/log,var/lib,var/longhorn}
+mkdir -p $MNT/{boot,home,nix,var/log,var/lib}
 
 mount -t vfat  -o noatime,defaults ${DEVICE}p1 "$MNT/boot"
 
@@ -47,7 +48,9 @@ mount -t btrfs -o noatime,compress=zstd,subvol=@nix "$P2" "$MNT/nix"
 mount -t btrfs -o noatime,compress=zstd,subvol=@varlib "$P2" "$MNT/var/lib"
 mount -t btrfs -o noatime,compress=zstd,subvol=@varlog "$P2" "$MNT/var/log"
 
-mount -t ext4  -o noatime,defaults ${DEVICE}p3 "$MNT/var/longhorn"
+mkdir $MNT/var/lib/longhorn
+
+mount -t ext4  -o noatime,defaults ${DEVICE}p3 "$MNT/var/lib/longhorn"
 
 mkdir -p "$MNT/home/addem/.ssh"
 ssh-keygen \
