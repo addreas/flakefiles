@@ -100,7 +100,7 @@ git config user.name "$(hostname)"
 git commit -am "add newly generated hardware-configuration.nix for $(hostname)"
 git push
 
-chown --recursive 1000:users $MNT/home/addem/flakefiles
+chown --recursive 1000:users $MNT/home/addem/
 
 curl "$(cmdline pixie-api)/v1/install-finished/$(cmdline mac)" \
   --silent \
