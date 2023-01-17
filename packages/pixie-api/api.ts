@@ -12,7 +12,7 @@ type HandlerContext = {
 const routeHandler = router<>({
   "/v1/boot/:mac": (_req, { hostConfigs, persistanceRoot }, match) => {
     const mac = match.mac;
-    if ([...Deno.readDirSync(".")].map((d) => d.name).includes(mac)) {
+    if ([...Deno.readDirSync(persistanceRoot)].map((d) => d.name).includes(mac)) {
       console.log(
         "Skipping already provisioned node",
         mac,

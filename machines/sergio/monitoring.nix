@@ -38,5 +38,6 @@
   networking.firewall.allowedTCPPorts = [
     3493 # nut/upsd
     3100 # loki
+    9100 # node exporter
   ];
 }
