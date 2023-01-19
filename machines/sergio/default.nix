@@ -114,7 +114,13 @@
     secretKeyFile = "/var/secret/local-nix-secret-key";
   };
 
-  networking.firewall.checkReversePath = "loose";
+
+  # networking.firewall.enable = false;
+  networking.firewall.logReversePathDrops = true;
+  # networking.firewall.logRefusedPackets = true;
+  # networking.firewall.logRefusedUnicastsOnly = true;
+
+  networking.firewall.checkReversePath = false; # even loose breaks kube-dns responses
 
   networking.firewall.allowedTCPPorts = [
     22
