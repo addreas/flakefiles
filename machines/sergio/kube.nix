@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   imports = [
     ../../packages/kube
   ];
@@ -15,4 +15,8 @@
   };
 
   environment.systemPackages = [ pkgs.kubernetes ];
+
+  services.avahi.reflector = true;
+  services.openiscsi.enable = true;
+  services.openiscsi.name = "iqn.2023-01.se.addem.nucles:${config.networking.hostName}";
 }
