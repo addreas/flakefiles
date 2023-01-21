@@ -16,7 +16,8 @@
 
     substituters =  [
       "https://nix-community.cachix.org"
-    ] ++ lib.lists.optional (config.networking.hostName != "sergio") ["http://sergio.localdomain:${toString config.services.nix-serve.port}"];
+    ];
+    # ] ++ lib.lists.optional (config.networking.hostName != "sergio") "http://sergio.localdomain:${toString config.services.nix-serve.port}";
 
     # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
     trusted-users = [ "root" "@wheel" ];
