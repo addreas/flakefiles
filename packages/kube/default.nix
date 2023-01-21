@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   imports = [
     ./crio.nix
     ./cilium.nix
@@ -15,6 +15,6 @@
     networking.firewall.checkReversePath = false; # even loose breaks kube-dns responses
     networking.firewall.allowedUDPPorts = [
       53 # routing kube dns responses
-    ]
+    ];
   };
 }
