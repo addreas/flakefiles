@@ -66,6 +66,9 @@ Setup kubelet bootstap token, and rebuild
 ```sh
 ssh nucle1.localdomain -- kubeadm token create | ssh nucle4.localdomain -- sudo tee /var/secret/kubeadm-bootstrap-token
 
+#for controlplane
+ssh nucle1.localdomain -- sudo kubeadm init phase upload-certs --upload-certs | grep -v upload-certs | ssh nucle4.localdomain -- sudo tee /var/secret/kubeadm-cert-key
+
 ssh new-node.localdomain
 # Now this hopefully works
 systemctl status kubeadm-join
