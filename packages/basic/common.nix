@@ -14,11 +14,9 @@
     auto-allocate-uids = true;
     use-cgroups = true;
 
-    substituters = [
-      "http://sergio.localdomain:${toString config.services.nix-serve.port}"
+    substituters =  [
       "https://nix-community.cachix.org"
-      "https://cache.nixos.org/"
-    ];
+    ] ++ lib.lists.optional (config.networking.hostName != "sergio") ["http://sergio.localdomain:${toString config.services.nix-serve.port}"];
 
     # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
     trusted-users = [ "root" "@wheel" ];

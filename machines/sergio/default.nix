@@ -112,6 +112,8 @@
   services.nix-serve = {
     enable = true;
     secretKeyFile = "/var/secret/local-nix-secret-key";
+    openFirewall = true;
+    # package = pkgs.haskellPackages.nix-serve-ng;
   };
 
 
@@ -126,8 +128,6 @@
     22
     80
     443
-
-    config.services.nix-serve.port
 
     9000 #minio
     9001 #minio

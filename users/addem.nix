@@ -22,6 +22,7 @@
     yq
     dig
     git
+    rlwrap
 
     home-manager
   ];
