@@ -109,12 +109,12 @@
   };
 
 
-  services.nix-serve = {
-    enable = true;
-    secretKeyFile = "/var/secret/local-nix-secret-key";
-    openFirewall = true;
-    # package = pkgs.haskellPackages.nix-serve-ng;
-  };
+  # services.nix-serve = {
+  #   enable = true;
+  #   secretKeyFile = "/var/secret/local-nix-secret-key";
+  #   openFirewall = true;
+  #   # package = pkgs.haskellPackages.nix-serve-ng;
+  # };
 
 
   # networking.firewall.enable = false;
