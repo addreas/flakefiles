@@ -23,6 +23,7 @@
     dig
     git
     rlwrap
+    git-lfs
 
     home-manager
   ];
