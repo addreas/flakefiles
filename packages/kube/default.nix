@@ -16,5 +16,34 @@
     networking.firewall.allowedUDPPorts = [
       53 # routing kube dns responses
     ];
+
+    systemd.sockets.cni-dhcp = {
+      description = "CNI DHCP service socket";
+      documentation = "https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp";
+      partOf = [ "chi-dhcp.service" ];
+
+      socketConfig = {
+        ListenStream = "/run/cni/dhcp.sock";
+        SocketMode = "0660";
+        SocketUser = "root";
+        SocketGroup = "root";
+        RemoveOnStop = true;
+      };
+
+      wantedBy = [ "sockets.target" ];
+    };
+
+
+    systemd.services.cni-dhcp = {
+      description = "CNI DHCP service";
+      documentation = "https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp";
+      after = [ "network.target" "cni-dhcp.socket" ];
+      requires = ["cni-dhcp.socket"];;
+
+      serviceConfig.ExecStart = "${pkgs.cni-plugins}/bin/dhcp daemon";
+
+      wantedBy = [ "multi-user.target" ];
+    };
+
   };
 }
