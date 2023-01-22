@@ -70,7 +70,6 @@
   systemd.network.networks.lan.DHCP = "yes";
   networking.dhcpcd.enable = false;
   services.resolved.dnssec = "false"; # dnssec fails for localdomain and breaks stuff
-  networking.dhcpcd.allowInterfaces = ["eno1"];
 
   services.tailscale.enable = true;
 
