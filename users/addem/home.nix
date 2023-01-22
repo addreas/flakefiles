@@ -17,6 +17,7 @@
   home.packages = with pkgs; [
     go
     deno
+    cue
   ];
 
   programs.home-manager.enable = true;
