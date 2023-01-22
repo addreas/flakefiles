@@ -27,5 +27,7 @@
   systemd.network.wait-online.anyInterface = true;
   services.resolved.dnssec = "false"; # dnssec fails for localdomain and breaks stuff
 
+  networking.dhcpcd.allowInterfaces = ["en*"];
+
   security.sudo.wheelNeedsPassword = false;
 }
