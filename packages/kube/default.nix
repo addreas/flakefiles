@@ -19,7 +19,7 @@
 
     systemd.sockets.cni-dhcp = {
       description = "CNI DHCP service socket";
-      documentation = "https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp";
+      documentation = ["https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp"];
       partOf = [ "chi-dhcp.service" ];
 
       socketConfig = {
@@ -36,9 +36,9 @@
 
     systemd.services.cni-dhcp = {
       description = "CNI DHCP service";
-      documentation = "https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp";
+      documentation = ["https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp"];
       after = [ "network.target" "cni-dhcp.socket" ];
-      requires = ["cni-dhcp.socket"];;
+      requires = ["cni-dhcp.socket"];
 
       serviceConfig.ExecStart = "${pkgs.cni-plugins}/bin/dhcp daemon";
 
