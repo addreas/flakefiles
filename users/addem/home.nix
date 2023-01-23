@@ -18,6 +18,13 @@
     go
     deno
     cue
+    kubernetes-helm
+    cilium-cli
+    openocd
+    gnumake
+    cmake
+    gcc
+    gcc-arm-embedded
   ];
 
   programs.home-manager.enable = true;
