@@ -39,5 +39,6 @@
   environment.pathsToLink = [ "/share" ];
 
   # services.tailscale.enable = true;
+  programs.wireshark.enable = true;
 }
 
