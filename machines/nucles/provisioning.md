@@ -22,14 +22,7 @@ Host config`./<new-node>/default.nix`:
 
 Add host config in root `flake.nix`
 ```nix
-      nixosConfigurations.<new-node> = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          "${self}/machines/nucles/<new-node>"
-          home-manager.nixosModules.home-manager
-          nixosModules.home-manager-addem
-        ];
-      };
+      nixosConfigurations.<new-node> = machine "<new-node>" [ addem-basic ];
 
       nixosConfigurations.<some-pxe-host> = ... {
         ...
@@ -57,7 +50,7 @@ ssh new-node.localdomain
 cd flakefiles
 git pull
 
-sudo ./users/mkshadow.sh addem
+sudo ./users/mkshadow.sh addem # TODO: perhaps just drop the hash in a .nix file instead to skip this
 sudo nixos-rebuild switch
 
 # These will be failing
@@ -67,6 +60,7 @@ systemctl status kubelet
 
 Setup kubelet bootstap token, and rebuild
 ```sh
+# TODO: this should/could be fetched via pixie-api instead?
 ssh nucle1.localdomain -- kubeadm token create | ssh new-node.localdomain -- sudo tee /var/secret/kubeadm-bootstrap-token
 
 #for controlplane

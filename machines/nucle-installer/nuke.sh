@@ -1,3 +1,7 @@
+# TODO: pixie-api mTLS?
+# TODO: serve this via pixie-api
+# TODO: fetch bootstrap tokens from pixie-api
+
 DEVICE=/dev/nvme0n1
 
 MNT=/mnt
