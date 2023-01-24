@@ -31,8 +31,7 @@ in
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/installer/netboot/netboot-minimal.nix")
 
-    ../../packages/basic/common.nix
-    ../../packages/basic/services.nix
+    ../common/base.nix
   ];
 
   system.stateVersion = "22.11";

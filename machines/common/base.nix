@@ -14,28 +14,17 @@
     auto-allocate-uids = true;
     use-cgroups = true;
 
-    substituters =  [
-      "https://nix-community.cachix.org"
-    ];
+    substituters =  [ "https://nix-community.cachix.org" ];
     # ] ++ lib.lists.optional (config.networking.hostName != "sergio") "http://sergio.localdomain:${toString config.services.nix-serve.port}";
 
-    # to allow nixos-rebuild test --target-host pixie-pie.localdomain --flake .#pixie-pie-host
     trusted-users = [ "root" "@wheel" ];
-    secret-key-files = [ "/var/secret/local-nix-secret-key" ];
-    # sudo nix-store --generate-binary-cache-key lenny-wsl-0 /var/secret/local-nix-secret-key /dev/stdout >> ./pubkeys.txt
-    trusted-public-keys = builtins.filter (l: l != "") (lib.strings.splitString "\n" (builtins.readFile ./pubkeys.txt));
-
-    max-jobs = lib.mkDefault 1;
-    cores = lib.mkDefault 4;
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "lenny-wsl-0:T6NHA2GC8JwcLTtDMKyl/osBFdk8+gt9o95poXrtmM0="
+      "expessy-0:03bM28uM9sIw2pGW4aFqNWPsdVSVZXu9REOMbUnQrLw="
+      "sergio-0:iLOUuTIPPeJARAemTdAhD4y0Yi+/luB52jiQhMYBwVE="
+    ];
   };
-
-  nix.daemonCPUSchedPolicy = lib.mkDefault "idle";
-
-  systemd.services.nix-daemon.serviceConfig = {
-    CPUQuota = "400%";
-    MemoryHigh = "4G";
-  };
-
 
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
@@ -61,18 +50,15 @@
   #     '';
   #   }
 
+  users.defaultUserShell = pkgs.zsh;
+  programs.command-not-found.enable = false;
 
   environment.systemPackages = with pkgs; [
     zsh
     vim
-    wget
+    helix
     curl
     git
-    cntr
   ];
-
-  programs.command-not-found.enable = false;
-
-  users.defaultUserShell = pkgs.zsh;
 }
 

@@ -1,6 +1,7 @@
 { pkgs, lib, ... }:
 {
   home.stateVersion = "22.11";
+  programs.home-manager.enable = true;
 
   imports = [
     ./helix.nix
@@ -15,20 +16,9 @@
   };
 
   home.packages = with pkgs; [
-    go
-    deno
-    cue
+    kubectl
+    fluxcd
     kubernetes-helm
     cilium-cli
-    openocd
-    gnumake
-    cmake
-    gcc
-    gcc-arm-embedded
   ];
-
-  programs.home-manager.enable = true;
-
-  programs.nix-index.enable = true;
-  programs.nix-index.enableZshIntegration = true;
 }

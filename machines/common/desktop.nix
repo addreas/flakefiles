@@ -41,7 +41,6 @@
   fonts.enableDefaultFonts = true;
   fonts.fonts = with pkgs; [
     nerdfonts
-    nerdfonts
     hack-font
     noto-fonts
     noto-fonts-extra

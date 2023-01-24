@@ -3,8 +3,8 @@
     ./kube.nix
 
     ../../users/addem.nix
-    ../../packages/basic/common.nix
-    ../../packages/basic/services.nix
+    ../common/base.nix
+    ../common/services.nix
   ];
   swapDevices = [ ];
 
@@ -17,7 +17,7 @@
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.flake = "/home/addem/flakefiles";
-  system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
+  # system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
 
   networking.domain = "localdomain";
 
@@ -27,7 +27,6 @@
   networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
   services.resolved.dnssec = "false"; # dnssec fails for localdomain and breaks stuff
-
 
   security.sudo.wheelNeedsPassword = false;
 }

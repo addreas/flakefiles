@@ -12,7 +12,27 @@
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, nixpkgs, nixos-wsl, nixos-hardware, home-manager, ... }:
-    let system = "x86_64-linux";
+    let
+      system = "x86_64-linux";
+
+      home-manager-addem = home-conf: [
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.addem = import home-conf;
+          }
+      ];
+
+      addem-basic = home-manager-addem ./users/addem/home.nix;
+
+      machine = name: modules: nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = nixpkgs.lib.lists.flatten [ "${self}/machines/${name}" modules ] ;
+      };
+
+      trivial-machine = name: machine name [];
+
     in
     with import nixpkgs { inherit system; }; rec {
       packages.${system} = rec {
@@ -20,6 +40,11 @@
         # cockpit = callPackage ./packages/cockpit { extraPackages = [ pcp ]; };
         cockpit-machines = callPackage ./packages/cockpit-machines { };
         cockpit-podman = callPackage ./packages/cockpit-podman { };
+      };
+
+      nixosModules = {
+        pcp = import ./packages/pcp/module.nix;
+        cockpit = import ./packages/cockpit/module.nix;
       };
 
       homeConfigurations.addem = home-manager.lib.homeManagerConfiguration {
@@ -37,117 +62,42 @@
         ];
       };
 
-      nixosModules = {
-        pcp = import ./packages/pcp/module.nix;
-        cockpit = import ./packages/cockpit/module.nix;
+      nixosConfigurations.sergio = machine "sergio" [
+        addem-basic
 
-        home-manager-addem = {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.addem = import ./users/addem/home.nix;
-        };
-        home-manager-addem-desktop = {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.addem = import ./users/addem/home.desktop.nix;
-        };
-      };
+        # "${self}/packages/pixie-api/module.nix"
+        # {
+        #   services.pixiecore-host-configs.enable = false;
+        #   services.pixiecore-host-configs.hosts = let
+        #     nucle-installer = name: {
+        #       nixosSystem = nixosConfigurations.nucle-installer;
+        #       kernelParams = [ "hostname=${name}" ];
+        #     };
+        #   in {
+        #     "1c:69:7a:a0:af:3e" = nucle-installer "nucle1";
+        #     "1c:69:7a:6f:c2:b8" = nucle-installer "nucle2";
+        #     "1c:69:7a:01:84:76" = nucle-installer "nucle3";
+        #     "84:a9:3e:10:c4:66" = nucle-installer "nucle4";
+        #   };
+        # }
+      ];
 
-      nixosConfigurations.sergio = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          "${self}/machines/sergio"
-          home-manager.nixosModules.home-manager
-          nixosModules.home-manager-addem
+      nixosConfigurations.nucle1 = machine "nucles/nucle1" [addem-basic];
+      nixosConfigurations.nucle2 = machine "nucles/nucle2" [addem-basic];
+      nixosConfigurations.nucle3 = machine "nucles/nucle3" [addem-basic];
+      nixosConfigurations.nucle4 = machine "nucles/nucle4" [addem-basic];
 
-          # "${self}/packages/pixie-api/module.nix"
-          # {
-          #   services.pixiecore-host-configs.enable = true;
-          #   services.pixiecore-host-configs.hosts = {
-          #     "84:a9:3e:10:c4:66" = {
-          #       nixosSystem = nixosConfigurations.nucle-installer;
-          #       kernelParams = [ "hostname=nucle4" ];
-          #     };
-          #   };
-          # }
-        ];
-      };
+      nixosConfigurations.expessy = machine "expessy" [
+        (home-manager-addem ./users/addem/home.desktop.nix)
+      ];
 
-      nixosConfigurations.nucle4 = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          "${self}/machines/nucles/nucle4"
-          home-manager.nixosModules.home-manager
-          nixosModules.home-manager-addem
-        ];
-      };
+      nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny" [
+        nixos-wsl.nixosModules.wsl
+        (home-manager-addem ./users/addem/home.dev.nix)
+      ];
 
-      nixosConfigurations.expessy = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          "${self}/machines/expessy"
-          home-manager.nixosModules.home-manager
-          nixosModules.home-manager-addem-desktop
-        ];
-      };
-
-      nixosConfigurations."LAPTOP-EK7DRJB8" = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [
-          nixos-wsl.nixosModules.wsl
-          "${self}/machines/lenny"
-          home-manager.nixosModules.home-manager
-          nixosModules.home-manager-addem
-        ];
-      };
-
-      nixosConfigurations.pixie-pie-host = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          "${self}/machines/pixie-pie-host"
-          "${self}/packages/pixie-api/module.nix"
-          nixos-hardware.nixosModules.raspberry-pi-4
-          {
-            #https://github.com/NixOS/nixpkgs/issues/154163
-            #https://github.com/NixOS/nixpkgs/issues/109280
-            #https://github.com/NixOS/nixpkgs/issues/126755#issuecomment-869149243
-            nixpkgs.overlays = [
-              (final: super: {
-                makeModulesClosure = x:
-                  super.makeModulesClosure (x // { allowMissing = true; });
-              })
-            ];
-
-            services.pixiecore-host-configs.enable = true;
-            services.pixiecore-host-configs.hosts = {
-              "84:a9:3e:10:c4:66" = {
-                nixosSystem = nixosConfigurations.nucle-installer;
-                kernelParams = [ "hostname=nucle4" ];
-              };
-              "00:00:00:00:00:00" = {
-                nixosSystem = nixosConfigurations.pixie-trixie;
-                kernelParams = [ "hostname=pixie-trixie-testhost" ];
-              };
-            };
-          }
-        ];
-      };
-      images.pixie-pie-host = nixosConfigurations.pixie-pie-host.config.system.build.sdImage;
-
-      nixosConfigurations.pixie-installer = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/pixie-installer" ];
-      };
-
-      nixosConfigurations.pixie-trixie = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/pixie-trixie" ];
-      };
-
-      nixosConfigurations.nucle-installer = nixpkgs.lib.nixosSystem {
-        inherit system;
-        modules = [ "${self}/machines/nucle-installer" ];
-      };
-
+      nixosConfigurations.pixie-installer = trivial-machine "pixie-installer";
+      nixosConfigurations.pixie-trixie = trivial-machine "pixie-trixie";
+      nixosConfigurations.nucle-installer = trivial-machine "nucle-installer";
     };
 }

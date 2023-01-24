@@ -13,6 +13,9 @@ Host config`./<new-node>/default.nix`:
   services.kubeadm.init = {
     enable = true;
     bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token"; 
+
+    # for control plane
+    certificateKeyFile = "/var/secret/kubeadm-cert-key";
   };
 }
 ```
@@ -54,23 +57,23 @@ ssh new-node.localdomain
 cd flakefiles
 git pull
 
-./users/mkshadow.sh addem
+sudo ./users/mkshadow.sh addem
 sudo nixos-rebuild switch
 
-# These will probably be failing
+# These will be failing
 systemctl status kubeadm-join
 systemctl status kubelet
 ```
 
 Setup kubelet bootstap token, and rebuild
 ```sh
-ssh nucle1.localdomain -- kubeadm token create | ssh nucle4.localdomain -- sudo tee /var/secret/kubeadm-bootstrap-token
+ssh nucle1.localdomain -- kubeadm token create | ssh new-node.localdomain -- sudo tee /var/secret/kubeadm-bootstrap-token
 
 #for controlplane
-ssh nucle1.localdomain -- sudo kubeadm init phase upload-certs --upload-certs | grep -v upload-certs | ssh nucle4.localdomain -- sudo tee /var/secret/kubeadm-cert-key
+ssh nucle1.localdomain -- sudo kubeadm init phase upload-certs --upload-certs | grep -v upload-certs | ssh new-node.localdomain -- sudo tee /var/secret/kubeadm-cert-key
 
 ssh new-node.localdomain
-# Now this hopefully works
+# Now these hopefully succeed / start
 systemctl status kubeadm-join
 systemctl status kubelet
 ````
@@ -78,8 +81,7 @@ systemctl status kubelet
 Finally remove
 ```
   services.kubeadm.init = {
-    enable = true;
-    bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token"; 
+    ...
   };
 ```
 from `./<new-node>/default.nix` and commit, push, pull and rebuild

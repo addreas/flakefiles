@@ -4,7 +4,7 @@
     ./hardware-configuration.nix
     ../default.nix
   ];
-  networking.hostName = "nucle1";
+  networking.hostName = "nucle2";
 
   services.kubeadm.controlPlane = true;
 

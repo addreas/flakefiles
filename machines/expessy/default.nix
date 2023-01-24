@@ -7,9 +7,9 @@
     ./hardware-configuration.nix
 
     ../../users/addem.nix
-    ../../packages/basic/common.nix
-    ../../packages/basic/services.nix
-    ../../packages/basic/desktop.nix
+    ../common/base.nix
+    ../common/services.nix
+    ../common/desktop.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

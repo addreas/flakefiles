@@ -2,6 +2,7 @@
 {
   imports = [
     ./home.nix
+    ./home.dev.nix
     ./kanshi.nix
     ./kdeconnect.nix
     ./kitty.nix

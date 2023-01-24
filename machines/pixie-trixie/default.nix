@@ -13,8 +13,8 @@ in
     ./kube.nix
 
     ../../users/addem.nix
-    ../../packages/basic/common.nix
-    ../../packages/basic/services.nix
+    ../common/base.nix
+    ../common/services.nix
   ];
 
 
@@ -61,7 +61,6 @@ in
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
 
-  networking.firewall.checkReversePath = "loose";
 
   networking.firewall.allowedTCPPorts = [ 22 80 443 ];
   networking.firewall.allowedUDPPorts = [ 1900 5353 ];

@@ -81,15 +81,6 @@ ln -s -r \
   "$MNT/home/addem/flakefiles/flake.nix" \
   "$MNT/etc/nixos"
 
-mkdir -p "$MNT/var/secret/" "/var/secret"
-nix-store \
-  --generate-binary-cache-key "$(hostname)-0" \
-  "/var/secret/local-nix-secret-key" \
-  /dev/stdout \
-  >> ./packages/basic/pubkeys.txt
-
-cp "/var/secret/local-nix-secret-key" "$MNT/var/secret/local-nix-secret-key"
-
 nixos-install \
   --root $MNT \
   --no-root-password \

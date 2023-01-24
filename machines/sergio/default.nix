@@ -27,8 +27,8 @@
     ./kube.nix
 
     ../../users/addem.nix
-    ../../packages/basic/common.nix
-    ../../packages/basic/services.nix
+    ../common/base.nix
+    ../common/services.nix
 
     ../../packages/cockpit/module.nix
     ../../packages/pcp/module.nix
