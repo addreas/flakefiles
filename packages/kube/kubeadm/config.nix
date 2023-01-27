@@ -1,6 +1,6 @@
 { pkgs, lib, config, ... }:
 let
-  subType = options: lib.types.submodule { inherit options; };
+  subType = description: options: lib.types.submodule { inherit options; };
   opt = type: description: lib.mkOption { inherit type description; };
   mkStrDefault = str: lib.mkOption {
     type = lib.types.str;
