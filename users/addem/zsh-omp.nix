@@ -36,7 +36,7 @@ in
           })
           (mkSeg "session" {
             foreground = colors.orange;
-            template = "{{ if .SSHSession }} ${ucode "F817"}{{ .HostName }}{{ end }}";
+            template = "{{ if .SSHSession }}${ucode "F817"}{{ .HostName }} {{ end }}";
           })
           (mkSeg "path" {
             foreground = colors.light_blue;
