@@ -73,7 +73,7 @@
   networking.dhcpcd.allowInterfaces = ["eno1"];
   systemd.network.wait-online.anyInterface = true;
 
-  services.tailscale.enable = true;
+  # services.tailscale.enable = true;
 
   # services.pcp.enable = true;
   # services.cockpit.enable = true;
