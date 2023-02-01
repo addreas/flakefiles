@@ -1,18 +1,14 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"reflect"
 	"regexp"
 	"sort"
 	"strings"
-	texttemplate "text/template"
 	"unicode"
 
-	// "github.com/yuin/goldmark"
-	// "github.com/yuin/goldmark-highlighting"
 	"k8s.io/gengo/types"
 	"k8s.io/klog/v2"
 )
@@ -42,13 +38,6 @@ func (p *apiPackage) DisplayName() string {
 // GroupName returns the API group the package contains.
 func (p *apiPackage) GroupName() string {
 	return p.apiGroup
-}
-
-// Anchor generates a valid anchor ID for an API package based on its name.
-func (p *apiPackage) Anchor() string {
-	s := strings.Replace(p.DisplayName(), " ", "", -1)
-	s = strings.Replace(s, "/", "-", -1)
-	return strings.Replace(s, ".", "-", -1)
 }
 
 // VisibleTypes enumerates all visible types contained in a package.
@@ -222,83 +211,6 @@ func (t *apiType) APIGroup() string {
 	return p.DisplayName()
 }
 
-// Anchor returns the #anchor string for the local type
-func (t *apiType) Anchor() string {
-	var s string
-	group := t.APIGroup()
-	if group[0] == '/' {
-		s = fmt.Sprintf("%s", t.Name.Name)
-	} else {
-		s = fmt.Sprintf("%s.%s", group, t.Name.Name)
-	}
-	s = strings.Replace(s, "/", "-", -1)
-	return strings.Replace(s, ".", "-", -1)
-}
-
-// Link returns an anchor to the type if it can be generated. returns
-// empty string if it is not a local type or unrecognized external type.
-func (t *apiType) Link() string {
-	t = t.deref() // dereference kind=Pointer
-
-	if t.Kind == types.Builtin {
-		return ""
-	}
-
-	if t.isLocal() {
-		return "#" + t.Anchor()
-	}
-
-	var arrIndex = func(a []string, i int) string {
-		return a[(len(a)+i)%len(a)]
-	}
-
-	// types like k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta,
-	// k8s.io/api/core/v1.Container, k8s.io/api/autoscaling/v1.CrossVersionObjectReference,
-	// github.com/knative/build/pkg/apis/build/v1alpha1.BuildSpec
-	if t.Kind == types.Struct || t.Kind == types.Pointer || t.Kind == types.Interface || t.Kind == types.Alias {
-		// gives {{ ImportPath.Identifier }} for type
-		id := t.typeId()
-		// to parse [meta, v1] from "k8s.io/apimachinery/pkg/apis/meta/v1"
-		segments := strings.Split(t.Name.Package, "/")
-
-		for _, v := range config.ExternalPackages {
-			r, err := regexp.Compile(v.Match)
-			if err != nil {
-				klog.Errorf("Pattern %q failed to compile: %+v", v.Match, err)
-				return ""
-			}
-			// The type identifier is identified as a type from an "external" package
-			if r.MatchString(id) {
-				tpl, err := texttemplate.New("").Funcs(map[string]interface{}{
-					"lower":    strings.ToLower,
-					"arrIndex": arrIndex,
-				}).Parse(v.Target)
-				if err != nil {
-					klog.Errorf("Failed to parse the 'target': %s", v.Target)
-					return ""
-				}
-
-				var b bytes.Buffer
-				err = tpl.Execute(&b, map[string]interface{}{
-					"TypeIdentifier":  t.Name.Name,
-					"PackagePath":     t.Name.Package,
-					"PackageSegments": segments,
-				})
-				if err != nil {
-					klog.Errorf("Failed to execute template: %+v", err)
-					return ""
-				}
-				return b.String()
-			}
-		}
-
-		// We are here if the type identifier for the type is not listed as an
-		// external one. This means we have to parse it.
-		klog.Errorf("External link source for '%s.%s' is not found.", t.Name.Package, t.Name.Name)
-	}
-	return ""
-}
-
 // DisplayName deterimines how a type is displayed in the docs.
 func (t *apiType) DisplayName() string {
 	s := t.typeId()
@@ -359,30 +271,6 @@ func (t *apiType) GetComment(indent int) string {
 	return renderComments(t.CommentLines, indent)
 }
 
-// References returns a list of types where the current type is referenced.
-func (t *apiType) References() []*apiType {
-	var out []*apiType
-	m := make(map[*apiType]struct{})
-	for _, ref := range references[t.String()] {
-		if !ref.isHidden() {
-			m[ref] = struct{}{}
-		}
-	}
-	for k := range m {
-		found := false
-		for _, e := range out {
-			if k.DisplayName() == e.DisplayName() && k.Link() == e.Link() {
-				found = true
-			}
-		}
-		if !found {
-			out = append(out, k)
-		}
-	}
-	sortTypes(out)
-	return out
-}
-
 // groupName extracts the "//+groupName" meta-comment from the specified
 // package's comments, or returns empty string if it cannot be found.
 func groupName(gopkg *types.Package) string {
@@ -431,28 +319,6 @@ func renderComments(comments []string, indent int) string {
 		}
 	}
 	return strings.Join(list, "\n")
-
-	// // replace '*' by '&lowast;', we do this before parsing the comment as markdown
-	// // doc = strings.Replace(doc, "*", "\\*", -1)
-	// if !config.MarkdownDisabled {
-	// 	// This is for blackfriday
-	// 	// res = string(blackfriday.Run([]byte(doc)))
-	// 	var buf bytes.Buffer
-	// 	md := goldmark.New(
-	// 		goldmark.WithExtensions(
-	// 			highlighting.Highlighting,
-	// 		),
-	// 	)
-	// 	if err := md.Convert([]byte(doc), &buf); err != nil {
-	// 		klog.Errorf("Bad doc detected: %+v", err)
-	// 		res = doc
-	// 	} else {
-	// 		res = buf.String()
-	// 	}
-	// } else {
-	// 	res = strings.Replace(doc, "\n\n", string(template.HTML("<br/><br/>")), -1)
-	// }
-	// return template.HTML(res)
 }
 
 // containsString checks if a given string is a member of the string list

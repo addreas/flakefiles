@@ -34,6 +34,10 @@ in
             properties.always_enabled = true;
             template = "➜ ";
           })
+          (mkSeg "session" {
+            foreground = colors.orange;
+            template = "{{ if .SSHSession }} ${ucode "F817"}{{ .HostName }}{{ end }}";
+          })
           (mkSeg "path" {
             foreground = colors.light_blue;
             properties.style = "letter";
@@ -119,10 +123,6 @@ in
               "{{end}})"
             ];
             parse_kubeconfig = true;
-          })
-          (mkSeg "session" {
-            foreground = colors.orange;
-            template = "{{ if .SSHSession }} ${ucode "F817"}{{ .HostName }}{{ end }}";
           })
           (mkSeg "time" {
             foreground = colors.faint;

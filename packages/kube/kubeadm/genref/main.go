@@ -47,10 +47,6 @@ type generatorConfig struct {
 	// output.
 	HideTypePatterns []string `json:"hideTypePatterns"`
 
-	// ExternalPackages lists recognized external package references and how to
-	// link to them.
-	ExternalPackages []externalPackage `json:"externalPackages"`
-
 	// StripPrefix is a list of type name prefixes that will be stripped
 	StripPrefix []string `json:"stripPrefix"`
 
@@ -58,16 +54,6 @@ type generatorConfig struct {
 
 	// APIs to process
 	Definitions []apiDefinition `json:"apis"`
-}
-
-type externalPackage struct {
-	// Match is a reqular expression for matching type names which are defined
-	// and documented externally.
-	Match string `json:"match"`
-
-	// Target provides a text template string for building the link to the
-	// external documentation for a type.
-	Target string `json:"target"`
 }
 
 // apiDefinition is a local struct for specifying the API type definitions for

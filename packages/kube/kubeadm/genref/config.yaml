@@ -1,22 +1,6 @@
 hiddenMemberFields:
   - "TypeMeta"
 
-externalPackages:
-  - match: ^k8s\.io/apimachinery/pkg/apis/meta/v1\.Duration$
-    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1#Duration
-  - match: ^k8s\.io/apimachinery/pkg/types\.UID$
-    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/types#UID
-  - match: ^k8s\.io/apimachinery/pkg/runtime\.RawExtension$
-    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime/#RawExtension
-  - match: ^k8s\.io/apimachinery/pkg/api/resource\.QuantityValue$
-    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/api/resource#QuantityValue
-  - match: ^k8s\.io/apimachinery/pkg/runtime\.Unknown$
-    target: https://pkg.go.dev/k8s.io/apimachinery/pkg/runtime#Unknown
-  - match: ^time\.Duration$
-    target: https://pkg.go.dev/time#Duration
-  - match: ^k8s\.io/(api|apimachinery/pkg/apis)/
-    target: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/#{{- lower .TypeIdentifier -}}-{{- arrIndex .PackageSegments -1 -}}-{{- arrIndex .PackageSegments -2 -}}
-
 hideTypePatterns:
   - "ParseError$"
   # - "List$"
@@ -29,136 +13,110 @@ stripPrefix:
   - github.com/tengqm/kubeconfig/config/bootstraptoken/v1.
 
 mappings:
-  meta/v1.Duration: duration
-  core/v1.Taint: Taint
-  core/v1.ResourceList: ResourceList
+  meta/v1.Duration: duration # string regex pls
+  core/v1.Taint: "(import ./core.v1.nix).Taint"
 
 apis:
+  - name: core
+    package: k8s.io/api
+    path: core/v1
+
   - name: kubelet-config
-    title: Kubelet Configuration (v1beta1)
     package: k8s.io/kubelet
     path: config/v1beta1
     includes:
       - k8s.io/component-base/logs/api/v1
       - k8s.io/component-base/tracing/api/v1
 
-  # - name: kubelet-config
-  #   title: Kubelet Configuration (v1)
-  #   package: k8s.io/kubelet
-  #   path: config/v1
-  #   includes:
-  #     - k8s.io/component-base/logs/api/v1
-  #     - k8s.io/component-base/tracing/api/v1
+  - name: kubelet-config
+    package: k8s.io/kubelet
+    path: config/v1
+    includes:
+      - k8s.io/component-base/logs/api/v1
+      - k8s.io/component-base/tracing/api/v1
 
   # - name: kubelet-credentialprovider
-  #   title: Kubelet CredentialProvider (v1alpha1)
   #   package: k8s.io/kubelet
   #   path: pkg/apis/credentialprovider/v1alpha1
 
   # - name: kubelet-credentialprovider
-  #   title: Kubelet CredentialProvider (v1beta1)
   #   package: k8s.io/kubelet
   #   path: pkg/apis/credentialprovider/v1beta1
 
   # - name: kubelet-credentialprovider
-  #   title: Kubelet CredentialProvider (v1)
   #   package: k8s.io/kubelet
   #   path: pkg/apis/credentialprovider/v1
 
   # - name: kube-scheduler-config
-  #   title: kube-scheduler Configuration (v1beta2)
   #   package: k8s.io/kube-scheduler
   #   path: config/v1beta2
   #   includes:
   #     - k8s.io/component-base/config/v1alpha1
 
   # - name: kube-scheduler-config
-  #   title: kube-scheduler Configuration (v1beta3)
   #   package: k8s.io/kube-scheduler
   #   path: config/v1beta3
   #   includes:
   #     - k8s.io/component-base/config/v1alpha1
 
-  # - name: kube-scheduler-config
-  #   title: kube-scheduler Configuration (v1)
-  #   package: k8s.io/kube-scheduler
-  #   path: config/v1
-  #   includes:
-  #     - k8s.io/component-base/config/v1alpha1
+  - name: kube-scheduler-config
+    package: k8s.io/kube-scheduler
+    path: config/v1
+    includes:
+      - k8s.io/component-base/config/v1alpha1
 
   # - name: kube-scheduler-extender
-  #   title: kube-scheduler Extender (v1)
   #   package: k8s.io/kube-scheduler
   #   path: extender/v1
 
-  # - name: kube-controller-manager-config
-  #   title: kube-controller-manager Configuration (v1alpha1)
-  #   package: k8s.io/kube-controller-manager
-  #   path: config/v1alpha1
-  #   includes:
-  #     - k8s.io/cloud-provider/controllers/service/config/v1alpha1
-  #     - k8s.io/cloud-provider/config/v1alpha1
-  #     - k8s.io/controller-manager/config/v1alpha1
+  - name: kube-controller-manager-config
+    package: k8s.io/kube-controller-manager
+    path: config/v1alpha1
+    includes:
+      - k8s.io/cloud-provider/controllers/service/config/v1alpha1
+      - k8s.io/cloud-provider/config/v1alpha1
+      - k8s.io/controller-manager/config/v1alpha1
 
-  # - name: kube-proxy-config
-  #   title: kube-proxy Configuration (v1alpha1)
-  #   package: k8s.io/kube-proxy
-  #   path: config/v1alpha1
-  #   includes:
-  #     - k8s.io/component-base/config/v1alpha1
+  - name: kube-proxy-config
+    package: k8s.io/kube-proxy
+    path: config/v1alpha1
+    includes:
+      - k8s.io/component-base/config/v1alpha1
 
   # v1alpha1 is preserved because TracingConfiguration is referenced.
-  # - name: apiserver-config
-  #   title: kube-apiserver Configuration (v1alpha1)
-  #   package: k8s.io/apiserver
-  #   path: pkg/apis/apiserver/v1alpha1
+  - name: apiserver-config
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1alpha1
 
   # v1beta1 is preserved because it has different types exposed.
-  # - name: apiserver-config
-  #   title: kube-apiserver Configuration (v1beta1)
-  #   package: k8s.io/apiserver
-  #   path: pkg/apis/apiserver/v1beta1
+  - name: apiserver-config
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1beta1
 
-  # - name: apiserver-config
-  #   title: kube-apiserver Configuration (v1)
-  #   package: k8s.io/apiserver
-  #   path: pkg/apis/apiserver/v1
+  - name: apiserver-config
+    package: k8s.io/apiserver
+    path: pkg/apis/apiserver/v1
 
   # Note: This is named as apiserver-encryption because the so called config
   # pkg only contains encryption config. Need to differentiate it from the
   # apiserver-config above.
   # - name: apiserver-encryption
-  #   title: kube-apiserver Encryption Configuration (v1)
   #   package: k8s.io/apiserver
   #   path: pkg/apis/config/v1
 
-    # Note: This is named apiserver-audit because it is part of the apiserver module
+  # Note: This is named apiserver-audit because it is part of the apiserver module
   # - name: apiserver-audit
-  #   title: kube-apiserver Audit Configuration (v1)
   #   package: k8s.io/apiserver
   #   path: pkg/apis/audit/v1
 
-  # - name: apiserver-admission
-  #   title: kube-apiserver Admission (v1)
-  #   package: k8s.io/api
-  #   path: admission/v1
-
-  # - name: apiserver-admission
-  #   title: kube-apiserver Admission (v1beta1)
-  #   package: k8s.io/api
-  #   path: admission/v1beta1
-
   # - name: apiserver-resourcequota
-  #   title: kube-apiserver ResourceQuota Configuration (v1)
   #   package: k8s.io/apiserver
   #   path: pkg/admission/plugin/resourcequota/apis/resourcequota/v1
 
   # - name: apiserver-webhookadmission
-  #   title: WebhookAdmission Configuration (v1)
   #   package: k8s.io/apiserver
   #   path: pkg/admission/plugin/webhook/config/apis/webhookadmission/v1
 
   # - name: apiserver-eventratelimit
-  #   title: Event Rate Limit Configuration (v1alpha1)
   #   package: github.com/tengqm/kubeconfig
   #   path: config/admission/eventratelimit/apis/v1alpha1
