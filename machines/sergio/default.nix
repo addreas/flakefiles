@@ -48,9 +48,12 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
 
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.flake = "/home/addem/flakefiles";
-  system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
+  system.autoUpgrade = {
+    enable = true;
+    flake = "/home/addem/flakefiles";
+    flags = [ "--update-input" "nixpkgs" ];
+    operation = "boot";
+  };
 
   # requires manual `sudo btrfs subvolume create /.snapshots`
   # services.snapper.snapshotRootOnBoot = true;
