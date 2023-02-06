@@ -27,7 +27,6 @@
   };
 
   nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
 
   time.timeZone = "Europe/Stockholm";
 

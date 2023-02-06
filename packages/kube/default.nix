@@ -2,6 +2,7 @@
   imports = [
     ./crio.nix
     ./cilium.nix
+    ./kured.nix
     ./kubernetes-version-overlay.nix
     ./kubeadm
   ];
