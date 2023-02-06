@@ -9,7 +9,7 @@ in
     "${modulesPath}/profiles/minimal.nix"
 
     ../../users/addem.nix
-    ../../packages/basic/common.nix
+    ../common/base.nix
   ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
