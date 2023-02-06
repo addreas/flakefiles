@@ -44,6 +44,7 @@ in
             --kubeconfig=/etc/kubernetes/kubelet.conf \
             --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf \
             --config=/var/lib/kubelet/config.yaml \
+            --node-labels=nucles.addem.se/os=nixos \
             $KUBELET_KUBEADM_ARGS
         '';
       };
