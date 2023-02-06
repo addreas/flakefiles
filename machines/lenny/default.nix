@@ -41,6 +41,7 @@ in
   };
 
   systemd.services.systemd-tmpfiles-setup-dev.enable = false;
+  systemd.services.systemd-tmpfiles-setup.enable = false;
   systemd.services.systemd-sysctl.enable = false;
 
   # virtualisation.podman.enable = true;
