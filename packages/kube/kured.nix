@@ -1,4 +1,4 @@
-{ pkg, ... }:
+{ pkgs, ... }:
 {
   config = {
     systemd.services.nixos-upgrade.onSuccess = [ "reboot-sentinel.service" ];
