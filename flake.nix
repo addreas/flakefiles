@@ -36,15 +36,8 @@
     in
     with import nixpkgs { inherit system; }; rec {
       packages.${system} = rec {
-        # pcp = callPackage ./packages/pcp { }; # just run container instead? https://quay.io/repository/performancecopilot/pcp?tab=tags
-        # cockpit = callPackage ./packages/cockpit { extraPackages = [ pcp ]; };
         cockpit-machines = callPackage ./packages/cockpit-machines { };
         cockpit-podman = callPackage ./packages/cockpit-podman { };
-      };
-
-      nixosModules = {
-        pcp = import ./packages/pcp/module.nix;
-        cockpit = import ./packages/cockpit/module.nix;
       };
 
       homeConfigurations.addem = home-manager.lib.homeManagerConfiguration {

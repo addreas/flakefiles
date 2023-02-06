@@ -29,10 +29,6 @@
     ../../users/addem.nix
     ../common/base.nix
     ../common/services.nix
-
-    ../../packages/cockpit/module.nix
-    ../../packages/pcp/module.nix
-
   ];
   swapDevices = [ ];
 
@@ -77,9 +73,6 @@
   systemd.network.wait-online.anyInterface = true;
 
   # services.tailscale.enable = true;
-
-  # services.pcp.enable = true;
-  # services.cockpit.enable = true;
 
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
