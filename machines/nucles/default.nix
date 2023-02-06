@@ -15,9 +15,12 @@
 
   system.stateVersion = "22.11";
 
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.flake = "/home/addem/flakefiles";
-  # system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
+  system.autoUpgrade = {
+    enable = true;
+    flake = "/home/addem/flakefiles";
+    # flags = [ "--update-input" "nixpkgs" ];
+    operation = "boot";
+  };
 
   networking.domain = "localdomain";
 
