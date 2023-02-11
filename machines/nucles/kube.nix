@@ -24,7 +24,6 @@ in
         certSANs = hosts;
         extraArgs.feature-gates = "MixedProtocolLBService=true";
       };
-      nodeRegistration.criSocket = "unix:///var/run/crio/crio.sock";
     };
 
     init.clusterConfig = {
