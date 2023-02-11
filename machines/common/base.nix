@@ -58,6 +58,7 @@
     helix
     curl
     git
+    parted
   ];
 }
 

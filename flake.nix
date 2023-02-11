@@ -75,9 +75,9 @@
         # }
       ];
 
-      nixosConfigurations.nucle1 = machine "nucles/nucle1" [addem-basic];
-      nixosConfigurations.nucle2 = machine "nucles/nucle2" [addem-basic];
-      nixosConfigurations.nucle3 = machine "nucles/nucle3" [addem-basic];
+      # nixosConfigurations.nucle1 = machine "nucles/nucle1" [addem-basic];
+      # nixosConfigurations.nucle2 = machine "nucles/nucle2" [addem-basic];
+      # nixosConfigurations.nucle3 = machine "nucles/nucle3" [addem-basic];
       nixosConfigurations.nucle4 = machine "nucles/nucle4" [addem-basic];
 
       nixosConfigurations.expessy = machine "expessy" [

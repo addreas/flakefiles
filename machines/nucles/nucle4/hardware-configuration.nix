@@ -49,7 +49,7 @@
     };
 
   fileSystems."/var/lib/longhorn" =
-    { device = "/dev/disk/by-uuid/0de32061-dedc-447e-b71c-6da698db33dd";
+    { device = "/dev/disk/by-uuid/0a40c243-115c-4bf2-bbab-182233de5e80";
       fsType = "ext4";
     };
 
