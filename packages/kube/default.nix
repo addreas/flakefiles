@@ -34,7 +34,6 @@
       wantedBy = [ "sockets.target" ];
     };
 
-
     systemd.services.cni-dhcp = {
       description = "CNI DHCP service";
       documentation = ["https://github.com/containernetworking/plugins/tree/master/plugins/ipam/dhcp"];
@@ -46,5 +45,8 @@
       wantedBy = [ "multi-user.target" ];
     };
 
+    networking.firewall.allowedTCPPorts = [
+      9100 # node-exporter
+    ];
   };
 }
