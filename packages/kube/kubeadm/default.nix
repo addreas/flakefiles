@@ -5,7 +5,7 @@ let
   kubeadmConfig = pkgs.writeText "kubeadm.yaml" (
       lib.strings.concatMapStringsSep
       "---"
-      lib.generators.toYAML
+      builtins.toJSON
       [
         cfg.init.initConfig
         cfg.init.clusterConfig
@@ -83,7 +83,7 @@ in
       script = ''
         if ! ${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}; then
           ${cfg.package}/bin/kubeadm init --config ${kubeadmConfig}
-        end
+        fi
       '';
 
       wantedBy = [ "kubelet.service" ];
@@ -119,7 +119,7 @@ in
           --v=5 \
           --token $(cat ${cfg.init.bootstrapTokenFile}) \
           --discovery-token-unsafe-skip-ca-verification \
-          ${lib.strings.optionalString (cfg.controlPlane && cfg.init.certificateKeyFile) ''
+          ${lib.strings.optionalString (cfg.controlPlane) ''
             --control-plane \
             --certificate-key $(cat ${cfg.init.certificateKeyFile})
             ''}

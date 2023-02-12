@@ -1,18 +1,19 @@
 { pkgs, config, ... }: {
   imports = [
-    ../../packages/kube
+    ../nucles/kube.nix
   ];
 
   services.kubeadm = {
-    enable = true;
-    package = pkgs.kubernetes;
-    kubelet.enable = true;
+    controlPlane = true;
     init = {
       enable = true;
-      bootstrapTokenFile = "/tmp/kube-bootstrap-token";
-      clusterConfig.controlPlaneEndpoint = "nucles.localdomain:6443";
+      bootstrapTokenFile = "/var/secret/kube-bootstrap-token";
+      certificateKeyFile = "/var/secret/kube-certificate-key";
     };
   };
 
-  environment.systemPackages = [ pkgs.kubernetes ];
+  environment.systemPackages = [ pkgs.etcd ];
+  environment.sessionVariables = {
+    "ETCDCTL_API" = "3";
+  };
 }

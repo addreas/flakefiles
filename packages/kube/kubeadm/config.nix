@@ -6,6 +6,13 @@ let
     type = lib.types.str;
     default = str;
   };
+  justAttrs = lib.mkOption {
+    type = lib.types.attrs;
+  };
+
+  justStrList = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+  };
 
   Taint = with lib.types; subType {
     effect = opt str "The effect of the taint on pods that do not tolerate the taint. Valid effects are NoSchedule, PreferNoSchedule and NoExecute. Possible enum values: - `\" NoExecute \"` Evict any already-running pods that do not tolerate the taint. Currently enforced by NodeController. - `\" NoSchedule \"` Do not allow new pods to schedule onto the node unless they tolerate the taint, but allow all pods submitted to Kubelet without going through the scheduler to start, and allow all already-running pods to continue running. Enforced by the scheduler. - `\" PreferNoSchedule \"` Like TaintEffectNoSchedule, but the scheduler tries not to schedule new pods onto the node, rather than prohibiting new pods from scheduling onto the node entirely. Enforced by the scheduler.";
@@ -95,53 +102,58 @@ in
         description = "Should contain the output from `kubeadm init phase upload-certs --upload-certs`";
       };
 
-      initConfig = opt (subType {
-        apiVersion = mkStrDefault "kubeadm.k8s.io/v1beta3";
-        kind = mkStrDefault "InitConfiguration";
+      initConfig.apiVersion = mkStrDefault "kubeadm.k8s.io/v1beta3";
+      initConfig.kind = mkStrDefault "InitConfiguration";
 
-        bootstrapTokens = opt (listOf BootstrapToken) "bootstrapTokens is respected at kubeadm init time and describes a set of Bootstrap Tokens to create. This information IS NOT uploaded to the kubeadm cluster configmap, partly because of its sensitive nature";
-        nodeRegistration = opt NodeRegistrationOptions "nodeRegistration holds fields that relate to registering the new control-plane node to the cluster.";
-        localAPIEndpoint = opt APIEndpoint "localAPIEndpoint represents the endpoint of the API server instance that's deployed on this control plane node. In HA setups, this differs from ClusterConfiguration.controlPlaneEndpoint in the sense that controlPlaneEndpoint is the global endpoint for the cluster, which then load-balances the requests to each individual API server. This configuration object lets you customize what IP/DNS name and port the local API server advertises it's accessible on. By default, kubeadm tries to auto-detect the IP of the default interface and use that, but in case that process fails you may set the desired value here.";
-        certificateKey = opt str "certificateKey sets the key with which certificates and keys are encrypted prior to being uploaded in a Secret in the cluster during the uploadcerts init phase.";
-        skipPhases = opt (listOf str) "skipPhases is a list of phases to skip during command execution. The list of phases can be obtained with the kubeadm init --help command. The flag \"--skip-phases\" takes precedence over this field.";
-        patches = opt Patches "patches contains options related to applying patches to components deployed by kubeadm during kubeadm init.";
-      }) "InitConfiguration";
+      # initConfig = opt (subType {
+      #   # bootstrapTokens = opt (listOf BootstrapToken) "bootstrapTokens is respected at kubeadm init time and describes a set of Bootstrap Tokens to create. This information IS NOT uploaded to the kubeadm cluster configmap, partly because of its sensitive nature";
+      #   # nodeRegistration = opt NodeRegistrationOptions "nodeRegistration holds fields that relate to registering the new control-plane node to the cluster.";
+      #   # localAPIEndpoint = opt APIEndpoint "localAPIEndpoint represents the endpoint of the API server instance that's deployed on this control plane node. In HA setups, this differs from ClusterConfiguration.controlPlaneEndpoint in the sense that controlPlaneEndpoint is the global endpoint for the cluster, which then load-balances the requests to each individual API server. This configuration object lets you customize what IP/DNS name and port the local API server advertises it's accessible on. By default, kubeadm tries to auto-detect the IP of the default interface and use that, but in case that process fails you may set the desired value here.";
+      #   # certificateKey = opt str "certificateKey sets the key with which certificates and keys are encrypted prior to being uploaded in a Secret in the cluster during the uploadcerts init phase.";
+      #   # skipPhases = opt (listOf str) "skipPhases is a list of phases to skip during command execution. The list of phases can be obtained with the kubeadm init --help command. The flag \"--skip-phases\" takes precedence over this field.";
+      #   # patches = opt Patches "patches contains options related to applying patches to components deployed by kubeadm during kubeadm init.";
+      # }) "InitConfiguration";
 
-      clusterConfig = opt (subType {
+      # clusterConfig.apiVersion = mkStrDefault "kubeadm.k8s.io/v1beta3";
+      # clusterConfig.kind = mkStrDefault "ClusterConfiguration";
+      # clusterConfig.apiServer = opt attrs "idk";
+
+      clusterConfig = {
         apiVersion = mkStrDefault "kubeadm.k8s.io/v1beta3";
         kind = mkStrDefault "ClusterConfiguration";
-
-        etcd = opt Etcd "etcd holds the configuration for etcd.";
-        networking = opt Networking "networking holds configuration for the networking topology of the cluster.";
-        kubernetesVersion = opt str "kubernetesVersion is the target version of the control plane.";
+        # etcd = opt Etcd "etcd holds the configuration for etcd.";
+        # networking = opt Networking "networking holds configuration for the networking topology of the cluster.";
+        # kubernetesVersion = opt str "kubernetesVersion is the target version of the control plane.";
         controlPlaneEndpoint = opt str ''
           controlPlaneEndpoint sets a stable IP address or DNS name for the control plane. It can be a valid IP address or a RFC-1123 DNS subdomain, both with optional TCP port. In case the controlPlaneEndpoint is not specified, the advertiseAddress + bindPort are used; in case the controlPlaneEndpoint is specified but without a TCP port, the bindPort is used. Possible usages are:
 
               In a cluster with more than one control plane instances, this field should be assigned the address of the external load balancer in front of the control plane instances.
               In environments with enforced node recycling, the controlPlaneEndpoint could be used for assigning a stable DNS to the control plane.
         '';
-        apiServer = opt APIServer "apiServer contains extra settings for the API server.";
-        controllerManager = opt ControlPlaneComponent "controllerManager contains extra settings for the controller manager.";
-        scheduler = opt ControlPlaneComponent "scheduler contains extra settings for the scheduler.";
-        dns = opt DNS "dns defines the options for the DNS add-on installed in the cluster.";
-        certificatesDir = opt str "certificatesDir specifies where to store or look for all required certificates.";
-        imageRepository = opt str "imageRepository sets the container registry to pull images from. If empty, registry.k8s.io will be used by default. In case of kubernetes version is a CI build (kubernetes version starts with ci/) gcr.io/k8s-staging-ci-images will be used as a default for control plane components and for kube-proxy, while registry.k8s.io will be used for all the other images.";
-        featureGates = opt (attrsOf bool) "featureGates contains the feature gates enabled by the user.";
+        apiServer = justAttrs;
+        # apiServer = opt APIServer "apiServer contains extra settings for the API server.";
+        # controllerManager = opt ControlPlaneComponent "controllerManager contains extra settings for the controller manager.";
+        # scheduler = opt ControlPlaneComponent "scheduler contains extra settings for the scheduler.";
+        # dns = opt DNS "dns defines the options for the DNS add-on installed in the cluster.";
+        # certificatesDir = opt str "certificatesDir specifies where to store or look for all required certificates.";
+        # imageRepository = opt str "imageRepository sets the container registry to pull images from. If empty, registry.k8s.io will be used by default. In case of kubernetes version is a CI build (kubernetes version starts with ci/) gcr.io/k8s-staging-ci-images will be used as a default for control plane components and for kube-proxy, while registry.k8s.io will be used for all the other images.";
+        # featureGates = opt (attrsOf bool) "featureGates contains the feature gates enabled by the user.";
         clusterName = opt str "The cluster name.";
-      }) "ClusterConfiguration";
+      };
 
-      proxyConfig = opt (subType {
+      proxyConfig = {
         apiVersion = mkStrDefault "kubeproxy.config.k8s.io/v1alpha1";
         kind = mkStrDefault "KubeProxyConfiguration";
 
         #  TODO: automate this ffs
-      }) "KubeProxyConfiguration";
+      };
 
-      kubeletConfig = opt (subType {
+      kubeletConfig = {
         apiVersion = mkStrDefault "kubelet.config.k8s.io/v1beta1";
         kind = mkStrDefault "KubeletConfiguration";
+        allowedUnsafeSysctls = justStrList;
 
         #  TODO: automate this ffs
-      }) "KubeletConfiguration";
+      };
     };
 }

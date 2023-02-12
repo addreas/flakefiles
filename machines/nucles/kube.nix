@@ -1,6 +1,7 @@
 { pkgs, ... }:
 let
   hosts = [
+    "sergio.localdomain"
     "nucles.localdomain"
     "nucle1.localdomain"
     "nucle2.localdomain"
@@ -18,17 +19,14 @@ in
     kubelet.enable = true;
 
     init.initConfig = {
-      clusterName = "nucles";
-      controlPlaneEndpoint = "nucles.localdomain:6443";
-      apiServer = {
-        certSANs = hosts;
-        extraArgs.feature-gates = "MixedProtocolLBService=true";
-      };
     };
 
     init.clusterConfig = {
       clusterName = "nucles";
-      apiServer.certSANs = hosts;
+      apiServer = {
+        certSANs = hosts;
+        extraArgs.feature-gates = "MixedProtocolLBService=true";
+      };
       controlPlaneEndpoint = "nucles.localdomain:6443";
     };
 

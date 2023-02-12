@@ -9,9 +9,15 @@ let
     device = "/dev/disk/by-uuid/660b83df-c44d-4265-b293-272127aabf22";
     fsType = "btrfs";
   };
+  btrfsDataSSD2 = {
+    device = "/dev/disk/by-uuid/b6df7c6f-d5fd-4f14-b02c-d57727db5a23";
+    fsType = "btrfs";
+  };
 in
 {
   fileSystems."/mnt/data" = btrfsDataHDD // { };
+  fileSystems."/mnt/solid-data" = btrfsDataSSD2 // { };
+
   fileSystems."/mnt/videos" = btrfsDataHDD // {
     options = [ "subvol=videos" ];
   };
