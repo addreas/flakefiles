@@ -8,7 +8,10 @@
   ];
 
   config = {
-    environment.systemPackages = [ pkgs.openiscsi ];
+    environment.systemPackages = with pkgs; [
+      openiscsi
+      nfs-utils
+    ];
 
     services.openiscsi.enable = true;
     services.openiscsi.name = "iqn.2023-01.se.addem.nucles:${config.networking.hostName}";
