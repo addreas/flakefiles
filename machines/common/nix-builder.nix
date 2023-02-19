@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  cache-uploader = pkgs.writeShellScript "post-build.sh" (lib.builtins ./post-build.sh);
+  cache-uploader = pkgs.writeShellScript "post-build.sh" (builtins.readFile ./post-build.sh);
 in
 {
   nix.settings = {
