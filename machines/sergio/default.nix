@@ -28,6 +28,7 @@
 
     ../../users/addem.nix
     ../common/base.nix
+    ../common/nix-builder.nix
     ../common/services.nix
   ];
   swapDevices = [ ];

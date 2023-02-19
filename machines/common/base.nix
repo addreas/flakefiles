@@ -14,8 +14,10 @@
     auto-allocate-uids = true;
     use-cgroups = true;
 
-    substituters =  [ "https://nix-community.cachix.org" ];
-    # ] ++ lib.lists.optional (config.networking.hostName != "sergio") "http://sergio.localdomain:${toString config.services.nix-serve.port}";
+    substituters =  [
+      "https://nix-community.cachix.org"
+      "s3://nix-cache?scheme=http&endpoint=sergio.localdomain:9000"
+    ];
 
     trusted-users = [ "root" "@wheel" ];
     trusted-public-keys = [
