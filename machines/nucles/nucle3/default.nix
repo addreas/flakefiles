@@ -6,12 +6,9 @@
   ];
   networking.hostName = "nucle3";
 
-  services.kubeadm.controlPlane = true;
-
   services.kubeadm.init = {
     enable = true;
     bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token"; 
-    certificateKeyFile = "/var/secret/kubeadm-cert-key";
   };
 }
 

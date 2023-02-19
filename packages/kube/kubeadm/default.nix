@@ -10,7 +10,7 @@ let
         cfg.init.initConfig
         cfg.init.clusterConfig
         cfg.init.kubeletConfig
-        cfg.init.proxyConfig
+        cfg.init.kubeProxyConfig
       ]
     );
 in
@@ -160,23 +160,29 @@ in
       script = let
         kubeadm = "${cfg.package}/bin/kubeadm";
         kubectl = "${cfg.package}/bin/kubectl";
-        jd = "${pkgs.jd-diff-patch}/bin/jd";
+        kubectl-get-kubeadm-target-version = ''
+          ${kubectl} get configmap kubeadm-config \
+            --kubeconfig /etc/kubernetes/admin.conf \
+            --namespace kube-system \
+            -o jsonpath='{.data.ClusterConfiguration}' \
+            | grep kubernetesVersion \
+            | cut -d" " -f2
+          '';
       in
       if cfg.controlPlane
       then ''
-        KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl} get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
+        KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl-get-kubeadm-target-version})
         KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
         KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
         if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
             ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
-            && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
+              && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
         elif [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBE_APISERVER_MANIFEST_VERSION" ]]; then
             ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
         fi
         ''
       else ''
-        KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl} get cm -n kube-system kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' | grep kubernetesVersion | cut -d" " -f2)
-        ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
+        ${kubeadm} upgrade node $(${kubectl-get-kubeadm-target-version})
         '';
 
       wantedBy = [ "kubelet.service" ];

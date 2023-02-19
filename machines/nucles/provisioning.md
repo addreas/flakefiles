@@ -10,13 +10,12 @@ Host config`./<new-node>/default.nix`:
 
   networking.hostName = "new-node";
 
-  services.kubeadm.init = {
-    enable = true;
-    bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token"; 
+  services.kubeadm.init.enable = true;
+  services.kubeadm.init.bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token"; 
 
-    # for control plane
-    certificateKeyFile = "/var/secret/kubeadm-cert-key";
-  };
+  # for control plane
+  services.kubeadm.controlPlane = true;
+  services.kubeadm.init.certificateKeyFile = "/var/secret/kubeadm-cert-key";
 }
 ```
 
@@ -60,10 +59,10 @@ systemctl status kubelet
 
 Setup kubelet bootstap token, and rebuild
 ```sh
-# TODO: this should/could be fetched via pixie-api instead?
+# TODO: this should/could be fetched via pixie-api instead? (cant pipelike thsi because of sudo)
 ssh nucle1.localdomain -- kubeadm token create | ssh new-node.localdomain -- sudo tee /var/secret/kubeadm-bootstrap-token
 
-#for controlplane
+#for controlplane (cant pipe like this because sudo...)
 ssh nucle1.localdomain -- sudo kubeadm init phase upload-certs --upload-certs | grep -v upload-certs | ssh new-node.localdomain -- sudo tee /var/secret/kubeadm-cert-key
 
 ssh new-node.localdomain
@@ -72,10 +71,4 @@ systemctl status kubeadm-join
 systemctl status kubelet
 ````
 
-Finally remove
-```
-  services.kubeadm.init = {
-    ...
-  };
-```
-from `./<new-node>/default.nix` and commit, push, pull and rebuild
+Finally remove anyting under `services.kubeadm.init` from `./<new-node>/default.nix` and commit, push, pull and rebuild
