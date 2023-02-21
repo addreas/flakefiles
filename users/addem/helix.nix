@@ -11,4 +11,10 @@
     };
     editor.lsp.display-messages = true;
   };
+  programs.helix.languages =
+    builtins.map (n: {
+      name = n;
+      language-server = { command = "deno"; args = ["lsp"]; };
+      config = { enable = true; };
+    }) ["typescript" "tsx" "javascript" "jsx"];
 }
