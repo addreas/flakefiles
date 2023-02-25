@@ -58,26 +58,26 @@
       nixosConfigurations.sergio = machine "sergio" [
         addem-basic
 
-        # "${self}/packages/pixie-api/module.nix"
-        # {
-        #   services.pixiecore-host-configs.enable = false;
-        #   services.pixiecore-host-configs.hosts = let
-        #     nucle-installer = name: {
-        #       nixosSystem = nixosConfigurations.nucle-installer;
-        #       kernelParams = [ "hostname=${name}" ];
-        #     };
-        #   in {
-        #     "1c:69:7a:a0:af:3e" = nucle-installer "nucle1";
-        #     "1c:69:7a:6f:c2:b8" = nucle-installer "nucle2";
-        #     "1c:69:7a:01:84:76" = nucle-installer "nucle3";
-        #     "84:a9:3e:10:c4:66" = nucle-installer "nucle4";
-        #   };
-        # }
+        "${self}/packages/pixie-api/module.nix"
+        {
+          services.pixiecore-host-configs.enable = true;
+          services.pixiecore-host-configs.hosts = let
+            nucle-installer = name: {
+              nixosSystem = nixosConfigurations.nucle-installer;
+              kernelParams = [ "hostname=${name}" ];
+            };
+          in {
+            "1c:69:7a:a0:af:3e" = nucle-installer "nucle1";
+            "1c:69:7a:6f:c2:b8" = nucle-installer "nucle2";
+            "1c:69:7a:01:84:76" = nucle-installer "nucle3";
+            "84:a9:3e:10:c4:66" = nucle-installer "nucle4";
+          };
+        }
       ];
 
       # nixosConfigurations.nucle1 = machine "nucles/nucle1" [addem-basic];
       # nixosConfigurations.nucle2 = machine "nucles/nucle2" [addem-basic];
-      # nixosConfigurations.nucle3 = machine "nucles/nucle3" [addem-basic];
+      nixosConfigurations.nucle3 = machine "nucles/nucle3" [addem-basic];
       nixosConfigurations.nucle4 = machine "nucles/nucle4" [addem-basic];
 
       nixosConfigurations.expessy = machine "expessy" [

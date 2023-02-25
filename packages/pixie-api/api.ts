@@ -206,6 +206,7 @@ async function githubDeviceFlow(
 
       if (accessTokenRes.access_token) {
         const token = accessTokenRes.access_token;
+        await Deno.mkdir(persistanceRoot, {recursive: true}).catch(() => {});
         await Deno.writeTextFile(tokenPath, token);
         return token;
       }

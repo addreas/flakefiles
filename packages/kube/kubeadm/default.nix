@@ -4,7 +4,7 @@ let
 
   kubeadmConfig = pkgs.writeText "kubeadm.yaml" (
       lib.strings.concatMapStringsSep
-      "---"
+      "\n---\n"
       builtins.toJSON
       [
         cfg.init.initConfig
@@ -52,8 +52,8 @@ in
       6443
       2379
       2380
-      # 10259
-      # 10257
+      10259
+      10257
     ]);
     networking.firewall.allowedTCPPortRanges = [{ from = 30000; to = 32767; }];
 

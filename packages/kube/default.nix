@@ -50,6 +50,7 @@
 
     networking.firewall.allowedTCPPorts = [
       9100 # node-exporter
+      3493 # ???
     ];
   };
 }
