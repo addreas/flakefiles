@@ -13,11 +13,11 @@
     deno
     cue
     rlwrap
-    openocd
-    blackmagic
+    # openocd
+    # blackmagic
     gnumake
     cmake
     gcc
-    gcc-arm-embedded
+    # gcc-arm-embedded
   ];
 }

@@ -18,10 +18,10 @@ in
 
   networking.hostName = "LAPTOP-EK7DRJB8";
 
-  nix.extraOptions = ''
-    extra-sandbox-paths = /nix/var/cache/ccache
-    extra-platforms = aarch64-linux arm-linux
-  '';
+  nix.settings = {
+    extra-platforms = ["aarch64-linux" "arm-linux" ];
+    system-features = ["big-parallel"];
+  };
 
 
 
