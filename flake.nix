@@ -63,7 +63,7 @@
           in {
             # "1c:69:7a:a0:af:3e" = nucle-installer "nucle1";
             # "1c:69:7a:6f:c2:b8" = nucle-installer "nucle2";
-            "1c:69:7a:01:84:76" = nucle-installer "nucle3";
+            # "1c:69:7a:01:84:76" = nucle-installer "nucle3";
             # "84:a9:3e:10:c4:66" = nucle-installer "nucle4";
           };
         }

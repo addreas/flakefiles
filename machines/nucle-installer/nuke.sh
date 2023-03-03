@@ -9,7 +9,7 @@ MNT=/mnt
 set -e
 set -x
 
-umount $MNT/var/lib/longhorn
+umount $MNT/var/lib/longhorn || true
 umount $MNT/{boot,home,nix,var/log,var/lib} || true
 umount $MNT || true
 
