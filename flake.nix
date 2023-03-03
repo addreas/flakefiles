@@ -24,6 +24,12 @@
           }
       ];
 
+      home-config = home-conf: home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+
+        modules = [home-conf];
+      };
+
       addem-basic = home-manager-addem ./users/addem/home.nix;
 
       machine = name: modules: nixpkgs.lib.nixosSystem {
@@ -40,20 +46,8 @@
         cockpit-podman = callPackage ./packages/cockpit-podman { };
       };
 
-      homeConfigurations.addem = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
-
-        modules = [
-          ./users/addem/home.desktop.nix
-          {
-            home = {
-              username = "addem";
-              homeDirectory = "/home/addem";
-              stateVersion = "22.11";
-            };
-          }
-        ];
-      };
+      homeConfigurations.addem = home-config ./users/addem/home.desktop.nix;
+      homeConfigurations.addem-dev = home-config ./users/addem/home.dev.nix;
 
       nixosConfigurations.sergio = machine "sergio" [
         addem-basic
