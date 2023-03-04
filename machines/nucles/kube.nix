@@ -19,6 +19,7 @@ in
     kubelet.enable = true;
 
     init.initConfig = {
+
     };
 
     init.clusterConfig = {
@@ -31,9 +32,10 @@ in
     };
 
     init.kubeletConfig = {
-      allowedUnsafeSysctls = [
-        "net.ipv4.conf.all.src_valid_mark"
-      ];
+      serializeImagePulls = false;
+      allowedUnsafeSysctls = [ "net.ipv4.conf.all.src_valid_mark" ];
+      shutdownGracePeriod = "1m";
+      shutdownGracePeriodCriticalPods = "5m";
     };
   };
 
