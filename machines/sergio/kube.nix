@@ -5,11 +5,11 @@
 
   services.kubeadm = {
     controlPlane = true;
-    init = {
-      enable = true;
-      bootstrapTokenFile = "/var/secret/kube-bootstrap-token";
-      certificateKeyFile = "/var/secret/kube-certificate-key";
-    };
+    # init = {
+      # enable = true;
+      # bootstrapTokenFile = "/var/secret/kube-bootstrap-token";
+      # certificateKeyFile = "/var/secret/kube-certificate-key";
+    # };
   };
 
   environment.systemPackages = [ pkgs.etcd ];
