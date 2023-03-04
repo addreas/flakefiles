@@ -177,8 +177,8 @@ in
         if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
             ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
               && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
-        elif [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBE_APISERVER_MANIFEST_VERSION" ]]; then
-            ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION
+        else
+            ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION --config ${kubeadmConfig}
         fi
         ''
       else ''
