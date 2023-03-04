@@ -108,13 +108,14 @@
   };
 
 
-  # services.nix-serve = {
-  #   enable = true;
-  #   secretKeyFile = "/var/secret/local-nix-secret-key";
-  #   openFirewall = true;
-  #   # package = pkgs.haskellPackages.nix-serve-ng;
-  # };
 
+  services.harmonia = {
+    enable = true;
+    settings = {
+      bind = "[::]:9723";
+      sign_key_path = "/var/secret/local-nix-secret-key";
+    };
+  };
 
   # networking.firewall.enable = false;
   networking.firewall.logReversePathDrops = true;
@@ -127,6 +128,8 @@
     22
     80
     443
+
+    9723 # harmonia
 
     9000 #minio
     9001 #minio
