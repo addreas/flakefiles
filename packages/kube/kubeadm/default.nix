@@ -178,11 +178,11 @@ in
             ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
               && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
         else
-            ${kubeadm} upgrade node $KUBEADM_CONFIG_TARGET_VERSION --config ${kubeadmConfig}
+            ${kubeadm} upgrade node
         fi
         ''
       else ''
-        ${kubeadm} upgrade node $(${kubectl-get-kubeadm-target-version})
+        ${kubeadm} upgrade node
         '';
 
       wantedBy = [ "kubelet.service" ];
