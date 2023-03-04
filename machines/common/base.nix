@@ -17,7 +17,7 @@
     substituters =  [
       "https://nix-community.cachix.org"
       "http://sergio.localdomain:9723"
-      "s3://nix-cache?scheme=http&endpoint=sergio.localdomain:9000"
+      # "s3://nix-cache?scheme=http&endpoint=sergio.localdomain:9000"
     ];
 
     trusted-users = [ "root" "@wheel" ];
