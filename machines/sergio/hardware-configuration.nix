@@ -14,36 +14,36 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/nvme1n1p2";
+    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/5863-AEAE";
+    { device = "UUID=5863-AEAE";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "/dev/nvme1n1p2";
+    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/nvme1n1p2";
+    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/var/lib" =
-    { device = "/dev/nvme1n1p2";
+    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
       fsType = "btrfs";
       options = [ "subvol=@varlib" ];
     };
 
   fileSystems."/var/log" =
-    { device = "/dev/nvme1n1p2";
+    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
       fsType = "btrfs";
       options = [ "subvol=@varlog" ];
     };

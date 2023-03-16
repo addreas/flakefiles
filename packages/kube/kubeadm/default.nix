@@ -111,7 +111,10 @@ in
         cfg.package
       ];
 
-      serviceConfig.Type = "oneshot";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecCondition = "${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}";
+      };
       unitConfig.ConditionPathExists = "!/etc/kubernetes";
 
       script = ''
@@ -154,7 +157,10 @@ in
         cfg.package
       ];
 
-      serviceConfig.Type = "oneshot";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecCondition = "${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}";
+      };
       unitConfig.ConditionPathExists = "/etc/kubernetes";
 
       script = let
