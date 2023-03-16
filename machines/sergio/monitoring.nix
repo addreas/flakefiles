@@ -2,10 +2,10 @@
 {
   services.smartd.enable = true;
   services.smartd.notifications.mail.enable = true;
-  services.prometheus.exporters.smartctl.enable = true;
-  services.prometheus.exporters.smartctl.openFirewall = true;
-  systemd.services."prometheus-smartctl-exporter".serviceConfig.DeviceAllow =
-    [ "block-blkext rw" "block-sd rw" "char-nvme rw" ];
+  # services.prometheus.exporters.smartctl.enable = true;
+  # services.prometheus.exporters.smartctl.openFirewall = true;
+  # systemd.services."prometheus-smartctl-exporter".serviceConfig.DeviceAllow =
+  #   [ "block-blkext rw" "block-sd rw" "char-nvme rw" ];
 
   # power.ups.enable = true;
   # power.ups.mode = "netserver";
@@ -38,6 +38,7 @@
   networking.firewall.allowedTCPPorts = [
     # 3493 # nut/upsd
     3100 # loki
+    9633 # smartctl exporter
     9100 # node exporter
   ];
 }
