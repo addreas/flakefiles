@@ -53,6 +53,11 @@
       fsType = "ext4";
     };
 
+  fileSystems."/var/lib/longhorn2" =
+    { device = "UUID=9dad2e80-3bb0-4a5f-86b9-969d71e62d22";
+      fsType = "ext4";
+    };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
