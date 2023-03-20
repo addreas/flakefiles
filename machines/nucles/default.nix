@@ -30,6 +30,7 @@
   networking.dhcpcd.enable = false;
   systemd.network.wait-online.anyInterface = true;
   services.resolved.dnssec = "false"; # dnssec fails for localdomain and breaks stuff
+  systemd.network.config.networkConfig.ManageForeignRoutingPolicyRules = false;
 
   security.sudo.wheelNeedsPassword = false;
 }
