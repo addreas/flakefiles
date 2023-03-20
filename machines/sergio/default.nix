@@ -72,6 +72,7 @@
   services.resolved.dnssec = "false"; # dnssec fails for localdomain and breaks stuff
   networking.dhcpcd.allowInterfaces = ["eno1"];
   systemd.network.wait-online.anyInterface = true;
+  systemd.network.config.networkConfig.ManageForeignRoutingPolicyRules = false;
 
   # services.tailscale.enable = true;
 
