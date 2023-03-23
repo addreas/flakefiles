@@ -15,5 +15,7 @@
     ];
 
     networking.firewall.allowedUDPPorts = [ 8472 ];
+
+    systemd.network.config.networkConfig.ManageForeignRoutingPolicyRules = false;
   };
 }
