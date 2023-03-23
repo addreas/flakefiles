@@ -1,7 +1,7 @@
 { pkgs, ... }:
 let
-  version = "1.25.7";
-  sha256 = "sha256-5rL6VwlKiwdjpNTYwqCsXEpZYTYhb6B5+0kzWjQh8ow=";
+  version = "1.26.3";
+  sha256 = "sha256-dJMfnd82JIPxyVisr5o9s/bC3ZDiolF841pmV4c9LN8=";
 in
 {
   config.nixpkgs.overlays = [
