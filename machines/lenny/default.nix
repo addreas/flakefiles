@@ -31,9 +31,9 @@ in
 
   wsl = {
     enable = true;
-    wslConf.automount.root  = "/mnt";
     inherit defaultUser;
-    startMenuLaunchers = true;
+    nativeSystemd  = true;
+    startMenuLaunchers = false;
     interop.register = true;
 
     # Enable integration with Docker Desktop (needs to be installed)
