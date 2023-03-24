@@ -9,7 +9,7 @@ type HandlerContext = {
   persistanceRoot: string;
 };
 
-const routeHandler = router<>({
+const routeHandler = router<HandlerContext>({
   "/v1/boot/:mac": (_req, { hostConfigs, persistanceRoot }, match) => {
     const mac = match.mac;
     if ([...Deno.readDirSync(persistanceRoot)].map((d) => d.name).includes(mac)) {

@@ -33,7 +33,7 @@ in
     boot.kernelModules = [ "br_netfilter" ];
 
     boot.kernel.sysctl = {
-      # idk why i have these 
+      # idk why i have these
       # "net.bridge.bridge-nf-call-iptables" = 1;
       # "net.bridge.bridge-nf-call-ip6tables" = 1;
       "net.ipv4.ip_forward" = 1;
@@ -157,10 +157,7 @@ in
         cfg.package
       ];
 
-      serviceConfig = {
-        Type = "oneshot";
-        ExecCondition = "${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}";
-      };
+      serviceConfig.Type = "oneshot";
       unitConfig.ConditionPathExists = "/etc/kubernetes";
 
       script = let
@@ -177,6 +174,10 @@ in
       in
       if cfg.controlPlane
       then ''
+        until ${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}; do
+          sleep 1
+        end
+
         KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl-get-kubeadm-target-version})
         KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
         KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
