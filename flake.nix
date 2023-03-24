@@ -8,13 +8,17 @@
   inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
   inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.vscode-server.url = "github:msteen/nixos-vscode-server";
+  inputs.vscode-server.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.harmonia.url = "github:nix-community/harmonia";
   inputs.harmonia.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, nixos-wsl, harmonia, nixos-hardware, home-manager, ... }:
+
+  outputs = { self, nixpkgs, nixos-wsl, vscode-server, harmonia, nixos-hardware, home-manager, ... }:
     let
       system = "x86_64-linux";
 
@@ -85,6 +89,7 @@
 
       nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny" [
         nixos-wsl.nixosModules.wsl
+        vscode-server.nixosModule
         (home-manager-addem ./users/addem/home.dev.nix)
       ];
 

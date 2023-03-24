@@ -12,17 +12,14 @@ in
     ../common/base.nix
   ];
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
   system.stateVersion = "22.05";
-
   networking.hostName = "LAPTOP-EK7DRJB8";
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   nix.settings = {
     extra-platforms = ["aarch64-linux" "arm-linux" ];
     system-features = ["big-parallel"];
   };
-
 
 
   programs.ccache.enable = true;
@@ -35,14 +32,16 @@ in
     nativeSystemd  = true;
     startMenuLaunchers = false;
     interop.register = true;
-
-    # Enable integration with Docker Desktop (needs to be installed)
-    # docker-desktop.enable = true;
   };
 
   systemd.services.systemd-tmpfiles-setup-dev.enable = false;
   systemd.services.systemd-tmpfiles-setup.enable = false;
   systemd.services.systemd-sysctl.enable = false;
 
-  # virtualisation.podman.enable = true;
+  virtualisation.podman.enable = true;
+
+  services.vscode-server = {
+    enable = true;
+    enableFHS = true;
+  };
 }
