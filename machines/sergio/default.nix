@@ -78,21 +78,6 @@
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
 
-  virtualisation.oci-containers.containers.plex = {
-    image = "linuxserver/plex";
-    environment = {
-      PUID = "1000";
-      PGID = "1000";
-      VERSION = "latest";
-    };
-    volumes = [
-      "/mnt/videos:/data"
-      "/mnt/plex-config:/config"
-      "/etc/localtime:/etc/localtime"
-    ];
-    extraOptions = [ "--network=host" ];
-  };
-
   virtualisation.oci-containers.containers.minio = {
     image = "minio/minio";
     cmd = [ "server" "--console-address" ":9001" "/data" ];

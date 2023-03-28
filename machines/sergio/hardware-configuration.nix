@@ -14,7 +14,7 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
+    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
@@ -25,36 +25,31 @@
     };
 
   fileSystems."/home" =
-    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
+    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
+    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/var/lib" =
-    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
+    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@varlib" ];
     };
 
   fileSystems."/var/log" =
-    { device = "UUID=59f1f150-d4c7-4443-a0e7-eac48c93033e";
+    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@varlog" ];
     };
 
   fileSystems."/var/lib/longhorn" =
     { device = "UUID=ff765678-1e5a-4496-aa0c-0f763dc6c9b1";
-      fsType = "ext4";
-    };
-
-  fileSystems."/var/lib/longhorn2" =
-    { device = "UUID=9dad2e80-3bb0-4a5f-86b9-969d71e62d22";
       fsType = "ext4";
     };
 
