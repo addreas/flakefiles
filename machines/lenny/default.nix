@@ -21,6 +21,11 @@ in
     system-features = ["big-parallel"];
   };
 
+  documentation.enable = true;
+  documentation.doc.enable = true;
+  documentation.info.enable = true;
+  documentation.man.enable = true;
+  documentation.nixos.enable = true;
 
   programs.ccache.enable = true;
   programs.ccache.cacheDir = "/nix/var/cache/ccache";
