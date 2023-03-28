@@ -176,7 +176,7 @@ in
       then ''
         until ${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}; do
           sleep 1
-        end
+        done
 
         KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl-get-kubeadm-target-version})
         KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
