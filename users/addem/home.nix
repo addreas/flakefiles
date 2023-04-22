@@ -23,6 +23,8 @@
   home.packages = with pkgs; [
     kubectl
     kubectx
+    kustomize
+    k9s
     fluxcd
     kubernetes-helm
     cilium-cli

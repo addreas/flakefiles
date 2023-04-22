@@ -10,6 +10,9 @@
 
   home.packages = with pkgs; [
     go
+    ko
+    go-jsonnet
+    jsonnet-bundler
     deno
     cue
     rlwrap
@@ -20,4 +23,9 @@
     gcc
     # gcc-arm-embedded
   ];
+
+  programs.go = {
+    enable = true;
+    goPath = ".go";
+  };
 }
