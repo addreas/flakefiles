@@ -28,6 +28,8 @@ in
         certSANs = hosts;
         extraArgs.feature-gates = "MixedProtocolLBService=true";
       };
+      controllerManager.extraArgs.bind-address = "0.0.0.0";
+      scheduler.extraArgs.bind-address = "0.0.0.0";
       controlPlaneEndpoint = "nucles.localdomain:6443";
     };
 
