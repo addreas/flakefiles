@@ -37,7 +37,7 @@
 
   networking.firewall.allowedTCPPorts = [
     # 3493 # nut/upsd
-    3100 # loki
+    # 3100 # loki
     9633 # smartctl exporter
     9100 # node exporter
   ];

@@ -64,6 +64,10 @@ in
       which = "whence -vas";
     };
 
+    profileExtra = ''
+      path+=~/.krew/bin
+      '';
+
     shellGlobalAliases = {
       "..." = "../..";
       "...." = "../../..";

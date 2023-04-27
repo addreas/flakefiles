@@ -24,6 +24,7 @@
     kubectl
     kubectx
     kustomize
+    krew
     k9s
     fluxcd
     kubernetes-helm

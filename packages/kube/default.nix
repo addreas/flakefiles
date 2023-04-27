@@ -50,6 +50,7 @@
 
     networking.firewall.allowedTCPPorts = [
       9100 # node-exporter
+      9633 # smartctl-exporter
       3493 # nut upsd
     ];
   };

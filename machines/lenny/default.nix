@@ -44,6 +44,8 @@ in
   systemd.services.systemd-sysctl.enable = false;
 
   virtualisation.podman.enable = true;
+  virtualisation.docker.enable = true;
+  virtualisation.docker.daemon.settings.features.buildkit = true;
 
   services.vscode-server = {
     enable = true;

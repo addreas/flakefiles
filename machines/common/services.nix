@@ -7,6 +7,8 @@
   services.avahi.enable = true;
 
   virtualisation.podman.enable = true;
+  virtualisation.docker.enable = true;
+  virtualisation.docker.daemon.settings.features.buildkit = true;
 
   environment.systemPackages = with pkgs; [
     podman
