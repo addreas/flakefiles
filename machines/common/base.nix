@@ -10,7 +10,7 @@
       "auto-allocate-uids"
       "cgroups"
     ];
-    system-features = [ "uid-range" ];
+    system-features = [ "kvm" "big-parallel" "uid-range" ];
     auto-allocate-uids = true;
     use-cgroups = true;
 
