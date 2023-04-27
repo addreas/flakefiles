@@ -193,7 +193,7 @@ in
         '';
 
       wantedBy = [ "kubelet.service" ];
-      after = [ "network-online.target" "kubelet.service" ];
+      after = [ "network-online.target" "kubelet.service" "crio.service" ];
       wants = [ "network-online.target" ];
     };
 
