@@ -27,9 +27,7 @@
       red = "#BF616A";
       orange = "#FFCC80";
       yellow = "#FFEB3B";
-      faint = "#666";
     };
-    # continuation_prompt = "[➜](dimmed faint)";
 
     character = {
       success_symbol = "[➜](bold green)";
@@ -60,7 +58,7 @@
     };
     cmd_duration = {
       format = "[$duration]($style) ";
-      style = " faint";
+      style = "dimmed";
       show_notifications = true;
     };
 
@@ -85,9 +83,9 @@
     nix_shell.disabled = true;
 
     git_branch = {
-      style = "yellow";
+      style = "dimmed green";
       symbol = "";
-      format = "[$symbol$branch(:$remote_branch)]($style) ";
+      format = "[$symbol](dimmed)[$branch(:$remote_branch)]($style) ";
     };
     git_commit = {};
     git_state = {};
