@@ -11,7 +11,8 @@
   imports = [
     ./helix.nix
     ./zsh.nix
-    ./zsh-omp.nix
+    # ./zsh-omp.nix
+    ./zsh-starship.nix
   ];
 
   home.sessionVariables = {
