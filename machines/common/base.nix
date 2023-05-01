@@ -53,6 +53,7 @@
   #   }
 
   users.defaultUserShell = pkgs.zsh;
+  programs.zsh.enable = true;
   programs.command-not-found.enable = false;
 
   environment.systemPackages = with pkgs; [
