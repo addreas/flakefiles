@@ -68,16 +68,17 @@ in
   services.samba-wsdd.enable = true;
   services.samba.openFirewall = true;
   services.samba.extraConfig = ''
-    unix password sync = yes
+    guest account = nobody
+    map to guest = Bad User
   '';
 
   services.samba.shares =
     let
       simpleShare = path: {
-        path = path;
+        "path" = path;
         "read only" = false;
-        browseable = "yes";
-        "guest ok" = "no";
+        "browseable" = "yes";
+        "guest ok" = "yes";
         "admin users" = "addem jonas";
       };
     in

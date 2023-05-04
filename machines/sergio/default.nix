@@ -78,22 +78,6 @@
   virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
 
-  virtualisation.oci-containers.containers.minio = {
-    image = "minio/minio";
-    cmd = [ "server" "--console-address" ":9001" "/data" ];
-    environmentFiles = [
-      # expecting  MINIO_ROOT_PASSWORD, MINIO_ROOT_USER
-      "/home/addem/.minio-env"
-    ];
-    user = "1000:1000";
-    ports = [ "9000:9000" "9001:9001" ];
-    volumes = [
-      "/mnt/minio-objects:/data"
-    ];
-  };
-
-
-
   services.harmonia = {
     enable = true;
     settings = {
