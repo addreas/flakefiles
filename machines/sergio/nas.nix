@@ -24,9 +24,6 @@ in
   fileSystems."/mnt/pictures" = btrfsDataHDD // {
     options = [ "subvol=pictures" ];
   };
-  fileSystems."/mnt/minio-objects" = btrfsDataHDD // {
-    options = [ "subvol=minio-objects" ];
-  };
   fileSystems."/mnt/longhorn-backup" = btrfsDataHDD // {
     options = [ "subvol=longhorn-backup" ];
   };
