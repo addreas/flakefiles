@@ -21,4 +21,9 @@
     gtk.enable = true;
     x11.enable = true;
   };
+
+  home.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = "1";
+    WLR_DRM_NO_MODIFIERS = "1";
+  };
 }

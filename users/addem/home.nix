@@ -19,6 +19,10 @@
     EDITOR = "hx";
     PAGER = "less";
     LESS = "-R";
+    # LESS = "-F -X";
+    VIRTUAL_ENV_DISABLE_PROMPT = "1";
+    PIPENV_SHELL_FANCY = "1";
+    ERL_AFLAGS = "-kernel shell_history enabled";
   };
 
   home.packages = with pkgs; [

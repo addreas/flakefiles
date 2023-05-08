@@ -65,6 +65,9 @@ in
     };
 
     profileExtra = ''
+      path+=~/.bin
+      path+=~/.local/bin
+      path+=~/.cargo/bin
       path+=~/.krew/bin
       '';
 
