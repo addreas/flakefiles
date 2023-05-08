@@ -41,7 +41,13 @@
 
       machine = name: modules: nixpkgs.lib.nixosSystem {
         inherit system;
-        modules = nixpkgs.lib.lists.flatten [ "${self}/machines/${name}" modules ] ;
+        modules = nixpkgs.lib.lists.flatten [
+          {
+            environment.etc."nixos-source".source = self;
+          }
+          "${self}/machines/${name}"
+          modules
+        ] ;
       };
 
       trivial-machine = name: machine name [];
@@ -51,6 +57,17 @@
       packages.${system} = rec {
         cockpit-machines = callPackage ./packages/cockpit-machines { };
         cockpit-podman = callPackage ./packages/cockpit-podman { };
+      };
+
+      apps.${system}.diff-current-system = let
+        diff-closures = pkgs.writeScript "diff-current-system" ''
+          nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel
+          nix store diff-closures /nix/var/nix/profiles/system ./result
+          # nix-diff --character-oriented --environment  /run/current-system ./result
+        '';
+      in {
+        type = "app";
+        program = "${diff-closures}";
       };
 
       homeConfigurations.addem = home-config ./users/addem/home.desktop.nix;
