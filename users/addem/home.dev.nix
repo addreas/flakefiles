@@ -18,6 +18,7 @@
     nodejs
     python3
     rustup
+    rust-analyzer
     rlwrap
     # openocd
     # blackmagic

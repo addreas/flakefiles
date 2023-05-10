@@ -45,6 +45,9 @@
           {
             environment.etc."nixos-source".source = self;
           }
+          {
+            nixpkgs.config.allowUnfree = true;
+          }
           "${self}/machines/${name}"
           modules
         ] ;
