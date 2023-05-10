@@ -60,6 +60,7 @@
       format = "[$duration]($style) ";
       style = "dimmed";
       show_notifications = true;
+      notification_timeout = 5;
     };
 
     package.format = "[$symbol($version)]($style) ";

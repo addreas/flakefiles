@@ -15,6 +15,9 @@
     jsonnet-bundler
     deno
     cue
+    nodejs
+    python3
+    rustup
     rlwrap
     # openocd
     # blackmagic
