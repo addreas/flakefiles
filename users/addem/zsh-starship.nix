@@ -35,8 +35,8 @@
     };
     hostname = {
       ssh_symbol = "";
-      format = "[$ssh_symbol$hostname]($style)";
-      style = "bold dimmed orange";
+      format = "[$ssh_symbol$hostname ]($style)";
+      style = "bold orange";
     };
     shlvl = {
       disabled = false;
