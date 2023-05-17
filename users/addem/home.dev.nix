@@ -13,18 +13,20 @@
     ko
     go-jsonnet
     jsonnet-bundler
-    deno
     cue
     nodejs
     python3
     rustup
     rust-analyzer
+    deno
     rlwrap
     # openocd
     # blackmagic
     gnumake
     cmake
+    pkgconfig
     gcc
+    kubeseal
     # gcc-arm-embedded
   ];
 
