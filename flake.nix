@@ -102,7 +102,11 @@
         (home-manager-addem ./users/addem/home.desktop.nix)
       ];
 
-      nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny" [
+      nixosConfigurations.lenny = machine "lenny" [
+        (home-manager-addem ./users/addem/home.desktop.nix)
+      ];
+
+      nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny-wsl" [
         nixos-wsl.nixosModules.wsl
         vscode-server.nixosModule
         (home-manager-addem ./users/addem/home.dev.nix)

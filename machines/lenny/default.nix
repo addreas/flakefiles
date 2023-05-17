@@ -1,54 +1,44 @@
-{ lib, pkgs, config, modulesPath, ... }:
-
-with lib;
-let
-  defaultUser = "addem";
-in
+# ./users/mkshadow.d.sh addem
+# ./users/mkshadow.d.sh addem /mnt
+# sudo nixos-install --root /mnt --flake .#expessy --no-root-password
+{ config, pkgs, lib, ... }:
 {
   imports = [
-    "${modulesPath}/profiles/minimal.nix"
+    ./hardware-configuration.nix
 
     ../../users/addem.nix
     ../common/base.nix
+    ../common/services.nix
+    ../common/desktop.nix
   ];
 
-  system.stateVersion = "22.05";
-  networking.hostName = "LAPTOP-EK7DRJB8";
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.efi.canTouchEfiVariables = false;
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-  nix.settings = {
-    extra-platforms = ["aarch64-linux" "arm-linux" ];
-    system-features = ["big-parallel"];
-  };
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "22.05"; # Did you read the comment?
 
-  documentation.enable = true;
-  documentation.doc.enable = true;
-  documentation.info.enable = true;
-  documentation.man.enable = true;
-  documentation.nixos.enable = true;
+  # system.autoUpgrade.enable = true;
+  # system.autoUpgrade.flake = "/home/addem/github.com/addreas/flakefiles";
+  # system.autoUpgrade.flags = [ "--update-input" "nixpkgs" ];
 
-  programs.ccache.enable = true;
-  programs.ccache.cacheDir = "/nix/var/cache/ccache";
-  nix.settings.extra-sandbox-paths = [ (toString config.programs.ccache.cacheDir) ];
+  # requires manual `sudo btrfs subvolume create /.snapshots`
+  # services.snapper.snapshotRootOnBoot = true;
+  # services.snapper.configs.root.subvolume = /;
 
-  wsl = {
-    enable = true;
-    inherit defaultUser;
-    nativeSystemd  = true;
-    startMenuLaunchers = false;
-    interop.register = true;
-  };
+  networking.hostName = "lenny";
+  networking.domain = "localdomain";
 
-  systemd.services.systemd-tmpfiles-setup-dev.enable = false;
-  systemd.services.systemd-tmpfiles-setup.enable = false;
-  systemd.services.systemd-sysctl.enable = false;
+  networking.networkmanager.enable = true;
 
-  virtualisation.podman.enable = true;
-  virtualisation.docker.enable = true;
-  virtualisation.docker.daemon.settings.features.buildkit = true;
+  users.mutableUsers = false;
 
-  services.vscode-server = {
-    enable = true;
-    enableFHS = true;
-  };
+  environment.pathsToLink = [ "/share" ];
+
+  # services.tailscale.enable = true;
+  programs.wireshark.enable = true;
 }
+

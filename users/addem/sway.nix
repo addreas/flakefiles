@@ -10,9 +10,6 @@
       terminal = "kitty";
       menu = "ulauncher-toggle";
 
-      # TODO: made redundant by programs.waybar?
-      bars = [{ command = "${pkgs.waybar}/bin/waybar"; }];
-
       keybindings = lib.mkOptionDefault {
         "${modifier}+space" = null; # conflicts with win_space_toggle
         "${modifier}+Shift+f" = "floating toggle"; # use this instead

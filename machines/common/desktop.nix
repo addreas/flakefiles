@@ -45,6 +45,9 @@
     noto-fonts-extra
     noto-fonts-emoji
     noto-fonts-emoji-blob-bin
+    roboto
+    font-awesome
+    liberation_ttf
   ];
 
   environment.systemPackages = with pkgs; [
@@ -58,6 +61,7 @@
     qt5.qtwayland
     wayland
     glib
+    xdg-utils
 
     firefox-bin
     # chromium

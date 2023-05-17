@@ -16,8 +16,8 @@
     cue
     nodejs
     python3
-    rustup
-    rust-analyzer
+    # rustup
+    # rust-analyzer
     deno
     rlwrap
     # openocd
@@ -33,5 +33,24 @@
   programs.go = {
     enable = true;
     goPath = ".go";
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "Andreas Mårtensson";
+    userEmail = "andreas@addem.se";
+
+    extraConfig = {
+      push.default = "simple";
+      push.autoSetupRemote = true;
+      pull.rebase = true;
+      fetch.prune = true;
+      init.defaultBranch = "main";
+      branch.autosetupmerge = true;
+    };
+
+    delta.enable = true;
+    # diff-so-fancy.enable = true;
+    # difftastic.enable = true;
   };
 }
