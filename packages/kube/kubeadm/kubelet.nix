@@ -32,7 +32,7 @@ in
         MemoryAccounting = true;
 
         StateDirectory = "kubelet";
-        ConfiguratonDirectory = "kubernetes";
+        ConfigurationDirectory = "kubernetes";
 
         EnvironmentFile = "-/var/lib/kubelet/kubeadm-flags.env";
 

@@ -86,6 +86,13 @@
     };
   };
 
+  users.users.harmonia = {
+    uid = 991;
+    isSystemUser = true;
+    group = "harmonia";
+  };
+  users.groups.harmonia.gid = 987;
+
   # networking.firewall.enable = false;
   networking.firewall.logReversePathDrops = true;
   # networking.firewall.logRefusedPackets = true;
