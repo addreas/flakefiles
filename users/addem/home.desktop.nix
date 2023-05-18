@@ -4,7 +4,7 @@
     ./home.nix
     ./home.dev.nix
     ./kanshi.nix
-    ./kdeconnect.nix
+    ./mako.nix
     ./kitty.nix
     ./swayidle.nix
     ./swaylock.nix
@@ -21,6 +21,8 @@
     gtk.enable = true;
     x11.enable = true;
   };
+
+  # home.extraOutputsToInstall = ["share"];
 
   home.sessionVariables = {
     MOZ_ENABLE_WAYLAND = "1";
@@ -52,4 +54,9 @@
       # xoronic.pestfile
     ];
   };
+
+  services.batsignal.enable = true; # todo: auto suspend
+  # services.poweralertd.enable = true;
+  services.gnome-keyring.enable = true;
+  services.network-manager-applet.enable  = true;
 }

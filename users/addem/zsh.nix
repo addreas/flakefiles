@@ -64,13 +64,6 @@ in
       which = "whence -vas";
     };
 
-    profileExtra = ''
-      path+=~/.bin
-      path+=~/.local/bin
-      path+=~/.cargo/bin
-      path+=~/.krew/bin
-      '';
-
     shellGlobalAliases = {
       "..." = "../..";
       "...." = "../../..";

@@ -28,15 +28,15 @@
       home = {
         outputs = [
           {
-            criteria = "Unknown 2269WM BCPD59A000079";
+            criteria = "Samsung Electric Company LS27A800U HNMTA00128";
             status = "enable";
-            mode = "1920x1080";
+            mode = "3840x2160";
             position = "0,0";
           }
           {
             criteria = "eDP-1";
             status = "enable";
-            position = "1920,540";
+            position = "0,2160";
           }
         ];
       };

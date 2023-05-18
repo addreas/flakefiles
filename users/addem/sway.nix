@@ -10,6 +10,8 @@
       terminal = "kitty";
       menu = "ulauncher-toggle";
 
+      bars = [];
+
       keybindings = lib.mkOptionDefault {
         "${modifier}+space" = null; # conflicts with win_space_toggle
         "${modifier}+Shift+f" = "floating toggle"; # use this instead
@@ -30,7 +32,7 @@
       floating.criteria = [
         { app_id = "ulauncher"; }
         { app_id = "wdisplays"; }
-        { title = "Variety.*"; }
+        { app_id = "variety"; }
         { title = ".+[Ss]haring (Indicator|your screen)"; }
       ];
 
@@ -39,7 +41,7 @@
         # TODO: deduplicate criteria
         { criteria = {app_id="ulauncher";}; command = "border none"; }
         { criteria = {app_id="wdisplays";}; command = "border none"; }
-        { criteria = {title="Variety.*";}; command = "border none"; }
+        { criteria = {app_id="variety";}; command = "border none"; }
         { criteria = {title=".+[Ss]haring (Indicator|your screen)";}; command = "move to scratchpad"; }
 
       ];

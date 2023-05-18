@@ -15,6 +15,13 @@
     ./zsh-starship.nix
   ];
 
+  home.sessionPath = [
+    "$HOME/.bin"
+    "$HOME/.local/bin"
+    "$HOME/.cargo/bin"
+    "$HOME/.krew/bin"
+  ];
+
   home.sessionVariables = {
     EDITOR = "hx";
     PAGER = "less";

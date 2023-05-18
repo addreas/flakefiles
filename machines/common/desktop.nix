@@ -53,9 +53,7 @@
   environment.systemPackages = with pkgs; [
     waybar
     sway
-    swaylock-effects
     swaybg
-    swayidle
     sway-contrib.grimshot
     mako
     qt5.qtwayland
