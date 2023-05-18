@@ -71,11 +71,10 @@
     gnome.adwaita-icon-theme
     evince
     wireshark
-    ulauncher
     wdisplays
     swappy
     pavucontrol
-    brightnessctl
+
 
     usbutils
     pciutils

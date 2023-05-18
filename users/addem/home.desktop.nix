@@ -23,8 +23,6 @@
     x11.enable = true;
   };
 
-  # home.extraOutputsToInstall = ["share"];
-
   home.sessionVariables = {
     MOZ_ENABLE_WAYLAND = "1";
     WLR_DRM_NO_MODIFIERS = "1";

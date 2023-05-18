@@ -1,5 +1,11 @@
 { pkgs, lib, ... }:
 {
+  home.packages = with pkgs; [
+    pulseaudio
+    brightnessctl
+    playerctl
+  ];
+
   wayland.windowManager.sway = {
     enable = true;
     package = null; # defer to system config

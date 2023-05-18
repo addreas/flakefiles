@@ -71,9 +71,6 @@ in
       "......" = "../../../../..";
     };
 
-    #TODO: kubectl completions
-    #TODO: kubens kubectx kubie
-
     plugins = [
       {
         name = "zsh-fzf-tab";
