@@ -28,6 +28,8 @@
     gcc
     kubeseal
     # gcc-arm-embedded
+
+    nixpkgs-fmt
   ];
 
   programs.go = {

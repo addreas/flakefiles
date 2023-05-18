@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" ];
@@ -14,47 +15,55 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
+    {
+      device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/586E-6973";
+    {
+      device = "/dev/disk/by-uuid/586E-6973";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
+    {
+      device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
+    {
+      device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/var/lib" =
-    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
+    {
+      device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@varlib" ];
     };
 
   fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
+    {
+      device = "/dev/disk/by-uuid/007e8a33-0f88-4755-9150-afd2aff1d4e7";
       fsType = "btrfs";
       options = [ "subvol=@varlog" ];
     };
 
   fileSystems."/var/lib/longhorn" =
-    { device = "/dev/disk/by-uuid/0a40c243-115c-4bf2-bbab-182233de5e80";
+    {
+      device = "/dev/disk/by-uuid/0a40c243-115c-4bf2-bbab-182233de5e80";
       fsType = "ext4";
     };
 
-   fileSystems."/var/lib/longhorn2" =
-    { device = "/dev/disk/by-uuid/957d2327-04ac-403e-9f35-1a4610342f7d";
+  fileSystems."/var/lib/longhorn2" =
+    {
+      device = "/dev/disk/by-uuid/957d2327-04ac-403e-9f35-1a4610342f7d";
       fsType = "ext4";
     };
 

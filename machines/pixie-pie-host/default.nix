@@ -19,7 +19,7 @@
   networking.firewall.enable = true;
   networking.interfaces.eth0.useDHCP = true;
 
-  environment.systemPackages = with pkgs; [tcpdump];
+  environment.systemPackages = with pkgs; [ tcpdump ];
 
   services.pixiecore-host-configs.enable = true;
 

@@ -1,10 +1,11 @@
 { config, pkgs, lib, modulesPath, ... }:
-let setupPersistance = pkgs.writeShellApplication
-  {
-    name = "setup-persistance";
-    runtimeInputs = [ pkgs.parted ];
-    text = builtins.readFile ./setup-persistance.sh;
-  };
+let
+  setupPersistance = pkgs.writeShellApplication
+    {
+      name = "setup-persistance";
+      runtimeInputs = [ pkgs.parted ];
+      text = builtins.readFile ./setup-persistance.sh;
+    };
 in
 {
   imports = [

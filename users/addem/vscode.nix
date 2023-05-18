@@ -1,7 +1,13 @@
-{ pkgs, ...}:
+{ pkgs, ... }:
 {
   programs.vscode = {
     enable = true;
+    package = pkgs.vscode.fhsWithPackages (ps: with ps; [
+      rustup
+      zlib
+      openssl.dev
+      pkg-config
+    ]);
     extensions = with pkgs.vscode-extensions; [
       arcticicestudio.nord-visual-studio-code
       # brian-anders.sublime-duplicate-text

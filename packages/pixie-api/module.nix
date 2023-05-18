@@ -9,16 +9,16 @@ let
   mkPixiecoreConfig = mac: host: {
     kernel = "file://${host.nixosSystem.config.system.build.kernel}/bzImage";
     initrd = [ "file://${host.nixosSystem.config.system.build.netbootRamdisk}/initrd" ];
-      # pixiecore appends initrd kernel args
+    # pixiecore appends initrd kernel args
     cmdline = builtins.concatStringsSep " " (builtins.concatLists [
-          [
-            "init=${host.nixosSystem.config.system.build.toplevel}/init"
-            "pixie-api=http://${config.networking.fqdn}:${builtins.toString cfg.port}"
-            # TODO: serve nuke.sh from instead of baking into nucle-installer
-            "mac=${mac}"
-          ]
-          host.kernelParams
-        ]);
+      [
+        "init=${host.nixosSystem.config.system.build.toplevel}/init"
+        "pixie-api=http://${config.networking.fqdn}:${builtins.toString cfg.port}"
+        # TODO: serve nuke.sh from instead of baking into nucle-installer
+        "mac=${mac}"
+      ]
+      host.kernelParams
+    ]);
   };
 in
 {
@@ -51,8 +51,8 @@ in
       dhcpNoBind = true;
     };
 
-    networking.firewall.allowedTCPPorts = [cfg.port];
-    networking.firewall.allowedUDPPorts = [4011];
+    networking.firewall.allowedTCPPorts = [ cfg.port ];
+    networking.firewall.allowedUDPPorts = [ 4011 ];
 
     systemd.services.pixiecore-host-configs = {
       description = "Pixiecore API mode responder";

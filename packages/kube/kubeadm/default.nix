@@ -3,7 +3,7 @@ let
   cfg = config.services.kubeadm;
 
   kubeadmConfig = pkgs.writeText "kubeadm.yaml" (
-      lib.strings.concatMapStringsSep
+    lib.strings.concatMapStringsSep
       "\n---\n"
       builtins.toJSON
       [
@@ -12,7 +12,7 @@ let
         cfg.init.kubeletConfig
         cfg.init.kubeProxyConfig
       ]
-    );
+  );
 in
 {
   imports = [
@@ -132,7 +132,7 @@ in
       '';
 
       wantedBy = [ "kubelet.service" ];
-      after = [ "network-online.target" ] ++ (lib.lists.optionals cfg.controlPlane ["kubeadm-init.service"]);
+      after = [ "network-online.target" ] ++ (lib.lists.optionals cfg.controlPlane [ "kubeadm-init.service" ]);
       wants = [ "network-online.target" ];
     };
 
@@ -160,36 +160,37 @@ in
       serviceConfig.Type = "oneshot";
       unitConfig.ConditionPathExists = "/etc/kubernetes";
 
-      script = let
-        kubeadm = "${cfg.package}/bin/kubeadm";
-        kubectl = "${cfg.package}/bin/kubectl";
-        kubectl-get-kubeadm-target-version = ''
-          ${kubectl} get configmap kubeadm-config \
-            --kubeconfig /etc/kubernetes/admin.conf \
-            --namespace kube-system \
-            -o jsonpath='{.data.ClusterConfiguration}' \
-            | grep kubernetesVersion \
-            | cut -d" " -f2
+      script =
+        let
+          kubeadm = "${cfg.package}/bin/kubeadm";
+          kubectl = "${cfg.package}/bin/kubectl";
+          kubectl-get-kubeadm-target-version = ''
+            ${kubectl} get configmap kubeadm-config \
+              --kubeconfig /etc/kubernetes/admin.conf \
+              --namespace kube-system \
+              -o jsonpath='{.data.ClusterConfiguration}' \
+              | grep kubernetesVersion \
+              | cut -d" " -f2
           '';
-      in
-      if cfg.controlPlane
-      then ''
-        until ${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}; do
-          sleep 1
-        done
+        in
+        if cfg.controlPlane
+        then ''
+          until ${pkgs.curl}/bin/curl --insecure https://${cfg.init.clusterConfig.controlPlaneEndpoint}; do
+            sleep 1
+          done
 
-        KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl-get-kubeadm-target-version})
-        KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
-        KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
-        if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
-            ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
-              && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
-        else
-            ${kubeadm} upgrade node
-        fi
+          KUBEADM_CONFIG_TARGET_VERSION=$(${kubectl-get-kubeadm-target-version})
+          KUBEADM_CLI_VERSION=$(${kubeadm} version -o short)
+          KUBE_APISERVER_MANIFEST_VERSION=$(cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep image: | cut -d: -f3)
+          if [[ "$KUBEADM_CONFIG_TARGET_VERSION" != "$KUBEADM_CLI_VERSION" ]]; then
+              ${kubeadm} upgrade plan $KUBEADM_CLI_VERSION --config ${kubeadmConfig} \
+                && ${kubeadm} upgrade apply $KUBEADM_CLI_VERSION --config ${kubeadmConfig} --yes
+          else
+              ${kubeadm} upgrade node
+          fi
         ''
-      else ''
-        ${kubeadm} upgrade node
+        else ''
+          ${kubeadm} upgrade node
         '';
 
       wantedBy = [ "kubelet.service" ];

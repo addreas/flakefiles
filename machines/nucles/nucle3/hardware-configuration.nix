@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "rtsx_pci_sdmmc" ];
@@ -14,42 +15,49 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
+    {
+      device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/AD8E-96B2";
+    {
+      device = "/dev/disk/by-uuid/AD8E-96B2";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
+    {
+      device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
+    {
+      device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/var/lib" =
-    { device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
+    {
+      device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
       fsType = "btrfs";
       options = [ "subvol=@varlib" ];
     };
 
   fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
+    {
+      device = "/dev/disk/by-uuid/1a7a02e7-3db5-4547-a3cf-2ac97a2639b4";
       fsType = "btrfs";
       options = [ "subvol=@varlog" ];
     };
 
   fileSystems."/var/lib/longhorn" =
-    { device = "/dev/disk/by-uuid/fea4c3d2-9f02-4ace-8519-1165435cb57f";
+    {
+      device = "/dev/disk/by-uuid/fea4c3d2-9f02-4ace-8519-1165435cb57f";
       fsType = "ext4";
     };
 

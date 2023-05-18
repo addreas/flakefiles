@@ -25,7 +25,7 @@ in
       ];
       ExecStart = "${ulauncher}/bin/ulauncher --hide-window";
     };
-    Install = { WantedBy = ["graphical-session.target"]; };
+    Install = { WantedBy = [ "graphical-session.target" ]; };
   };
 
   # xdg.configFile."ulauncher/settings.json".text = ''

@@ -25,32 +25,32 @@ in
     version = 2;
     final_space = true;
     blocks = [{
-        alignment = "left";
-        type = "prompt";
-        segments = [
-          (mkSeg "exit" {
-            foreground = colors.light_green;
-            foreground_templates = ["{{ if gt .Code 0 }}${colors.red}{{ end }}"];
-            properties.always_enabled = true;
-            template = "➜ ";
-          })
-          (mkSeg "session" {
-            foreground = colors.orange;
-            template = "{{ if .SSHSession }}${ucode "F817"}{{ .HostName }} {{ end }}";
-          })
-          (mkSeg "path" {
-            foreground = colors.light_blue;
-            properties.style = "letter";
-            template = "{{ .Path }}";
-          })
-        ];
-      }
+      alignment = "left";
+      type = "prompt";
+      segments = [
+        (mkSeg "exit" {
+          foreground = colors.light_green;
+          foreground_templates = [ "{{ if gt .Code 0 }}${colors.red}{{ end }}" ];
+          properties.always_enabled = true;
+          template = "➜ ";
+        })
+        (mkSeg "session" {
+          foreground = colors.orange;
+          template = "{{ if .SSHSession }}${ucode "F817"}{{ .HostName }} {{ end }}";
+        })
+        (mkSeg "path" {
+          foreground = colors.light_blue;
+          properties.style = "letter";
+          template = "{{ .Path }}";
+        })
+      ];
+    }
       {
         alignment = "right";
         type = "rprompt";
         segments = [
           (mkSeg "exit" {
-            foreground_templates = ["{{ if gt .Code 0 }}${colors.red}{{ end }}"];
+            foreground_templates = [ "{{ if gt .Code 0 }}${colors.red}{{ end }}" ];
             template = "{{ if gt .Code 0 }}${ucode "f00d"} {{ trimPrefix \"SIG\" .Meaning }}{{ end }} ";
           })
           (mkSeg "executiontime" {
@@ -72,30 +72,30 @@ in
               "{{ .HEAD }}"
 
               "{{ if or (gt .Ahead 0) (gt .Behind 0) }}"
-                "<${colors.faint}>:</>"
-                "{{ .BranchStatus }}"
+              "<${colors.faint}>:</>"
+              "{{ .BranchStatus }}"
               "{{ end }}"
 
               "{{ if .Working.Changed }}"
-                "<${colors.faint}>:</>"
-                "<${colors.red}>"
-                (ucode "F044")
-                "{{ .Working.String }}"
-                "</>"
+              "<${colors.faint}>:</>"
+              "<${colors.red}>"
+              (ucode "F044")
+              "{{ .Working.String }}"
+              "</>"
               "{{ end }}"
 
               "{{ if .Staging.Changed }}"
-                "<${colors.faint}>:</>"
-                "<${colors.light_green}>"
-                (ucode "F046")
-                "{{ .Staging.String }}"
-                "</>"
+              "<${colors.faint}>:</>"
+              "<${colors.light_green}>"
+              (ucode "F046")
+              "{{ .Staging.String }}"
+              "</>"
               "{{ end }}"
 
               "{{ if gt .StashCount 0 }}"
-                "<${colors.faint}>:</>"
-                (ucode "F692")
-                "{{ .StashCount }}"
+              "<${colors.faint}>:</>"
+              (ucode "F692")
+              "{{ .StashCount }}"
               "{{ end }}"
             ];
             properties = {
@@ -109,17 +109,17 @@ in
             template = lib.strings.concatStrings [
               " ${ucode "fd31"}("
               "<${colors.light_blue}>"
-                "{{if eq .Context \"nucles\"}}${ucode "f015"}"
-                  "{{else if eq .Context \"dev.aurora\"}}dev${ucode "f110"}"
-                  "{{else if eq .Context \"app.aurora\"}}app${ucode "f110"}"
-                  "{{else if eq .Context \"canary.aurora\"}}canary${ucode "f110"}"
-                  "{{else if eq .Context \"support.aurora\"}}support${ucode "f110"}"
-                  "{{else}}{{.Context}}"
-                "{{end}}"
+              "{{if eq .Context \"nucles\"}}${ucode "f015"}"
+              "{{else if eq .Context \"dev.aurora\"}}dev${ucode "f110"}"
+              "{{else if eq .Context \"app.aurora\"}}app${ucode "f110"}"
+              "{{else if eq .Context \"canary.aurora\"}}canary${ucode "f110"}"
+              "{{else if eq .Context \"support.aurora\"}}support${ucode "f110"}"
+              "{{else}}{{.Context}}"
+              "{{end}}"
               "</>"
               "{{if .Namespace}}"
-                "<${colors.faint}>:</>"
-                "<${colors.light_blue}>{{.Namespace}}</>"
+              "<${colors.faint}>:</>"
+              "<${colors.light_blue}>{{.Namespace}}</>"
               "{{end}})"
             ];
             parse_kubeconfig = true;
@@ -129,11 +129,10 @@ in
             properties.time_format = "15:04:05";
           })
         ];
-      }
-    ];
+      }];
     secondary_prompt = {
-        foreground = colors.faint;
-        template = "➜ ";
+      foreground = colors.faint;
+      template = "➜ ";
     };
   };
 }

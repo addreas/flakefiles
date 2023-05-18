@@ -18,11 +18,11 @@
           mode = "3440x1440";
           position = "1920,0";
         }
-        {
-          criteria = "eDP-1";
-          status = "disable";
-          position =  "0,1080";
-        }];
+          {
+            criteria = "eDP-1";
+            status = "disable";
+            position = "0,1080";
+          }];
       };
 
       home = {

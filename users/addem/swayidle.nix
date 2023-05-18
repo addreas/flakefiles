@@ -5,16 +5,16 @@ let
   # swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
 in
 {
-  services.swayidle =  {
+  services.swayidle = {
     enable = true;
     events = [{
       event = "lock";
       command = "${swaylock} -f";
     }
-    {
-      event = "before-sleep";
-      command = "${swaylock} -f";
-    }];
+      {
+        event = "before-sleep";
+        command = "${swaylock} -f";
+      }];
     timeouts = [{
       timeout = 150;
       command = "${swaylock} -f --grace 5";

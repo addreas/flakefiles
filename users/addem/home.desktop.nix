@@ -34,6 +34,9 @@
 
   services.batsignal.enable = true; # todo: auto suspend
   # services.poweralertd.enable = true;
-  services.gnome-keyring.enable = true;
-  services.network-manager-applet.enable  = true;
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "secrets" ];
+  };
+  services.network-manager-applet.enable = true;
 }

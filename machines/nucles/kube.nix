@@ -18,9 +18,7 @@ in
     package = pkgs.kubernetes;
     kubelet.enable = true;
 
-    init.initConfig = {
-
-    };
+    init.initConfig = { };
 
     init.clusterConfig = {
       clusterName = "nucles";

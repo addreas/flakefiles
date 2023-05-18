@@ -8,7 +8,7 @@
 
   services.kubeadm.init = {
     enable = true;
-    bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token"; 
+    bootstrapTokenFile = "/var/secret/kubeadm-bootstrap-token";
   };
 }
 

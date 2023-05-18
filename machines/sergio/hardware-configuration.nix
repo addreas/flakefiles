@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "mpt3sas" "usbhid" "sd_mod" ];
@@ -14,42 +15,49 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
+    {
+      device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "UUID=5863-AEAE";
+    {
+      device = "UUID=5863-AEAE";
       fsType = "vfat";
     };
 
   fileSystems."/home" =
-    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
+    {
+      device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
   fileSystems."/nix" =
-    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
+    {
+      device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@nix" ];
     };
 
   fileSystems."/var/lib" =
-    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
+    {
+      device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@varlib" ];
     };
 
   fileSystems."/var/log" =
-    { device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
+    {
+      device = "UUID=43fbc380-3f3a-4aab-8612-212b13f7eb61";
       fsType = "btrfs";
       options = [ "subvol=@varlog" ];
     };
 
   fileSystems."/var/lib/longhorn" =
-    { device = "UUID=ff765678-1e5a-4496-aa0c-0f763dc6c9b1";
+    {
+      device = "UUID=ff765678-1e5a-4496-aa0c-0f763dc6c9b1";
       fsType = "ext4";
     };
 

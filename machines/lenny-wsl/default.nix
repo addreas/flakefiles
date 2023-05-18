@@ -17,8 +17,8 @@ in
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   nix.settings = {
-    extra-platforms = ["aarch64-linux" "arm-linux" ];
-    system-features = ["big-parallel"];
+    extra-platforms = [ "aarch64-linux" "arm-linux" ];
+    system-features = [ "big-parallel" ];
   };
 
   documentation.enable = true;
@@ -34,7 +34,7 @@ in
   wsl = {
     enable = true;
     inherit defaultUser;
-    nativeSystemd  = true;
+    nativeSystemd = true;
     startMenuLaunchers = false;
     interop.register = true;
   };

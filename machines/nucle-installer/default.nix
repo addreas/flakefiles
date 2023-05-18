@@ -1,30 +1,30 @@
 { config, pkgs, lib, modulesPath, ... }:
 let
   cmdline = pkgs.writeScriptBin "cmdline" (
-      builtins.replaceStrings
-        ["/usr/bin/env python3"]
-        ["${pkgs.python3}/bin/python"]
-        (builtins.readFile ./cmdline.py)
-    );
+    builtins.replaceStrings
+      [ "/usr/bin/env python3" ]
+      [ "${pkgs.python3}/bin/python" ]
+      (builtins.readFile ./cmdline.py)
+  );
   nuke = pkgs.writeShellApplication {
-      name = "nuke-nvme0n1-and-install";
-      runtimeInputs = with pkgs; [
-        parted
-        curl
-        git
-        openssh
-        btrfs-progs
-        dosfstools
-        e2fsprogs
-        nettools
-        util-linux
-        nix
-        nixos-install-tools
+    name = "nuke-nvme0n1-and-install";
+    runtimeInputs = with pkgs; [
+      parted
+      curl
+      git
+      openssh
+      btrfs-progs
+      dosfstools
+      e2fsprogs
+      nettools
+      util-linux
+      nix
+      nixos-install-tools
 
-        cmdline
-      ];
-      text = builtins.readFile ./nuke.sh;
-    };
+      cmdline
+    ];
+    text = builtins.readFile ./nuke.sh;
+  };
 in
 {
   imports = [

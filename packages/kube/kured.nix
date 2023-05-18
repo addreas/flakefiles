@@ -8,18 +8,20 @@
 
       serviceConfig.Type = "oneshot";
 
-      script = let
-        readlink = "${pkgs.coreutils}/bin/readlink";
-      in ''
-        booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
-        built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+      script =
+        let
+          readlink = "${pkgs.coreutils}/bin/readlink";
+        in
+        ''
+          booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
+          built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
 
-        if [ "''${booted}" = "''${built}" ]; then
-          rm -f /var/run/reboot-required
-        else
-          touch /var/run/reboot-required
-        fi
-      '';
+          if [ "''${booted}" = "''${built}" ]; then
+            rm -f /var/run/reboot-required
+          else
+            touch /var/run/reboot-required
+          fi
+        '';
     };
   };
 }

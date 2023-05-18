@@ -11,9 +11,68 @@
     ];
     # right_format = "$all";
     right_format = lib.concatStrings [
-      "$status" "$cmd_duration"
-      "$sudo" "$package" "$c" "$cmake" "$cobol" "$daml" "$dart" "$deno" "$dotnet" "$elixir" "$elm" "$erlang" "$fennel" "$golang" "$guix_shell" "$haskell" "$haxe" "$helm" "$java" "$julia" "$kotlin" "$gradle" "$lua" "$nim" "$nodejs" "$ocaml" "$opa" "$perl" "$php" "$pulumi" "$purescript" "$python" "$raku" "$rlang" "$red" "$ruby" "$rust" "$scala" "$swift" "$terraform" "$vlang" "$vagrant" "$zig" "$buf" "$nix_shell" "$conda" "$meson" "$spack" "$memory_usage" "$aws" "$gcloud" "$openstack" "$azure" "$env_var" "$crystal"
-      "$git_branch" "$git_commit" "$git_state" "$git_metrics" "$git_status"
+      "$status"
+      "$cmd_duration"
+      "$sudo"
+      "$package"
+      "$c"
+      "$cmake"
+      "$cobol"
+      "$daml"
+      "$dart"
+      "$deno"
+      "$dotnet"
+      "$elixir"
+      "$elm"
+      "$erlang"
+      "$fennel"
+      "$golang"
+      "$guix_shell"
+      "$haskell"
+      "$haxe"
+      "$helm"
+      "$java"
+      "$julia"
+      "$kotlin"
+      "$gradle"
+      "$lua"
+      "$nim"
+      "$nodejs"
+      "$ocaml"
+      "$opa"
+      "$perl"
+      "$php"
+      "$pulumi"
+      "$purescript"
+      "$python"
+      "$raku"
+      "$rlang"
+      "$red"
+      "$ruby"
+      "$rust"
+      "$scala"
+      "$swift"
+      "$terraform"
+      "$vlang"
+      "$vagrant"
+      "$zig"
+      "$buf"
+      "$nix_shell"
+      "$conda"
+      "$meson"
+      "$spack"
+      "$memory_usage"
+      "$aws"
+      "$gcloud"
+      "$openstack"
+      "$azure"
+      "$env_var"
+      "$crystal"
+      "$git_branch"
+      "$git_commit"
+      "$git_state"
+      "$git_metrics"
+      "$git_status"
       "$kubernetes"
       "$time"
       "$battery"
@@ -77,9 +136,9 @@
     golang.symbol = " ";
     elixir.symbol = " ";
 
-    elixir.detect_extensions = ["ex" "exs"];
-    erlang.detect_extensions = ["erl"];
-    nodejs.detect_extensions = ["cjs" "cts"];
+    elixir.detect_extensions = [ "ex" "exs" ];
+    erlang.detect_extensions = [ "erl" ];
+    nodejs.detect_extensions = [ "cjs" "cts" ];
 
     nix_shell.disabled = true;
 
@@ -88,8 +147,8 @@
       symbol = "";
       format = "[$symbol](dimmed)[$branch(:$remote_branch)]($style) ";
     };
-    git_commit = {};
-    git_state = {};
+    git_commit = { };
+    git_state = { };
     git_metrics = { disabled = false; };
     git_status = {
       format = ''(\[$staged$conflicted$deleted$renamed$modified$ahead_behind$untracked$stashed\] )'';
@@ -113,7 +172,7 @@
       context_aliases = {
         nucles = "";
       };
-      detect_extensions = ["yaml" "cue"];
+      detect_extensions = [ "yaml" "cue" ];
       # detect_folders = ["homelab"];
     };
 
