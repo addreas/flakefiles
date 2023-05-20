@@ -2,6 +2,7 @@
 {
   programs.kitty = {
     enable = true;
+    font.name = "Hack Nerd Font";
     # theme = "One Dark";
     settings = {
       scrollback_lines = 10000;

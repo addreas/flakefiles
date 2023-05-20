@@ -40,13 +40,13 @@
 
   fonts.enableDefaultFonts = true;
   fonts.fonts = with pkgs; [
+    hack-font
     (nerdfonts.override { fonts = [ "Hack" ]; })
     noto-fonts
     noto-fonts-extra
     noto-fonts-emoji
     noto-fonts-emoji-blob-bin
     roboto
-    font-awesome
     liberation_ttf
   ];
 

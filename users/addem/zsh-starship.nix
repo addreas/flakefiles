@@ -93,7 +93,7 @@
       error_symbol = "[➜](bold red)";
     };
     hostname = {
-      ssh_symbol = "";
+      ssh_symbol = "󰌘";
       format = "[$ssh_symbol$hostname ]($style)";
       style = "bold orange";
     };
@@ -153,12 +153,12 @@
     git_status = {
       format = ''(\[$staged$conflicted$deleted$renamed$modified$ahead_behind$untracked$stashed\] )'';
 
-      conflicted = "[ﲍ$count](bright-red)";
+      conflicted = "[󰘕$count](bright-red)";
       ahead = "[⇡$count](dimmed green)";
       behind = "[⇣$count](dimmed red)";
       diverged = "[⇕⇡$ahead_count⇣$behind_count](red)";
-      untracked = "[?$count](dimmed red)";
-      stashed = "[$count](dimmed yellow)";
+      untracked = "[󱀶$count](dimmed red)";
+      stashed = "[$count](dimmed yellow)";
       modified = "[$count](orange)";
       staged = "[$count](green)";
       renamed = "[»$count](orange)";
@@ -167,7 +167,7 @@
 
     kubernetes = {
       disabled = false;
-      symbol = "ﴱ";
+      symbol = "󱃾";
       format = ''[$symbol](bold blue)\([$context](blue)(:[$namespace](dimmed blue))\) '';
       context_aliases = {
         nucles = "";
