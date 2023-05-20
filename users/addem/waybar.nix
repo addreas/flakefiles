@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 {
   programs.waybar = {
     enable = true;
@@ -105,9 +105,20 @@
       "sway/language" = {
         format = "{short}";
         tooltip-format = "{long}";
-        on-click = "sway_xkb_next";
+        on-click = "swaymsg input type:keyboard xkb_switch_layout next";
       };
     };
     style = builtins.readFile ./waybar.style.css;
   };
+
+  systemd.user.services.waybar.Service.Environment =
+    let
+      paths = [
+        "${config.home.homeDirectory}/.nix-profile"
+        "/etc/profiles/per-user/${config.home.username}"
+        "${config.xdg.stateHome}/nix/profile"
+        "/run/current-system/sw"
+      ];
+    in
+    [ "PATH=${lib.strings.makeBinPath paths}" ];
 }
