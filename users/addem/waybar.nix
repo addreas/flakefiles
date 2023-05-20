@@ -13,15 +13,15 @@
       "sway/scratchpad" = {
         format = "{icon} {count}";
         show-empty = false;
-        format-icons = [ "" "" ];
+        format-icons = [ "" "" ]; # nf-fa-window_restore
         tooltip = true;
         tooltip-format = "{app} = {title}";
       };
       idle_inhibitor = {
         format = "{icon}";
         format-icons = {
-          activated = "";
-          deactivated = "";
+          activated = ""; #nf-fa-eye
+          deactivated = ""; #nf-fa-eye_slash
         };
         tooltip = false;
         timeout = 30;
@@ -36,11 +36,11 @@
         format = "{:%Y-%m-%d %H:%M:%S}";
       };
       cpu = {
-        format = "{usage}% ";
+        format = "{usage}% "; # nf-fa-microchip
         tooltip = true;
       };
       memory = {
-        format = "{}% ";
+        format = "{}% "; # nf-fa-bars
       };
       temperature = {
         #  thermal-zone = 1;
@@ -48,52 +48,57 @@
         critical-threshold = 80;
         # format-critical = "{temperatureC}°C {icon}";
         format = "{temperatureC}°C {icon}";
-        format-icons = [ "" "" "" ];
+        format-icons = [ "" "" "" ]; # nf-fa-thermometer_(empty|half|full)
       };
       backlight = {
         # device = "acpi_video1";
         format = "{percent}% {icon}";
-        format-icons = [ "" "" ];
+        format-icons = [ "" "" ]; #nf-fa-sun nf-fa-circle
       };
       battery = {
         states = {
-          # good = 95;
+          full = 100;
+          ninety = 90;
+          eighty = 80;
+          seventy = 70;
+          sixty = 60;
+          fifty = 50;
+          fourty = 40;
           warning = 30;
-          critical = 15;
+          twenty = 20;
+          critical = 10;
         };
         format = "{capacity}% {icon}";
-        format-charging = "{capacity}% ";
-        format-plugged = "{capacity}% ";
-        # format-good = ""; # An empty format will hide the module
-        # format-full = "";
-        format-icons = [ "" "" "" "" "" ];
+        format-charging = "{capacity}% 󰂄"; #nf-md-battery_charging
+        format-plugged = "{capacity}% 󱐥"; #nf-md-power_plug_outline
+        format-icons = [ "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ]; #nf-md-battery_xx..., nf-md-battery
       };
       network = {
-        format-ethernet = "";
-        tooltip-format-ethernet = " {ifname} = {ipaddr}/{cidr}";
+        format-ethernet = "󰈀"; # nf-md-ethernet
+        tooltip-format-ethernet = "󰈀 {ifname} = {ipaddr}/{cidr}"; # nf-md-ethernet
 
-        format-wifi = "";
+        format-wifi = ""; # nf-fa-wifi
         tooltip-format-wifi = "  {essid} ({signalStrength}%)";
 
-        format-linked = " (No IP)";
-        format-disconnected = "⚠ Disconnected";
+        format-linked = "󰈀 (No IP)"; # nf-md-ethernet
+        format-disconnected = "⚠ Disconnected"; # warning emoji
       };
       pulseaudio = {
         # scroll-step = 1; # %; can be a float
         format = "{volume}% {icon} {format_source}";
-        format-bluetooth = "{volume}% {icon} {format_source}";
-        format-bluetooth-muted = " {icon} {format_source}";
-        format-muted = " {format_source}";
-        format-source = "{volume}% ";
-        format-source-muted = "";
+        format-bluetooth = "{volume}% {icon} {format_source}"; #nf-fa-bluetooth_b
+        format-bluetooth-muted = "󰝟 {icon} {format_source}"; # nf-md-volume_mute 412nf-fa-bluetooth_b
+        format-muted = "󰝟 {format_source}"; #nf-md-volume_mute
+        format-source = "{volume}% "; #nf-fa-microphone
+        format-source-muted = ""; #nf-fa-microphone_slash
         format-icons = {
-          headphone = "";
-          hands-free = "";
-          headset = "";
-          phone = "";
-          portable = "";
-          car = "";
-          default = [ "" "" "" ];
+          headphone = ""; #nf-fa-headphones
+          hands-free = "󰋎"; #nf-md-headset
+          headset = "󰋎"; #nf-md-headset
+          phone = ""; #nf-fa-phone
+          portable = ""; #nf-fa-phone
+          car = ""; #nf-fa-car
+          default = [ "󰕿" "󰖀" "󰕾" ]; # nf-md-volume_(low|medium|high)
         };
         on-click = "pavucontrol";
       };
