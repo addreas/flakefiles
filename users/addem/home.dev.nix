@@ -16,7 +16,7 @@
     cue
     nodejs
     python3
-    # rustup
+    rustup
     # rust-analyzer
     deno
     rlwrap

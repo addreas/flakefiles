@@ -11,13 +11,21 @@
   inputs.vscode-server.url = "github:msteen/nixos-vscode-server";
   inputs.vscode-server.inputs.nixpkgs.follows = "nixpkgs";
 
+  inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+  inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
 
-  outputs = { self, nixpkgs, nixos-wsl, vscode-server, nixos-hardware, home-manager, ... }:
+  outputs = { self, nixpkgs, nixos-wsl, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
     let
       system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [vscode-extensions.overlays.default];
+        config.allowUnfree = true;
+      };
 
       home-manager-addem = home-conf: [
         home-manager.nixosModules.home-manager
@@ -29,8 +37,7 @@
       ];
 
       home-config = home-conf: home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${system};
-
+        inherit pkgs;
         modules = [ home-conf ];
       };
 
@@ -38,12 +45,10 @@
 
       machine = name: modules: nixpkgs.lib.nixosSystem {
         inherit system;
+        inherit pkgs;
         modules = nixpkgs.lib.lists.flatten [
           {
             environment.etc."nixos-source".source = self;
-          }
-          {
-            nixpkgs.config.allowUnfree = true;
           }
           "${self}/machines/${name}"
           modules
@@ -52,11 +57,10 @@
 
       trivial-machine = name: machine name [ ];
 
-    in
-    with import nixpkgs { inherit system; }; rec {
+    in rec {
       packages.${system} = rec {
-        cockpit-machines = callPackage ./packages/cockpit-machines { };
-        cockpit-podman = callPackage ./packages/cockpit-podman { };
+        cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
+        cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
       };
 
       apps.${system}.diff-current-system =
