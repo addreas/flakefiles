@@ -177,9 +177,13 @@
     };
 
     time = {
-      format = "[$time]($style)";
+      format = "[$time]($style) ";
       style = "dimmed";
       disabled = false;
+    };
+    battery = {
+      charging_symbol = "󰂄 "; #nf-md-battery_charging
+      discharging_symbol = "󰂃 "; #nf-md-battery_alert
     };
   };
 }
