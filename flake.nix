@@ -23,7 +23,10 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [vscode-extensions.overlays.default];
+        overlays = [
+          (import ./packages/kube/kubernetes-version-overlay.nix)
+          vscode-extensions.overlays.default
+        ];
         config.allowUnfree = true;
       };
 
@@ -57,7 +60,8 @@
 
       trivial-machine = name: machine name [ ];
 
-    in rec {
+    in
+    rec {
       packages.${system} = rec {
         cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
         cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
