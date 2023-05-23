@@ -41,5 +41,7 @@
     fluxcd
     kubernetes-helm
     cilium-cli
+
+    kitty.terminfo
   ];
 }
