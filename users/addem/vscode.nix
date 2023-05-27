@@ -30,7 +30,7 @@ let
     ms-vscode.sublime-keybindings
     nico-castell.linux-desktop-file
     # platformio.platformio-ide
-    silvenon.mdx
+    unifiedjs.vscode-mdx
     # VisualStudioExptTeam.vscodeintellicode
     xoronic.pestfile
   ];
@@ -42,7 +42,7 @@ in
     userSettings = {
       "editor.bracketPairColorization.enabled" = true;
       "editor.codeActionsOnSave" = [ ];
-      "editor.fontFamily" = "'Hack'; 'Segoe UI Emoji'; 'Segoe UI Symbol'";
+      "editor.fontFamily" = "'Hack Nerd Font', 'Hack', 'Segoe UI Emoji', 'Segoe UI Symbol'";
       "editor.fontSize" = 12;
       "editor.formatOnPaste" = false;
       "editor.formatOnSave" = false;
@@ -66,7 +66,7 @@ in
       "redhat.telemetry.enabled" = false;
       "search.mode" = "reuseEditor";
       "telemetry.telemetryLevel" = "off";
-      "terminal.integrated.fontFamily" = "'Hack'; monospace";
+      "terminal.integrated.fontFamily" = "'Hack Nerd Font', 'Hack', 'Segoe UI Emoji', 'Segoe UI Symbol'";
       "terminal.integrated.fontSize" = 12;
       "typescript.enablePromptUseWorkspaceTsdk" = true;
       "typescript.format.semicolons" = "remove";
