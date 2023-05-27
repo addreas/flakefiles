@@ -72,7 +72,7 @@
       workspaceOutputAssign =
         let
           up = "\"Dell Inc. DELL U3421WE 50F6753\"";
-          home = "\"Unknown 2269WM BCPD59A000079\"";
+          home = "\"Samsung Electric Company LS27A800U HNMTA00128\"";
         in
         [
           { workspace = "1"; output = "${up} ${home} eDP-1"; }
@@ -82,5 +82,9 @@
           { workspace = "10"; output = "eDP-1"; }
         ];
     };
+    extraConfig = ''
+      bindswitch --reload --locked lid:on output eDP-1 disable
+      bindswitch --reload --locked lid:off output eDP-1 enable
+      '';
   };
 }
