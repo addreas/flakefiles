@@ -40,6 +40,10 @@
         { app_id = "wdisplays"; }
         { app_id = "variety"; }
         { title = ".+[Ss]haring (Indicator|your screen)"; }
+
+        { app_id = "lutris"; }
+        { instance = "Steam"; }
+        { instance = "eadesktop.exe"; }
       ];
 
       window.border = 1;
@@ -49,6 +53,7 @@
         { criteria = { app_id = "wdisplays"; }; command = "border none"; }
         { criteria = { app_id = "variety"; }; command = "border none"; }
         { criteria = { title = ".+[Ss]haring (Indicator|your screen)"; }; command = "move to scratchpad"; }
+        { criteria = { instance = "explorer.exe"; title = "Wine System Tray"; }; command = "move to scratchpad"; }
 
       ];
 

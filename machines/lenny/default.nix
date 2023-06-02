@@ -40,5 +40,12 @@
 
   services.tailscale.enable = true;
   programs.wireshark.enable = true;
+
+  programs.steam.enable = true;
+  environment.systemPackages = with pkgs; [
+    lutris
+    winetricks
+    wineWowPackages.waylandFull
+  ];
 }
 
