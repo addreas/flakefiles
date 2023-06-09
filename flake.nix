@@ -17,7 +17,6 @@
   inputs.home-manager.url = "github:nix-community/home-manager";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-
   outputs = { self, nixpkgs, nixos-wsl, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
     let
       system = "x86_64-linux";
@@ -30,63 +29,77 @@
         config.allowUnfree = true;
       };
 
-      home-manager-addem = home-conf: [
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.addem = import home-conf;
-        }
-      ];
-
-      home-config = home-conf: home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [ home-conf ];
-      };
-
-      addem-basic = home-manager-addem ./users/addem/home.nix;
-
-      machine = name: modules: nixpkgs.lib.nixosSystem {
+      machine = name: extraModules: nixpkgs.lib.nixosSystem {
         inherit system;
         inherit pkgs;
-        modules = nixpkgs.lib.lists.flatten [
-          {
-            environment.etc."nixos-source".source = self;
-          }
+        modules = [
+          { environment.etc."nixos-source".source = self; }
           "${self}/machines/${name}"
-          modules
-        ];
+        ] ++ extraModules;
       };
 
       trivial-machine = name: machine name [ ];
 
     in
-    rec {
-      packages.${system} = rec {
+    {
+      formatter.${system} = pkgs.nixpkgs-fmt;
+
+      packages.${system} = {
         cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
         cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
       };
 
-      apps.${system}.diff-current-system =
+      apps.${system} =
         let
-          diff-closures = pkgs.writeScript "diff-current-system" ''
-            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel
-            nix store diff-closures /nix/var/nix/profiles/system ./result
-            # nix-diff --character-oriented --environment  /run/current-system ./result
-          '';
+          script = name: src: {
+            type = "app";
+            program = "${pkgs.writeScript name src}";
+          };
         in
         {
-          type = "app";
-          program = "${diff-closures}";
+          diff-current-system-store = script "diff-current-system-store" ''
+            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
+            && nix store diff-closures /nix/var/nix/profiles/system ./result
+          '';
+          diff-current-system-drv = script "diff-current-system-drv" ''
+            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
+            && ${pkgs.nix-diff}/bin/nix-diff --character-oriented --environment  /run/current-system ./result
+          '';
         };
 
-      formatter.${system} = pkgs.nixpkgs-fmt;
+      nixosModules =
+        let
+          addem-module = path: {
+            imports = [
+              home-manager.nixosModules.home-manager
+              ./users/addem.nix
+            ];
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.addem = import "${self}/users/addem/${path}";
+          };
+        in
+        {
+          addem-basic = addem-module "home.nix";
+          addem-desktop = addem-module "home.desktop.nix";
+          addem-dev = addem-module "home.dev.nix";
+        };
 
-      homeConfigurations.addem = home-config ./users/addem/home.desktop.nix;
-      homeConfigurations.addem-dev = home-config ./users/addem/home.dev.nix;
+      homeConfigurations =
+        let
+          addem-home-config = path: home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [ "${self}/users/addem/${path}" ];
+          };
+        in
+        {
+          addem-basic = addem-home-config "home.nix";
+          addem-desktop = addem-home-config "home.desktop.nix";
+          addem-dev = addem-home-config "home.dev.nix";
+        };
 
       nixosConfigurations.sergio = machine "sergio" [
-        addem-basic
+        self.nixosModules.addem-basic
 
         # "${self}/packages/pixie-api/module.nix"
         # {
@@ -105,23 +118,19 @@
         # }
       ];
 
-      # nixosConfigurations.nucle1 = machine "nucles/nucle1" [addem-basic];
-      # nixosConfigurations.nucle2 = machine "nucles/nucle2" [addem-basic];
-      nixosConfigurations.nucle3 = machine "nucles/nucle3" [ addem-basic ];
-      nixosConfigurations.nucle4 = machine "nucles/nucle4" [ addem-basic ];
+      # nixosConfigurations.nucle1 = machine "nucles/nucle1" [self.nixosModules.addem-basic];
+      # nixosConfigurations.nucle2 = machine "nucles/nucle2" [self.nixosModules.addem-basic];
+      nixosConfigurations.nucle3 = machine "nucles/nucle3" [ self.nixosModules.addem-basic ];
+      nixosConfigurations.nucle4 = machine "nucles/nucle4" [ self.nixosModules.addem-basic ];
 
-      nixosConfigurations.expessy = machine "expessy" [
-        (home-manager-addem ./users/addem/home.desktop.nix)
-      ];
+      nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
 
-      nixosConfigurations.lenny = machine "lenny" [
-        (home-manager-addem ./users/addem/home.desktop.nix)
-      ];
+      nixosConfigurations.lenny = machine "lenny" [ self.nixosModules.addem-desktop ];
 
       nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny-wsl" [
         nixos-wsl.nixosModules.wsl
         vscode-server.nixosModule
-        (home-manager-addem ./users/addem/home.dev.nix)
+        self.nixosModules.addem-dev
       ];
 
       nixosConfigurations.pixie-installer = trivial-machine "pixie-installer";

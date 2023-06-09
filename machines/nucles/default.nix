@@ -2,7 +2,6 @@
   imports = [
     ./kube.nix
 
-    ../../users/addem.nix
     ../common/base.nix
     ../common/services.nix
   ];

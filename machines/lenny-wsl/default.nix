@@ -8,7 +8,6 @@ in
   imports = [
     "${modulesPath}/profiles/minimal.nix"
 
-    ../../users/addem.nix
     ../common/base.nix
   ];
 

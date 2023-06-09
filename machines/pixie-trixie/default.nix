@@ -13,7 +13,6 @@ in
     ./hardware-configuration.nix
     ./kube.nix
 
-    ../../users/addem.nix
     ../common/base.nix
     ../common/services.nix
   ];

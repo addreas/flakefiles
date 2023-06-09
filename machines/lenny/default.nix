@@ -6,7 +6,6 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../../users/addem.nix
     ../common/base.nix
     ../common/services.nix
     ../common/desktop.nix

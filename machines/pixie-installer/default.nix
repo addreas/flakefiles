@@ -14,7 +14,6 @@ in
 
     ../common/base.nix
     ../common/services.nix
-    ../../users/addem.nix
   ];
 
   system.stateVersion = "22.11";

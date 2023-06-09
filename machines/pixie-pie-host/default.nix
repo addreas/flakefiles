@@ -3,7 +3,6 @@
   imports = [
     (modulesPath + "/installer/sd-card/sd-image-aarch64-installer.nix")
 
-    ../../users/addem.nix
     ../common/base.nix
     ../common/services.nix
     ../../packages/pixie-api/module.nix
