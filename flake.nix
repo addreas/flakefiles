@@ -83,6 +83,10 @@
           addem-basic = addem-module "home.nix";
           addem-desktop = addem-module "home.desktop.nix";
           addem-dev = addem-module "home.dev.nix";
+
+          base = import ./machines/common/base.nix;
+          nix-builder = import ./machines/common/nix-builder.nix;
+          services = import ./machines/common/services.nix;
         };
 
       homeConfigurations =
