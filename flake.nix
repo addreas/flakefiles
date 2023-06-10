@@ -38,8 +38,6 @@
         ] ++ extraModules;
       };
 
-      trivial-machine = name: machine name [ ];
-
     in
     {
       formatter.${system} = pkgs.nixpkgs-fmt;
@@ -102,31 +100,6 @@
           addem-dev = addem-home-config "home.dev.nix";
         };
 
-      nixosConfigurations.sergio = machine "sergio" [
-        self.nixosModules.addem-basic
-
-        # "${self}/packages/pixie-api/module.nix"
-        # {
-        #   services.pixiecore-host-configs.enable = true;
-        #   services.pixiecore-host-configs.hosts = let
-        #     nucle-installer = name: {
-        #       nixosSystem = nixosConfigurations.nucle-installer;
-        #       kernelParams = [ "hostname=${name}" ];
-        #     };
-        #   in {
-        #     # "1c:69:7a:a0:af:3e" = nucle-installer "nucle1";
-        #     # "1c:69:7a:6f:c2:b8" = nucle-installer "nucle2";
-        #     # "1c:69:7a:01:84:76" = nucle-installer "nucle3";
-        #     # "84:a9:3e:10:c4:66" = nucle-installer "nucle4";
-        #   };
-        # }
-      ];
-
-      # nixosConfigurations.nucle1 = machine "nucles/nucle1" [self.nixosModules.addem-basic];
-      # nixosConfigurations.nucle2 = machine "nucles/nucle2" [self.nixosModules.addem-basic];
-      nixosConfigurations.nucle3 = machine "nucles/nucle3" [ self.nixosModules.addem-basic ];
-      nixosConfigurations.nucle4 = machine "nucles/nucle4" [ self.nixosModules.addem-basic ];
-
       nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
 
       nixosConfigurations.lenny = machine "lenny" [ self.nixosModules.addem-desktop ];
@@ -136,9 +109,5 @@
         vscode-server.nixosModule
         self.nixosModules.addem-dev
       ];
-
-      nixosConfigurations.pixie-installer = trivial-machine "pixie-installer";
-      nixosConfigurations.pixie-trixie = trivial-machine "pixie-trixie";
-      nixosConfigurations.nucle-installer = trivial-machine "nucle-installer";
     };
 }
