@@ -23,7 +23,6 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          (import ./packages/kube/kubernetes-version-overlay.nix)
           vscode-extensions.overlays.default
         ];
         config.allowUnfree = true;
