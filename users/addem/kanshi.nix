@@ -32,12 +32,12 @@
             status = "enable";
             mode = "3840x2160";
             position = "0,0";
+            scale = 1.5;
           }
           {
             criteria = "eDP-1";
-            status = "enable";
-            position = "0,2160";
-            scale = 1.5;
+            status = "disable";
+            # position = "0,2160";
           }
         ];
       };
