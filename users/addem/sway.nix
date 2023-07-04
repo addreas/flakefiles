@@ -53,7 +53,7 @@
         { criteria = { app_id = "wdisplays"; }; command = "border none"; }
         { criteria = { app_id = "variety"; }; command = "border none"; }
         { criteria = { title = ".+[Ss]haring (Indicator|your screen)"; }; command = "move to scratchpad"; }
-        { criteria = { instance = "explorer.exe"; title = "Wine System Tray"; }; command = "move to scratchpad"; }
+        { criteria = { title = "Wine System Tray"; }; command = "move to scratchpad"; }
 
       ];
 
@@ -84,7 +84,7 @@
           { workspace = "2"; output = "${up} ${home} eDP-1"; }
           { workspace = "3"; output = "${up} ${home} eDP-1"; }
           { workspace = "4"; output = "${up} eDP-1"; }
-          { workspace = "10"; output = "eDP-1"; }
+          { workspace = "9"; output = "eDP-1"; }
         ];
     };
     extraConfig = ''
