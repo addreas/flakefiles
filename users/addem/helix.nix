@@ -2,7 +2,7 @@
 {
   programs.helix.enable = true;
   programs.helix.settings = {
-    theme = "bogster";
+    theme = "ayu_evolve";
     editor.scrolloff = 5;
     editor.file-picker.hidden = false;
     editor.whitespace.render = {

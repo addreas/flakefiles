@@ -5,7 +5,7 @@
     ./home.dev.nix
     ./kanshi.nix
     ./mako.nix
-    ./kitty.nix
+    ./alacritty.nix
     ./swayidle.nix
     ./swaylock.nix
     ./sway.nix

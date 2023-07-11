@@ -13,7 +13,7 @@
     config = rec {
       modifier = "Mod4";
 
-      terminal = "kitty";
+      terminal = "alacritty";
       menu = "ulauncher-toggle";
 
       bars = [ ];
@@ -35,6 +35,7 @@
 
       floating.modifier = modifier;
       floating.border = 1;
+      floating.titlebar = false;
       floating.criteria = [
         { app_id = "ulauncher"; }
         { app_id = "wdisplays"; }
@@ -47,6 +48,7 @@
       ];
 
       window.border = 1;
+      window.titlebar = false;
       window.commands = [
         # TODO: deduplicate criteria
         { criteria = { app_id = "ulauncher"; }; command = "border none"; }

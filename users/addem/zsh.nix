@@ -87,7 +87,24 @@ in
           sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
         };
       }
+      {
+        name = "zsh-tab-title";
+        file = "zsh-tab-title.plugin.zsh";
+        src = pkgs.fetchFromGitHub {
+          owner = "trystan2k";
+          repo = "zsh-tab-title";
+          rev = "v2.3.1";
+          sha256 = "DoUUssc8Z1J0fSqNDESERltZJLp27z48PukxUTp39Yw=";
+        };
+      }
     ];
+
+    sessionVariables = {
+      ZSH_TAB_TITLE_ADDITIONAL_TERMS = "alacritty|foot";
+    };
+
+    # TODO: try out prezto
+    # prezto.terminal.autoTitle = true;
 
     initExtra = ''
       # open command line in $EDITOR with ctrl-x ctrl-e

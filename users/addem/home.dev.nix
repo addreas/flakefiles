@@ -1,6 +1,5 @@
 { pkgs, lib, ... }:
 {
-  home.stateVersion = "22.11";
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
 

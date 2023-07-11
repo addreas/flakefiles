@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   home = {
-    stateVersion = "22.11";
+    stateVersion = "23.05";
     username = "addem";
     homeDirectory = "/home/addem";
   };

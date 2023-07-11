@@ -11,14 +11,11 @@
     ../common/desktop.nix
   ];
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = false;
 
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.05"; # Did you read the comment?
+  system.stateVersion = "23.05";
 
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.flake = "/home/addem/github.com/addreas/flakefiles";
