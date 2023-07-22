@@ -1,6 +1,7 @@
 { pkgs, lib, config, ... }:
 {
   programs.swaylock.package = pkgs.swaylock-effects;
+  programs.swaylock.enable = true;
   programs.swaylock.settings = {
     indicator = true;
     clock = true;
@@ -13,5 +14,5 @@
     line-uses-inside = true;
   };
 
-  # expects `cp $(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt) $HOME/.config/variety/wallpaper/wallpaper.jpg` in /home/addem/.config/variety/scripts/set_wallpaper
+  # expects `cp "$(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt)" $HOME/.config/variety/wallpaper/wallpaper.jpg` in /home/addem/.config/variety/scripts/set_wallpaper
 }

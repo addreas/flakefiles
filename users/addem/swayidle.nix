@@ -1,8 +1,6 @@
 { pkgs, config, ... }:
 let
   swaylock = "${config.programs.swaylock.package}/bin/swaylock";
-  # swaylock = "${pkgs.swaylock}/bin/swaylock";
-  # swaylock = "${pkgs.swaylock-effects}/bin/swaylock";
 in
 {
   services.swayidle = {
