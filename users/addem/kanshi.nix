@@ -17,6 +17,7 @@
             criteria = "Samsung Electric Company LS27A800U HNMTA00128";
             status = "enable";
             mode = "3840x2160";
+            position = "0,0";
             scale = 1.5;
           }
           {

@@ -40,4 +40,8 @@ in
     enable = true;
     extensions = nixpkgs-extensions ++ market-extensions;
   };
+
+  xdg.mimeApps.associations.removed = {
+    "inode/directory" = "code.desktop";
+  };
 }
