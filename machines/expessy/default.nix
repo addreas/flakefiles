@@ -37,5 +37,13 @@
 
   # services.tailscale.enable = true;
   programs.wireshark.enable = true;
+  services.tlp.enable = true;
+  services.udisks2.enable = true;
+  services.gvfs.enable = true;
+  services.gnome.sushi.enable = true;
+  services.packagekit.enable = true;
+  programs.file-roller.enable = true;
+
+  environment.systemPackages = with pkgs; [ darktable digikam nfs-utils libraw exiftool ];
 }
 
