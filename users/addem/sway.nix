@@ -20,7 +20,14 @@
 
       keybindings = lib.mkOptionDefault {
         "${modifier}+space" = null; # conflicts with win_space_toggle
+        "${modifier}+Shift+space" = null;
+
         "${modifier}+Shift+f" = "floating toggle"; # use this instead
+
+        "${modifier}+e" = null; # no layout toggle split
+        # "${modifier}+w" = null; # no layout tabbed
+
+        "${modifier}+w" = "resize set width 66ppt";
 
         "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
         "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
