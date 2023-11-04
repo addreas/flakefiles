@@ -15,7 +15,7 @@
     use-cgroups = true;
 
     substituters = [
-      "http://sergio.localdomain:9723"
+      "http://nucles.localdomain:9723"
       # "s3://nix-cache?scheme=http&endpoint=sergio.localdomain:9000"
       "https://nix-community.cachix.org"
     ];
