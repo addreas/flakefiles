@@ -19,6 +19,7 @@
     "$HOME/.bin"
     "$HOME/.local/bin"
     "$HOME/.cargo/bin"
+    "$HOME/.go/bin"
     "$HOME/.krew/bin"
   ];
 
