@@ -38,8 +38,8 @@
   services.blueman.enable = true;
   services.hardware.bolt.enable = true;
 
-  fonts.enableDefaultFonts = true;
-  fonts.fonts = with pkgs; [
+  fonts.enableDefaultPackages = true;
+  fonts.packages = with pkgs; [
     hack-font
     roboto
     (nerdfonts.override { fonts = [ "Hack" ]; })

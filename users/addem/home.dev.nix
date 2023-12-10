@@ -14,6 +14,7 @@
     jsonnet-bundler
     cue
     elixir
+    elixir-ls
     nodejs
     python3
     rustup
@@ -24,7 +25,7 @@
     # blackmagic
     gnumake
     cmake
-    pkgconfig
+    pkg-config
     gcc
     kubeseal
     # gcc-arm-embedded

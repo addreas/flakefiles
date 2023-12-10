@@ -7,7 +7,7 @@
 , flex
 , binutils-unwrapped
 , gnumake
-, pkgconfig
+, pkg-config
 , python
 , python3
 , perl
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     flex
     bison
     makeWrapper

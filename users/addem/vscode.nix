@@ -39,6 +39,7 @@ in
 {
   programs.vscode = {
     enable = true;
+    mutableExtensionsDir = false;
     extensions = nixpkgs-extensions ++ market-extensions;
   };
 
