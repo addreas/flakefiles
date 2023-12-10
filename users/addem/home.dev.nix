@@ -13,6 +13,7 @@
     go-jsonnet
     jsonnet-bundler
     cue
+    elixir
     nodejs
     python3
     rustup

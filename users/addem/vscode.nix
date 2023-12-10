@@ -5,6 +5,7 @@ let
     denoland.vscode-deno
     esbenp.prettier-vscode
     editorconfig.editorconfig
+    elixir-lsp.vscode-elixir-ls
     firefox-devtools.vscode-firefox-debug
     golang.go
     jnoortheen.nix-ide
