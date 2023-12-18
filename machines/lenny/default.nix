@@ -44,6 +44,7 @@
     lutris
     winetricks
     wineWowPackages.waylandFull
+    cura
   ];
 }
 
