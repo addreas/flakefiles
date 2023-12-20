@@ -45,6 +45,7 @@
       packages.${system} = {
         cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
         cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
+        slc-cli = pkgs.callPackage ./packages/slc-cli { };
       };
 
       apps.${system} =
