@@ -27,7 +27,7 @@
         normal = {
           black =   "#0D0D0D";
           red =     "#DD3E25";
-          green =   "#91B362";
+          green =   "#5A8025";
           yellow =  "#F9AF4F";
           blue =    "#53BDFA";
           magenta = "#FAE994";

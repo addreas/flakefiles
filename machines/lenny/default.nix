@@ -38,6 +38,7 @@
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false; # https://github.com/NixOS/nixpkgs/issues/180175
   programs.wireshark.enable = true;
   services.tlp.enable = true;
+  services.fwupd.enable = true;
 
   programs.steam.enable = true;
   environment.systemPackages = with pkgs; [
