@@ -3,6 +3,7 @@
 
   # inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
   inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
+  inputs.nixpkgsOld.url = "nixpkgs/nixos-23.05";
 
   inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
 
@@ -18,7 +19,7 @@
   inputs.home-manager.url = "github:nix-community/home-manager/release-23.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, nixos-wsl, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
+  outputs = { self, nixpkgs, nixpkgsOld, nixos-wsl, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -26,6 +27,10 @@
         overlays = [
           vscode-extensions.overlays.default
         ];
+        config.allowUnfree = true;
+      };
+      pkgsOld = import nixpkgsOld {
+        inherit system;
         config.allowUnfree = true;
       };
 
@@ -42,10 +47,13 @@
     {
       formatter.${system} = pkgs.nixpkgs-fmt;
 
-      packages.${system} = {
+      packages.${system} = rec {
         cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
         cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
-        slc-cli = pkgs.callPackage ./packages/slc-cli { };
+        jlink = pkgsOld.callPackage ./packages/jlink { };
+        simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { inherit jlink; };
+        simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { inherit jlink; };
+        slc = pkgs.callPackage ./packages/slc-cli { };
       };
 
       apps.${system} =

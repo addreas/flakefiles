@@ -29,6 +29,7 @@
     gcc
     kubeseal
     # gcc-arm-embedded
+    unzip
 
     nixpkgs-fmt
   ];
@@ -40,6 +41,7 @@
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "Andreas Mårtensson";
     userEmail = "andreas@addem.se";
 
