@@ -2,6 +2,8 @@
 , lib
 , fetchzip
 , autoPatchelfHook
+, makeBinaryWrapper
+, eudev
 , qt48
 }:
 stdenvNoCC.mkDerivation rec {
@@ -16,6 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    makeBinaryWrapper
  ];
 
   installPhase = ''
@@ -30,6 +33,17 @@ stdenvNoCC.mkDerivation rec {
 
     ln -s ${qt48}/lib/libQtGui.so.4.8.7 $out/opt/SEGGER/JLink/libQtGui.so.4.8.7
     ln -s ${qt48}/lib/libQtCore.so.4.8.7 $out/opt/SEGGER/JLink/libQtCore.so.4.8.7
+
+    mkdir $out/bin
+    for f in $(find . -maxdepth 1 -type f -name 'J*Exe'); do
+      ln -s $out/opt/SEGGER/JLink/$f $out/bin/$f
+    done
+  '';
+
+  postFixup = ''
+    for f in $(find . -maxdepth 1 -type f -name 'J*Exe'); do
+      wrapProgram $out/opt/SEGGER/JLink/$f --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath [eudev] }
+    done
   '';
 
 
