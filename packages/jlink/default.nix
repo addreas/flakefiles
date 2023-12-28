@@ -2,7 +2,6 @@
 , lib
 , fetchzip
 , autoPatchelfHook
-
 , qt48
 }:
 stdenvNoCC.mkDerivation rec {
@@ -20,13 +19,17 @@ stdenvNoCC.mkDerivation rec {
  ];
 
   installPhase = ''
-    cp -r . $out
+    mkdir -p $out/opt/SEGGER/JLink
+    cp -r . $out/opt/SEGGER/JLink
 
-    rm $out/libQtGui.so.4.8.7
-    rm $out/libQtCore.so.4.8.7
+    mkdir -p $out/lib/udev/rules.d
+    cp 99-jlink.rules $out/lib/udev/rules.d
 
-    ln -s ${qt48}/lib/libQtGui.so.4.8.7 $out/libQtGui.so.4.8.7
-    ln -s ${qt48}/lib/libQtCore.so.4.8.7 $out/libQtCore.so.4.8.7
+    rm $out/opt/SEGGER/JLink/libQtGui.so.4.8.7
+    rm $out/opt/SEGGER/JLink/libQtCore.so.4.8.7
+
+    ln -s ${qt48}/lib/libQtGui.so.4.8.7 $out/opt/SEGGER/JLink/libQtGui.so.4.8.7
+    ln -s ${qt48}/lib/libQtCore.so.4.8.7 $out/opt/SEGGER/JLink/libQtCore.so.4.8.7
   '';
 
 

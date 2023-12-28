@@ -18,9 +18,15 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+  ];
+
+  buildInputs = [
     jlink
     qt5Full
   ];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     tar xvf $src/Commander-cli_linux_x86_64_*.tar.bz

@@ -37,6 +37,7 @@
       machine = name: extraModules: nixpkgs.lib.nixosSystem {
         inherit system;
         inherit pkgs;
+        specialArgs.flakepkgs = self.packages.${system};
         modules = [
           { environment.etc."nixos-source".source = self; }
           "${self}/machines/${name}"
@@ -51,6 +52,11 @@
         cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
         cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
         jlink = pkgsOld.callPackage ./packages/jlink { };
+
+        nrf-connect = pkgs.callPackage ./packages/nrf-connect { inherit jlink nrf-udev; };
+        nrf-udev = pkgs.callPackage ./packages/nrf-udev {};
+        
+        simplicity-studio = pkgs.callPackage ./packages/simplicity-studio { };
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { inherit jlink; };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { inherit jlink; };
         slc = pkgs.callPackage ./packages/slc-cli { };
@@ -113,10 +119,10 @@
 
       nixosConfigurations.lenny = machine "lenny" [ self.nixosModules.addem-desktop ];
 
-      nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny-wsl" [
-        nixos-wsl.nixosModules.wsl
-        vscode-server.nixosModule
-        self.nixosModules.addem-dev
-      ];
+      # nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny-wsl" [
+      #   nixos-wsl.nixosModules.wsl
+      #   vscode-server.nixosModule
+      #   self.nixosModules.addem-dev
+      # ];
     };
 }

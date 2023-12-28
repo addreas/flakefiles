@@ -9,6 +9,7 @@
     ../common/base.nix
     ../common/services.nix
     ../common/desktop.nix
+    ../common/embedded.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
