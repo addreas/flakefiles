@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation rec {
     libgcc
     libuuid
     libz
- ];
+  ];
 
 
   buildInputs = [
@@ -76,9 +76,9 @@ stdenvNoCC.mkDerivation rec {
     ln -s ${python}/include $out/share/slc-cli/developer/adapter_packs/python/include
     ln -s ${python}/site-packages $out/share/slc-cli/developer/adapter_packs/python/ext-site-packages
     # ln -s ${python}/site-packages $out/share/slc-cli/developer/adapter_packs/python/site-packages
-    '';
+  '';
 
-  autoPatchelfLibs = ["${jdk}/lib/openjdk/lib/server"];
+  autoPatchelfLibs = [ "${jdk}/lib/openjdk/lib/server" ];
 
   meta = with lib; {
     description = "Silicon Labs Configurator (SLC)";

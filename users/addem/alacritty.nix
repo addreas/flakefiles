@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-  programs.alacritty= {
+  programs.alacritty = {
     enable = true;
 
     settings = {
@@ -25,25 +25,25 @@
         };
 
         normal = {
-          black =   "#0D0D0D";
-          red =     "#DD3E25";
-          green =   "#5A8025";
-          yellow =  "#F9AF4F";
-          blue =    "#53BDFA";
+          black = "#0D0D0D";
+          red = "#DD3E25";
+          green = "#5A8025";
+          yellow = "#F9AF4F";
+          blue = "#53BDFA";
           magenta = "#FAE994";
-          cyan =    "#90E1C6";
-          white =   "#C7C7C7";
+          cyan = "#90E1C6";
+          white = "#C7C7C7";
         };
 
         bright = {
-          black =   "#686868";
-          red =     "#F07178";
-          green =   "#C2D94C";
-          yellow =  "#CFCA0D";
-          blue =    "#59C2FF";
+          black = "#686868";
+          red = "#F07178";
+          green = "#C2D94C";
+          yellow = "#CFCA0D";
+          blue = "#59C2FF";
           magenta = "#FFEE99";
-          cyan =    "#95E6CB";
-          white =   "#FFFFFF";
+          cyan = "#95E6CB";
+          white = "#FFFFFF";
         };
       };
     };

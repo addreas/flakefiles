@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = pname;
-    rev =  "v${version}";
+    rev = "v${version}";
     sha256 = "bEIAsz9ZwX6RTzhv5/waFZ5a3KlnwX4kQs29+475zN0=";
   };
 

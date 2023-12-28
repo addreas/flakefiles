@@ -43,5 +43,5 @@
     components = [ "secrets" ];
   };
   services.network-manager-applet.enable = true;
-  home.packages = [pkgs.gcr];
+  home.packages = [ pkgs.gcr ];
 }

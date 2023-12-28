@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeBinaryWrapper
- ];
+  ];
 
   installPhase = ''
     mkdir -p $out/opt/SEGGER/JLink

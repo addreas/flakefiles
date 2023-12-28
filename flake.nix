@@ -54,8 +54,8 @@
         jlink = pkgsOld.callPackage ./packages/jlink { };
 
         nrf-connect = pkgs.callPackage ./packages/nrf-connect { inherit jlink nrf-udev; };
-        nrf-udev = pkgs.callPackage ./packages/nrf-udev {};
-        
+        nrf-udev = pkgs.callPackage ./packages/nrf-udev { };
+
         simplicity-studio = pkgs.callPackage ./packages/simplicity-studio { };
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { inherit jlink; };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { inherit jlink; };

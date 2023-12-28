@@ -15,7 +15,7 @@ let
     url = "https://www.silabs.com/documents/login/software/SimplicityStudio-5.tgz";
     sha256 = "xhSYOoQ9qX1/wpvDmmWTWFc8r2ThAl2k/bOMNcEI0cn=";
   };
-in 
+in
 buildFHSEnv rec {
   name = "simplicity-studio";
 
@@ -31,7 +31,7 @@ buildFHSEnv rec {
   ];
 
   # runScript = "studiowayland.sh";
-  
+
   meta = with lib; {
     description = "Simplicity Studio";
     homepage = "https://www.silabs.com/";
