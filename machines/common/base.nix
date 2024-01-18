@@ -29,8 +29,6 @@
     ];
   };
 
-  nix.gc.automatic = true;
-
   time.timeZone = "Europe/Stockholm";
 
   i18n.defaultLocale = "en_GB.UTF-8";

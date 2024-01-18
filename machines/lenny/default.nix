@@ -48,5 +48,11 @@
     wineWowPackages.waylandFull
     cura
   ];
+
+  networking.firewall.allowedTCPPorts = [
+    8080
+    8081
+    5580
+  ];
 }
 

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, flakepkgs, lib, ... }:
 {
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
@@ -16,22 +16,27 @@
     elixir
     elixir-ls
     nodejs
+    deno
     python3
     rustup
-    # rust-analyzer
-    deno
-    rlwrap
-    # openocd
-    # blackmagic
-    gnumake
-    cmake
-    pkg-config
-    gcc
+
     kubeseal
-    # gcc-arm-embedded
+
+    gnumake
+    pkg-config
+    cmake
+    ninja
+    gcc
+    gcc-arm-embedded
+    openocd
+    # blackmagic
+
     unzip
+    file
+    rlwrap
 
     nixpkgs-fmt
+    cntr
   ];
 
   programs.go = {

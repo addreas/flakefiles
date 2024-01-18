@@ -2,26 +2,23 @@
 , lib
 , fetchzip
 , autoPatchelfHook
+, makeBinaryWrapper
 
 , qt5Full
-, udev
-, jlink
+, eudev
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "simplicity-commander-cli";
   version = "1.16.3";
 
   src = fetchzip {
-    url = "https://www.silabs.com/documents/login/software/SimplicityCommander-Linux.zip";
+    url = "https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip";
     sha256 = "xhSYOoQ9qX1/wpvDmmWTWFc8r2ThAl2k/bOMNcEI0cM=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-  ];
-
-  buildInputs = [
-    jlink
+    makeBinaryWrapper
     qt5Full
   ];
 
@@ -29,8 +26,15 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    tar xvf $src/Commander-cli_linux_x86_64_*.tar.bz
-    cp -r commander-cli/ $out
+     tar xvf $src/Commander-cli_linux_x86_64_*.tar.bz
+    
+     mkdir -p $out/share
+     cp -r commander-cli/ $out/share/simplicity-commander-cli
+
+    wrapProgram $out/share/simplicity-commander-cli/commander-cli --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath [eudev] }
+
+     mkdir $out/bin
+     ln -s $out/share/simplicity-commander-cli/commander-cli $out/bin/simplicity-commander-cli
   '';
 
 
