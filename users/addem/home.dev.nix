@@ -29,6 +29,7 @@
     gcc
     gcc-arm-embedded
     openocd
+    tio
     # blackmagic
 
     unzip
