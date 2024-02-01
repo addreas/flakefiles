@@ -169,17 +169,20 @@
       disabled = false;
       symbol = "󱃾";
       format = ''[$symbol](bold blue)\([$context](blue)(:[$namespace](dimmed blue))\) '';
-      context_aliases = {
-        nucles = "";
-      };
+      contexts = [
+        {
+          context_pattern = "nucles";
+          context_alias = "";
+        }  
+      ];
       detect_extensions = [ "yaml" "cue" ];
       # detect_folders = ["homelab"];
     };
 
     time = {
+      disabled = false;
       format = "[$time]($style) ";
       style = "dimmed";
-      disabled = false;
     };
     battery = {
       charging_symbol = "󰂄 "; #nf-md-battery_charging
