@@ -16,7 +16,7 @@
       scrolling.history = 10000;
       scrolling.multiplier = 5;
 
-      font.name = "Hack Nerd Font";
+      font.normal.family = "Hack Nerd Font";
 
       colors = {
         primary = {

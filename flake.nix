@@ -1,8 +1,8 @@
 {
   description = "Just a bunch of stuff";
 
-  # inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
-  inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
+  inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
+  # inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
 
   inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
 
@@ -15,7 +15,8 @@
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.home-manager.url = "github:nix-community/home-manager/release-23.11";
+  inputs.home-manager.url = "github:nix-community/home-manager";
+  # inputs.home-manager.url = "github:nix-community/home-manager/release-23.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, nixpkgs, nixos-wsl, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
