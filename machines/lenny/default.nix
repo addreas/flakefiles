@@ -35,7 +35,11 @@
 
   environment.pathsToLink = [ "/share" ];
 
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+    # extraUpFlags = ["--accept-dns" "--accept-routes"];
+  };
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false; # https://github.com/NixOS/nixpkgs/issues/180175
   programs.wireshark.enable = true;
   services.tlp.enable = true;
