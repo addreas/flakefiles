@@ -6,6 +6,7 @@
     ./kanshi.nix
     ./mako.nix
     ./alacritty.nix
+    ./wezterm.nix
     ./swayidle.nix
     ./swaylock.nix
     ./sway.nix
@@ -29,6 +30,9 @@
     # NIXOS_OZONE_WL = "1"; # vscode hates this
   };
 
+  fonts.fontconfig.enable = true;
+
+  services.cliphist.enable = true;
 
   services.batsignal.enable = true; # todo: auto suspend
   services.batsignal.extraArgs = [
@@ -42,6 +46,9 @@
     enable = true;
     components = [ "secrets" ];
   };
+
   services.network-manager-applet.enable = true;
+  services.blueman-applet.enable = true;
+
   home.packages = [ pkgs.gcr ];
 }

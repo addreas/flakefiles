@@ -109,6 +109,7 @@
           };
         in
         {
+          addem = addem-home-config "home.desktop.nix";
           addem-basic = addem-home-config "home.nix";
           addem-desktop = addem-home-config "home.desktop.nix";
           addem-dev = addem-home-config "home.dev.nix";

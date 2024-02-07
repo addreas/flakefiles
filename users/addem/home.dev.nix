@@ -3,8 +3,18 @@
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
 
+  programs.navi.enable = true; # cheats
+
+  programs.bat.enable = true;
+
+  # programs.atuin.enable = true; # synced shell history, would want to self host first
+
+  # programs.jujutsu.enable = true; jj # jj git replacement
+  # programs.jujutsu.enableZshIntegration = true;
+
   imports = [
     ./home.nix
+    ./k9s.nix
   ];
 
   home.packages = with pkgs; [

@@ -6,8 +6,6 @@
     homeDirectory = "/home/addem";
   };
 
-  programs.home-manager.enable = true;
-
   imports = [
     ./helix.nix
     ./zsh.nix
@@ -45,4 +43,26 @@
 
     tree
   ];
+
+  programs.home-manager.enable = true;
+
+  programs.fzf.enable = true;
+  programs.ripgrep.enable = true;
+
+  # z auto jump thing, would i use it?
+  programs.zoxide.enable = true;
+  programs.zoxide.enableZshIntegration = true;
+  # programs.pazi.enable = true;
+
+  # filemanagers, yazi + broot frankenstein wouldbe cool
+  # programs.yazi.enable = true;
+  # programs.broot.enable = true;
+  # programs.joshuto.enable = true;
+
+  home.file.digrc = {
+    target = ".digrc";
+    text = ''
+    +nostats +nocomments +nocmd +noquestion +recurse
+    '';
+  };
 }

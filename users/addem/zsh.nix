@@ -45,7 +45,6 @@ in
     nix-zsh-completions
   ];
 
-  programs.fzf.enable = true;
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
