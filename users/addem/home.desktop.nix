@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, flakepkgs, ... }:
 {
   imports = [
     ./home.nix
@@ -50,5 +50,5 @@
   services.network-manager-applet.enable = true;
   services.blueman-applet.enable = true;
 
-  home.packages = [ pkgs.gcr ];
+  home.packages = [ pkgs.gcr flakepkgs.onagre ];
 }

@@ -58,6 +58,8 @@
 
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
+
+        onagre = pkgs.callPackage ./packages/onagre { };
       };
 
       apps.${system} =
@@ -106,6 +108,7 @@
           addem-home-config = path: home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
             modules = [ "${self}/users/addem/${path}" ];
+            extraSpecialArgs.flakepkgs = self.packages.${system};
           };
         in
         {

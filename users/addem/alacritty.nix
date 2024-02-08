@@ -48,6 +48,4 @@
       };
     };
   };
-
-  home.packages = [ pkgs.ueberzugpp ];  # for yazi images
 }

@@ -13,7 +13,8 @@
     config = rec {
       modifier = "Mod4";
 
-      terminal = "alacritty";
+      # terminal = "alacritty";
+      terminal = "wezterm";
       menu = "ulauncher-toggle";
 
       bars = [ ];
