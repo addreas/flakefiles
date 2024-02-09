@@ -58,8 +58,6 @@
 
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
-
-        onagre = pkgs.callPackage ./packages/onagre { };
       };
 
       apps.${system} =
