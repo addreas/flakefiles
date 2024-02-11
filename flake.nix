@@ -50,10 +50,6 @@
         cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
         cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
 
-        segger-jlink = pkgs.callPackage ./packages/pr-255185/segger-jlink.nix { };
-        nrfconnect = pkgs.callPackage ./packages/pr-255185/nrfconnect.nix { inherit segger-jlink; };
-        nrf-command-line-tools = pkgs.callPackage ./packages/pr-255185/nrf-command-line-tools.nix { inherit  segger-jlink; };
-
         nrf-udev = pkgs.callPackage ./packages/nrf-udev { };
 
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };

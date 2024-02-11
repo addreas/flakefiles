@@ -2,14 +2,14 @@
 {
   services.udev.packages = [
     pkgs.openocd
+    pkgs.segger-jlink
     flakepkgs.nrf-udev
-    flakepkgs.segger-jlink
   ];
 
   environment.systemPackages = with pkgs; [
-    pkgs.openocd
-    flakepkgs.segger-jlink
-    flakepkgs.nrfconnect
+    openocd
+    segger-jlink
+    nrfconnect
   ];
 }
 
