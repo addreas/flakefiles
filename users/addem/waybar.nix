@@ -123,5 +123,5 @@
     [ "PATH=${lib.strings.makeBinPath paths}" ];
 
 
-    # programs.eww?
+  # programs.eww?
 }

@@ -118,8 +118,6 @@
     cmd_duration = {
       format = "[$duration]($style) ";
       style = "dimmed";
-      show_notifications = true;
-      notification_timeout = 5;
     };
 
     package.format = "[$symbol($version)]($style) ";
@@ -173,7 +171,7 @@
         {
           context_pattern = "nucles";
           context_alias = "";
-        }  
+        }
       ];
       detect_extensions = [ "yaml" "cue" ];
       # detect_folders = ["homelab"];

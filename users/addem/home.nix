@@ -62,7 +62,7 @@
   home.file.digrc = {
     target = ".digrc";
     text = ''
-    +nostats +nocomments +nocmd +noquestion +recurse
+      +nostats +nocomments +nocmd +noquestion +recurse
     '';
   };
 }

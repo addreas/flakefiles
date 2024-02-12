@@ -46,6 +46,11 @@
           white = "#FFFFFF";
         };
       };
+
+      keyboard.bindings = [
+        { key = "PageUp"; action = "ScrollLineUp"; }
+        { key = "PageDown"; action = "ScrollLineDown"; }
+      ];
     };
   };
 }
