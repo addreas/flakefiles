@@ -45,7 +45,7 @@ in
 
   home.activation = {
     variety-set-wallpaper = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      run cp $VERBOSE_ARG ${set-wallpaper} $HOME/.config/variety/scripts/set_wallpaper
+      run cp -f $VERBOSE_ARG ${set-wallpaper} $HOME/.config/variety/scripts/set_wallpaper
     '';
   };
 }
