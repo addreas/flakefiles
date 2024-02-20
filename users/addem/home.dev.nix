@@ -3,7 +3,7 @@
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
 
-  programs.navi.enable = true; # cheats
+  programs.navi.enable = true;
 
   programs.bat.enable = true;
 
@@ -58,20 +58,40 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
+
     userName = "Andreas Mårtensson";
     userEmail = "andreas@addem.se";
 
     extraConfig = {
-      push.default = "simple";
-      push.autoSetupRemote = true;
+      # https://jvns.ca/blog/2024/02/16/popular-git-config-options
+      merge.conflictstyle = "zdiff3";
+      push.default = "current";
       pull.rebase = true;
       fetch.prune = true;
       init.defaultBranch = "main";
+      rerere.enabled = true;
+      help.autocorrect = "prompt";
+      diff.algorithm = "histogram";
+      diff.colorMoved = true;
       branch.autosetupmerge = true;
     };
 
-    delta.enable = true;
-    # diff-so-fancy.enable = true;
-    # difftastic.enable = true;
+    delta = {
+      enable = true;
+      options = {
+        features = "decorations";
+        line-numbers = true;
+        right-arrow = "⟶";
+        relative-paths = true;
+        navigate = true;
+        # hyperlinks = true;
+
+        decorations = {
+          file-decoration-style = "ul ol";
+          hunk-header-style = "syntax";
+          hunk-header-decoration-style = "none";
+        };
+      };
+    };
   };
 }
