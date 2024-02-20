@@ -12,9 +12,9 @@ let
     matklad.rust-analyzer
     ms-python.python
     ms-python.vscode-pylance
-    ms-vscode.cpptools
-    ms-vscode.makefile-tools
-    ms-vscode.cmake-tools
+    # ms-vscode.cpptools
+    # ms-vscode.makefile-tools
+    # ms-vscode.cmake-tools
     redhat.vscode-xml
     redhat.vscode-yaml
     ryu1kn.partial-diff
@@ -30,18 +30,18 @@ let
     maximus136.change-string-case
     ms-python.isort
     ms-vscode.sublime-keybindings
-    ms-vscode.cpptools-extension-pack
+    # ms-vscode.cpptools-extension-pack
     nico-castell.linux-desktop-file
     # platformio.platformio-ide
-    unifiedjs.vscode-mdx
+    # unifiedjs.vscode-mdx
     # VisualStudioExptTeam.vscodeintellicode
     xoronic.pestfile
-    silabs.siliconlabssupportextension
-    marus25.cortex-debug
-    mcu-debug.debug-tracker-vscode
-    mcu-debug.memory-view
-    mcu-debug.rtos-views
-    mcu-debug.peripheral-viewer
+    # silabs.siliconlabssupportextension
+    # marus25.cortex-debug
+    # mcu-debug.debug-tracker-vscode
+    # mcu-debug.memory-view
+    # mcu-debug.rtos-views
+    # mcu-debug.peripheral-viewer
   ];
 in
 {
