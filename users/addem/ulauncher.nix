@@ -37,7 +37,7 @@ in
   #   "render-on-screen": "mouse-pointer-monitor",
   #   "show-indicator-icon": false,
   #   "show-recent-apps": "3",
-  #   "terminal-command": "kitty",
+  #   "terminal-command": "alactritty",
   #   "theme-name": "adwaita"
   # }
   # '';

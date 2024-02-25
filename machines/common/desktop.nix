@@ -63,7 +63,6 @@
 
     firefox-bin
     # chromium
-    kitty
     wl-clipboard
     gnome.nautilus
     gnome.file-roller

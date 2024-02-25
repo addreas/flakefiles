@@ -42,6 +42,7 @@ let
     # mcu-debug.memory-view
     # mcu-debug.rtos-views
     # mcu-debug.peripheral-viewer
+    antfu.unocss
   ];
 in
 {

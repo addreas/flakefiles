@@ -72,6 +72,9 @@
             nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
             && ${pkgs.nix-diff}/bin/nix-diff --character-oriented --environment  /run/current-system ./result
           '';
+          tree-current-system-drv = script "tree-current-system-drv" ''
+            nix eval --raw .#nixosConfigurations.$(hostname).config.system.build.toplevel | xargs -o ${pkgs.nix-tree}/bin/nix-tree --derivation
+          '';
         };
 
       nixosModules =
