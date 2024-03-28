@@ -26,6 +26,7 @@
     elixir
     elixir-ls
     nodejs
+    nodePackages.pnpm
     deno
     python3
     rustup

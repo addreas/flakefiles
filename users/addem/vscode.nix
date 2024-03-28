@@ -2,7 +2,6 @@
 let
   nixpkgs-extensions = with pkgs.vscode-extensions; [
     arcticicestudio.nord-visual-studio-code
-    denoland.vscode-deno
     esbenp.prettier-vscode
     editorconfig.editorconfig
     elixir-lsp.vscode-elixir-ls
@@ -21,6 +20,7 @@ let
     tomoki1207.pdf
   ];
   market-extensions = with pkgs.vscode-marketplace; [
+    denoland.vscode-deno
     brian-anders.sublime-duplicate-text
     cardinal90.multi-cursor-case-preserve
     # pkgs.vscode-marketplace."cuelang.org".cue

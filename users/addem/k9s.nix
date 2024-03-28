@@ -2,7 +2,7 @@
 {
   programs.k9s = {
     enable = true;
-    settings.k9s.ui.headless = true;
+    # settings.k9s.ui.headless = true;
 
     plugin.plugins =
       let
