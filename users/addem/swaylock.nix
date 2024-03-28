@@ -1,6 +1,14 @@
 { pkgs, lib, config, ... }:
 {
-  programs.swaylock.package = pkgs.swaylock-effects;
+  programs.swaylock.package = pkgs.swaylock-effects.overrideAttrs rec {
+    version = "1.7.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "blastrock";
+      repo = "swaylock-effects-second";
+      rev = "da4efb5632d72eeb23086a8274d00f20dc8847ac";
+      sha256 = "sha256-YeF3mZIkH2X8QR8jvVCDEcHDbtMp3JBhizpvUzVHHz0=";
+    };
+  };
   programs.swaylock.enable = true;
   programs.swaylock.settings = {
     indicator = true;
