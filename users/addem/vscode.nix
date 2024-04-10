@@ -43,6 +43,7 @@ let
     # mcu-debug.rtos-views
     # mcu-debug.peripheral-viewer
     antfu.unocss
+    bradlc.vscode-tailwindcss
   ];
 in
 {

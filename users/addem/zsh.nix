@@ -5,18 +5,24 @@ let
     "auto_cd" #If a command is issued that can’t be executed as a normal command, and the command is the name of a directory, perform the cd command to that directory. This option is only applicable if the option SHIN_STDIN is set, i.e. if commands are being read from standard input. The option is designed for interactive use; it is recommended that cd be used explicitly in scripts to avoid ambiguity.
     "auto_pushd" #Make cd push the old directory onto the directory stack.
     "pushd_ignore_dups" #Don’t push multiple copies of the same directory onto the directory stack.
+
     # complete
     "always_to_end" #If a completion is performed with the cursor within a word, and a full completion is inserted, the cursor is moved to the end of the word. That is, the cursor is moved to the end of the word if either a single match is inserted or menu completion is performed.
     "auto_param_slash" #If a parameter is completed whose content is the name of a directory, then add a trailing slash instead of a space.
     "complete_in_word" #If unset, the cursor is set to the end of the word if completion is started. Otherwise it stays there and completion is done from both ends.
+
     # history
-    "hist_verify" #Whenever the user enters a line with history expansion, don’t execute the line directly; instead, perform history expansion and reload the line into the editing buffer.
-    "hist_save_no_dups" #When writing out the history file, older commands that duplicate newer ones are omitted.
-    "share_history" #This option both imports new commands from the history file, and also causes your typed commands to be appended to the history file (the latter is like specifying INC_APPEND_HISTORY, which should be turned off if this option is in effect). The history lines are also output with timestamps ala EXTENDED_HISTORY (which makes it easier to find the spot where we left off reading the file after it gets re-written).
+    "hist_verify" # Whenever the user enters a line with history expansion, don’t execute the line directly; instead, perform history expansion and reload the line into the editing buffer.
+    "hist_save_no_dups" # When writing out the history file, older commands that duplicate newer ones are omitted.
+    "hist_reduce_blanks" # Remove superfluous blanks from each command line being added to the history.
+    "inc_append_history" # Write to the history file immediately, not when the shell exits.
+
     #io
     "interactive_comments" #Allow comments even in interactive shells.
+
     #job control
     "long_list_jobs" #Print job notifications in the long format by default.
+
     #prompting
     "prompt_subst" #If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts. Substitutions within prompts do not affect the command status.
   ];
@@ -51,8 +57,18 @@ in
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    history.extended = true;
-    history.expireDuplicatesFirst = true;
+    history =
+      {
+        size = 1000000;
+        save = 1000000;
+        share = true;
+        extended = true;
+        ignoreDups = true;
+        ignoreAllDups = true;
+        expireDuplicatesFirst = true;
+        ignorePatterns = [ "ls*" "cd*" ];
+      };
+
     historySubstringSearch = {
       enable = true;
       searchUpKey = "^[OA";
