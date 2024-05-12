@@ -11,9 +11,9 @@ let
     matklad.rust-analyzer
     ms-python.python
     ms-python.vscode-pylance
-    # ms-vscode.cpptools
-    # ms-vscode.makefile-tools
-    # ms-vscode.cmake-tools
+    ms-vscode.cpptools
+    ms-vscode.makefile-tools
+    ms-vscode.cmake-tools
     redhat.vscode-xml
     redhat.vscode-yaml
     ryu1kn.partial-diff
