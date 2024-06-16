@@ -8,7 +8,7 @@ let
     firefox-devtools.vscode-firefox-debug
     golang.go
     jnoortheen.nix-ide
-    matklad.rust-analyzer
+    rust-lang.rust-analyzer
     ms-python.python
     ms-python.vscode-pylance
     ms-vscode.cpptools
