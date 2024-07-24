@@ -7,6 +7,8 @@ let
     elixir-lsp.vscode-elixir-ls
     firefox-devtools.vscode-firefox-debug
     golang.go
+    gleam.gleam
+    phoenixframework.phoenix
     jnoortheen.nix-ide
     rust-lang.rust-analyzer
     ms-python.python

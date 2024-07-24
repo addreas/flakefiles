@@ -30,7 +30,6 @@
   };
   services.dbus.enable = true;
 
-  sound.enable = true;
   services.pipewire.enable = true;
   services.pipewire.pulse.enable = true;
 
@@ -64,10 +63,10 @@
     firefox-bin
     # chromium
     wl-clipboard
-    gnome.nautilus
-    gnome.file-roller
-    gnome.sushi
-    gnome.adwaita-icon-theme
+    nautilus
+    file-roller
+    sushi
+    adwaita-icon-theme
     evince
     wireshark
     wdisplays

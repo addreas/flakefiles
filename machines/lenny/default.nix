@@ -52,7 +52,7 @@
     lutris
     winetricks
     wineWowPackages.waylandFull
-    cura
+    # cura
   ];
 
   networking.firewall.allowedTCPPorts = [

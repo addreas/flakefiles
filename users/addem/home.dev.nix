@@ -25,6 +25,9 @@
     cue
     elixir
     elixir-ls
+    gleam
+    erlang
+    rebar3
     nodejs
     nodePackages.pnpm
     deno
@@ -41,11 +44,14 @@
     gcc-arm-embedded
     openocd
     tio
+    ttylog
     # blackmagic
 
     unzip
     file
     rlwrap
+    inotify-tools
+    openssl
 
     nixpkgs-fmt
     cntr

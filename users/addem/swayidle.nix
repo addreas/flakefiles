@@ -14,9 +14,9 @@ in
         command = "${swaylock} -f";
       }];
     timeouts = [{
-      timeout = 150;
+      timeout = 1800;
       command = "${swaylock} -f --grace 5";
     }];
-    extraArgs = [ "idlehint 300" ];
+    extraArgs = [ "idlehint 3600" ];
   };
 }
