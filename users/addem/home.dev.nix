@@ -26,7 +26,7 @@
     elixir
     elixir-ls
     gleam
-    erlang
+    erlang_27
     rebar3
     nodejs
     nodePackages.pnpm

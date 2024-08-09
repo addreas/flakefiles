@@ -66,7 +66,7 @@ in
         ignoreDups = true;
         ignoreAllDups = true;
         expireDuplicatesFirst = true;
-        ignorePatterns = [ "ls*" "cd*" ];
+        ignorePatterns = [ "ls*" ];
       };
 
     historySubstringSearch = {
