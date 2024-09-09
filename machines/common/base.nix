@@ -1,6 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixpkgs, ... }:
 {
-  nix.package = pkgs.nixVersions.stable;
+  nix.package = pkgs.lix;
   nix.settings = {
     experimental-features = [
       "nix-command"
@@ -28,6 +28,12 @@
       "sergio-0:iLOUuTIPPeJARAemTdAhD4y0Yi+/luB52jiQhMYBwVE="
     ];
   };
+
+  # for `nix run nixpkgs#nixpkgs`
+  nix.registry.nixpkgs.flake = nixpkgs;
+  # for `nix repl '<nixpkgs>'`
+  environment.etc."nix/inputs/nixpkgs".source = "${nixpkgs}";
+  nix.nixPath = ["/etc/nix/inputs"];
 
   time.timeZone = "Europe/Stockholm";
 
