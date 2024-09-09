@@ -35,6 +35,7 @@
       machine = name: extraModules: nixpkgs.lib.nixosSystem {
         inherit system;
         inherit pkgs;
+        specialArgs.nixpkgs = nixpkgs;
         specialArgs.flakepkgs = self.packages.${system};
         modules = [
           { environment.etc."nixos-source".source = self; }
