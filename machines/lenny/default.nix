@@ -53,6 +53,7 @@
     winetricks
     wineWowPackages.waylandFull
     # cura
+    prusa-slicer
   ];
 
   networking.firewall.allowedTCPPorts = [
