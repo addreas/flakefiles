@@ -49,11 +49,15 @@
     liberation_ttf
   ];
 
+  services.udisks2.enable = true;
+  services.gvfs.enable = true;
+
   environment.systemPackages = with pkgs; [
     waybar
     sway
     swaybg
     sway-contrib.grimshot
+    swappy
     mako
     qt5.qtwayland
     wayland
@@ -64,13 +68,14 @@
     # chromium
     wl-clipboard
     nautilus
+    nfs-utils
+    cifs-utils
     file-roller
     sushi
     adwaita-icon-theme
     evince
     wireshark
     wdisplays
-    swappy
     pavucontrol
 
 

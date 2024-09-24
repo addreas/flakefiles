@@ -48,6 +48,7 @@
         { app_id = "ulauncher"; }
         { app_id = "wdisplays"; }
         { app_id = "variety"; }
+        { app_id = "org.gnome.NautilusPreviewer"; }
         { title = ".+[Ss]haring (Indicator|your screen)"; }
 
         { app_id = "lutris"; }
@@ -62,9 +63,9 @@
         { criteria = { app_id = "ulauncher"; }; command = "border none"; }
         { criteria = { app_id = "wdisplays"; }; command = "border none"; }
         { criteria = { app_id = "variety"; }; command = "border none"; }
+
         { criteria = { title = ".+[Ss]haring (Indicator|your screen)"; }; command = "move to scratchpad"; }
         { criteria = { title = "Wine System Tray"; }; command = "move to scratchpad"; }
-
       ];
 
       focus.mouseWarping = "container";

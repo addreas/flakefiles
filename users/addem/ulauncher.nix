@@ -1,8 +1,11 @@
 { config, pkgs, lib, ... }:
 let
-  ulauncher = pkgs.ulauncher.overrideAttrs (old: {
+  ulauncher = pkgs.ulauncher.overrideAttrs (old: with pkgs.python3Packages; {
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
-      pkgs.python3Packages.pytz
+      pytz
+      pint
+      simpleeval
+      distutils
     ];
   });
 in
