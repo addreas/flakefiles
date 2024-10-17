@@ -32,7 +32,7 @@
 
   fonts.fontconfig.enable = true;
 
-  services.cliphist.enable = true;
+  # services.cliphist.enable = true;
 
   services.batsignal.enable = true; # todo: auto suspend
   services.batsignal.extraArgs = [
