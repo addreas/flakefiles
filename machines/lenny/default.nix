@@ -61,5 +61,8 @@
     8081
     5580
   ];
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.daemon.settings.features.buildkit = true;
 }
 
