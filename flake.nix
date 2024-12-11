@@ -6,9 +6,6 @@
 
   inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
 
-  inputs.nixos-wsl.url = "github:nix-community/NixOS-WSL";
-  inputs.nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-
   inputs.vscode-server.url = "github:msteen/nixos-vscode-server";
   inputs.vscode-server.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -19,7 +16,7 @@
   # inputs.home-manager.url = "github:nix-community/home-manager/release-23.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, nixos-wsl, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
+  outputs = { self, nixpkgs, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -66,14 +63,17 @@
         in
         {
           diff-current-system-store = script "diff-current-system-store" ''
+            #!/bin/sh
             nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
             && nix store diff-closures /nix/var/nix/profiles/system ./result
           '';
           diff-current-system-drv = script "diff-current-system-drv" ''
+            #!/bin/sh
             nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
             && ${pkgs.nix-diff}/bin/nix-diff --character-oriented --environment  /run/current-system ./result
           '';
           tree-current-system-drv = script "tree-current-system-drv" ''
+            #!/bin/sh
             nix eval --raw .#nixosConfigurations.$(hostname).config.system.build.toplevel | xargs -o ${pkgs.nix-tree}/bin/nix-tree --derivation
           '';
         };
@@ -119,11 +119,5 @@
       nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
 
       nixosConfigurations.lenny = machine "lenny" [ self.nixosModules.addem-desktop ];
-
-      # nixosConfigurations."LAPTOP-EK7DRJB8" = machine "lenny-wsl" [
-      #   nixos-wsl.nixosModules.wsl
-      #   vscode-server.nixosModule
-      #   self.nixosModules.addem-dev
-      # ];
     };
 }

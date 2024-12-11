@@ -41,7 +41,7 @@
   fonts.packages = with pkgs; [
     hack-font
     roboto
-    (nerdfonts.override { fonts = [ "Hack" ]; })
+    nerd-fonts.hack
     noto-fonts
     noto-fonts-extra
     noto-fonts-emoji

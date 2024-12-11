@@ -16,6 +16,7 @@ let
     ms-vscode.cpptools
     ms-vscode.makefile-tools
     ms-vscode.cmake-tools
+    ms-vscode.cpptools-extension-pack
     redhat.vscode-xml
     redhat.vscode-yaml
     ryu1kn.partial-diff
