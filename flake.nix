@@ -1,13 +1,9 @@
 {
   description = "Just a bunch of stuff";
 
-  inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
+  # inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
   # inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
-
-  inputs.nixos-hardware.url = "github:NixOS/nixos-hardware";
-
-  inputs.vscode-server.url = "github:msteen/nixos-vscode-server";
-  inputs.vscode-server.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs";
 
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
@@ -16,7 +12,7 @@
   # inputs.home-manager.url = "github:nix-community/home-manager/release-23.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, vscode-server, vscode-extensions, nixos-hardware, home-manager, ... }:
+  outputs = { self, nixpkgs, vscode-extensions, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
