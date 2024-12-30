@@ -1,7 +1,7 @@
 # ./users/mkshadow.d.sh addem
 # ./users/mkshadow.d.sh addem /mnt
 # sudo nixos-install --root /mnt --flake .#expessy --no-root-password
-{ config, pkgs, lib, ... }:
+{ config, pkgs, flakepkgs, lib, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -54,6 +54,8 @@
     wineWowPackages.waylandFull
     # cura
     prusa-slicer
+
+    flakepkgs.freecad
   ];
 
   networking.firewall.allowedTCPPorts = [

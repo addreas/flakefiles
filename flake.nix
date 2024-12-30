@@ -48,6 +48,8 @@
 
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
+
+        freecad = pkgs.callPackage ./packages/freecad { };
       };
 
       apps.${system} =
