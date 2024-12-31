@@ -35,11 +35,11 @@ stdenvNoCC.mkDerivation rec {
     done
 
     makeWrapper ${freecad}/bin/FreeCAD $out/bin/FreeCAD \
-      --set PYTHONPATH ${ pyenv.sitePackages } \
+      --set PYTHONPATH ${pyenv}/${pyenv.sitePackages} \
       --prefix PATH : ${ lib.makeBinPath [graphviz] }
 
     makeWrapper ${freecad}/bin/FreeCADCmd $out/bin/FreeCADCmd \
-      --set PYTHONPATH ${ pyenv.sitePackages } \
+      --set PYTHONPATH ${pyenv}/${pyenv.sitePackages} \
       --prefix PATH : ${ lib.makeBinPath [graphviz] }
 
     ln -s $out/bin/FreeCAD $out/bin/freecad 
