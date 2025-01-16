@@ -55,6 +55,42 @@
 
     nixpkgs-fmt
     cntr
+
+    (pkgs.buildFHSEnv {
+      name = "pixi";
+      runScript = "pixi";
+      targetPkgs = pkgs: with pkgs; [
+        pixi
+
+        glib
+        dbus
+        fontconfig
+        freetype
+        libGL
+        libxkbcommon
+        xorg.libX11
+        xorg.libXext
+        xorg.libxcb
+        xorg.xcbutilwm
+        xorg.xcbutilimage
+        xorg.xcbutilkeysyms
+        xorg.xcbutilrenderutil
+
+        zlib
+        zstd
+        xz
+        stdenv.cc.cc
+        curl
+        openssl
+        attr
+        libssh
+        bzip2
+        libxml2
+        acl
+        libsodium
+        util-linux
+      ];
+    })
   ];
 
   programs.go = {

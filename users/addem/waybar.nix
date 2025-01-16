@@ -2,6 +2,9 @@
 {
   programs.waybar = {
     enable = true;
+    # package = pkgs.waybar.override {
+    #   hyprlandSupport = false;
+    # };
     systemd.enable = true;
     settings.top = {
       spacing = 4;

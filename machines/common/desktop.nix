@@ -53,7 +53,6 @@
   services.gvfs.enable = true;
 
   environment.systemPackages = with pkgs; [
-    waybar
     sway
     swaybg
     sway-contrib.grimshot

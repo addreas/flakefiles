@@ -52,7 +52,7 @@ in
 {
   programs.vscode = {
     enable = true;
-    mutableExtensionsDir = false;
+    mutableExtensionsDir = true;
     extensions = nixpkgs-extensions ++ market-extensions;
   };
 
