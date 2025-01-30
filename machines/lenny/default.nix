@@ -17,6 +17,7 @@
   boot.loader.efi.canTouchEfiVariables = false;
   
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  programs.appimage.binfmt = true;
 
   system.stateVersion = "23.05";
 
@@ -55,6 +56,7 @@
     # cura
     prusa-slicer
 
+    blender
     flakepkgs.freecad
   ];
 

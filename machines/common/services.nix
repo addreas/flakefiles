@@ -3,7 +3,6 @@
   services.openssh.enable = true;
   services.locate.enable = true;
   services.locate.package = pkgs.plocate;
-  services.locate.localuser = null;
   services.avahi.enable = true;
 
   virtualisation.podman.enable = true;

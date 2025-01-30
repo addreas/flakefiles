@@ -2,17 +2,25 @@
 , lib
 , makeBinaryWrapper
 
-, freecad-wayland
+, freecad-git
 , python311
 , graphviz
+, fontconfig
+, freetype
 }:
 let
-  freecad = freecad-wayland;
+  freecad = freecad-git;
   pyenv = (python311.withPackages (ps: with ps; [
-      ifcopenshell
+      # ifcopenshell
       requests
       lark
     ]));
+  libpath = lib.makeLibraryPath [
+      fontconfig
+      freetype
+    ];
+
+  path = lib.makeBinPath [graphviz];
 in
 stdenvNoCC.mkDerivation rec {
   pname = "freecad-wrapped";
@@ -36,11 +44,12 @@ stdenvNoCC.mkDerivation rec {
 
     makeWrapper ${freecad}/bin/FreeCAD $out/bin/FreeCAD \
       --set PYTHONPATH ${pyenv}/${pyenv.sitePackages} \
-      --prefix PATH : ${ lib.makeBinPath [graphviz] }
+      --set LD_LIBRARY_PATH ${libpath} \
+      --prefix PATH : ${path}
 
     makeWrapper ${freecad}/bin/FreeCADCmd $out/bin/FreeCADCmd \
       --set PYTHONPATH ${pyenv}/${pyenv.sitePackages} \
-      --prefix PATH : ${ lib.makeBinPath [graphviz] }
+      --prefix PATH : ${path}
 
     ln -s $out/bin/FreeCAD $out/bin/freecad 
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd 

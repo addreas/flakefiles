@@ -38,6 +38,8 @@
   services.hardware.bolt.enable = true;
 
   fonts.enableDefaultPackages = true;
+  fonts.fontDir.enable = true;
+  fonts.fontconfig.useEmbeddedBitmaps = true;
   fonts.packages = with pkgs; [
     hack-font
     roboto

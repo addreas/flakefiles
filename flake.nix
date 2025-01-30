@@ -1,15 +1,16 @@
 {
   description = "Just a bunch of stuff";
 
-  # inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
   # inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs";
+  # inputs.nixpkgs.url = "github:NixOS/nixpkgs";
+  # inputs.nixpkgs.url = "nixpkgs/nixos-24.11";
 
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.home-manager.url = "github:nix-community/home-manager";
-  # inputs.home-manager.url = "github:nix-community/home-manager/release-23.11";
+  # inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, nixpkgs, vscode-extensions, home-manager, ... }:
@@ -49,7 +50,40 @@
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
 
-        freecad = pkgs.callPackage ./packages/freecad { };
+        freecad = pkgs.callPackage ./packages/freecad { inherit freecad-git; };
+        # freecad-custom = (pkgs.freecad.override {
+        #   withWayland = true;
+        #   # ifcSupport = true;
+        # }).customize {
+        #   pythons = [(ps: with ps; [ ifcopenshell ])];
+        #   makeWrapperArgs = []
+        # };
+        # freecad-git-ifc = freecad-git.customize {
+        #   pythons = [(ps: with ps; [ ifcopenshell ])];
+        # };
+        freecad-git = pkgs.freecad-wayland.overrideAttrs {
+          version = "1.1.0-dev";
+          patches = let patch = index: builtins.elemAt pkgs.freecad-wayland.patches index; in [
+            (patch 0)
+            (patch 1)
+          ];
+          nativeBuildInputs = pkgs.freecad-wayland.nativeBuildInputs ++ [ pkgs.fontconfig pkgs.freetype ];
+
+          # nativeBuildInputs = pkgs.freecad-wayland.nativeBuildInputs ++ [ pkgs.autoPatchelfHook ];
+          # appendRunpaths = [
+          #   (pkgs.lib.makeLibraryPath [
+          #     pkgs.fontconfig
+          #     pkgs.freetype
+          #   ])
+          # ];
+          src = pkgs.fetchFromGitHub {
+            owner = "FreeCAD";
+            repo = "FreeCAD";
+            rev = "6c20224379d6f52dfbc768ebab4942f90bcb3ea4";
+            hash = "sha256-XuySqC529mVns/M3yItUdIqz3+/g0UxyKUsJmAd9ZK8=";
+            fetchSubmodules = true;
+          };
+        };
       };
 
       apps.${system} =
