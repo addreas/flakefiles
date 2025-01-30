@@ -48,12 +48,7 @@
   services.tlp.enable = true;
   services.fwupd.enable = true;
 
-  programs.steam.enable = true;
   environment.systemPackages = with pkgs; [
-    lutris
-    winetricks
-    wineWowPackages.waylandFull
-    # cura
     prusa-slicer
 
     blender
