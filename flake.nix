@@ -50,32 +50,22 @@
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
 
-        freecad = pkgs.callPackage ./packages/freecad { inherit freecad-git; };
-        # freecad-custom = (pkgs.freecad.override {
-        #   withWayland = true;
-        #   # ifcSupport = true;
-        # }).customize {
-        #   pythons = [(ps: with ps; [ ifcopenshell ])];
-        #   makeWrapperArgs = []
-        # };
-        # freecad-git-ifc = freecad-git.customize {
-        #   pythons = [(ps: with ps; [ ifcopenshell ])];
-        # };
-        freecad-git = pkgs.freecad-wayland.overrideAttrs {
+        # freecad = pkgs.callPackage ./packages/freecad { inherit freecad-git; };
+        freecad = (freecad-git.override {
+          withWayland = true;
+          ifcSupport = true;
+        }).customize {
+          makeWrapperFlags = [
+          "--set" "LD_LIBRARY_PATH" (pkgs.lib.makeLibraryPath [ pkgs.fontconfig pkgs.freetype])
+          "--set" "PATH" (pkgs.lib.makeBinPath [ pkgs.graphviz ])
+          ];
+        };
+        freecad-git = pkgs.freecad.overrideAttrs {
           version = "1.1.0-dev";
-          patches = let patch = index: builtins.elemAt pkgs.freecad-wayland.patches index; in [
+          patches = let patch = index: builtins.elemAt pkgs.freecad.patches index; in [
             (patch 0)
             (patch 1)
           ];
-          nativeBuildInputs = pkgs.freecad-wayland.nativeBuildInputs ++ [ pkgs.fontconfig pkgs.freetype ];
-
-          # nativeBuildInputs = pkgs.freecad-wayland.nativeBuildInputs ++ [ pkgs.autoPatchelfHook ];
-          # appendRunpaths = [
-          #   (pkgs.lib.makeLibraryPath [
-          #     pkgs.fontconfig
-          #     pkgs.freetype
-          #   ])
-          # ];
           src = pkgs.fetchFromGitHub {
             owner = "FreeCAD";
             repo = "FreeCAD";

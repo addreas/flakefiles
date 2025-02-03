@@ -11,7 +11,7 @@
 let
   freecad = freecad-git;
   pyenv = (python311.withPackages (ps: with ps; [
-      # ifcopenshell
+      ifcopenshell
       requests
       lark
     ]));
