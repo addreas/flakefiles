@@ -76,6 +76,10 @@
         xorg.xcbutilkeysyms
         xorg.xcbutilrenderutil
 
+        musl
+        iconv
+        glibc_multi
+
         zlib
         zstd
         xz

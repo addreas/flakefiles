@@ -4,7 +4,9 @@ let
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
       pytz
       pint
-      simpleeval
+      (simpleeval.overrideAttrs (old: with pkgs.python3Packages; {
+        nativeBuildInputs = old.nativeBuildInputs ++ [ hatchling ];
+      }))
       distutils
     ];
   });

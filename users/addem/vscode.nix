@@ -10,7 +10,7 @@ let
     gleam.gleam
     phoenixframework.phoenix
     jnoortheen.nix-ide
-    rust-lang.rust-analyzer
+    # rust-lang.rust-analyzer
     ms-python.python
     ms-python.vscode-pylance
     ms-vscode.cpptools

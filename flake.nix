@@ -53,10 +53,10 @@
         # freecad = pkgs.callPackage ./packages/freecad { inherit freecad-git; };
         freecad = (freecad-git.override {
           withWayland = true;
-          ifcSupport = true;
+          # ifcSupport = true;
         }).customize {
           makeWrapperFlags = [
-          "--set" "LD_LIBRARY_PATH" (pkgs.lib.makeLibraryPath [ pkgs.fontconfig pkgs.freetype])
+          "--set" "LD_LIBRARY_PATH" (pkgs.lib.makeLibraryPath [ pkgs.fontconfig pkgs.freetype ])
           "--set" "PATH" (pkgs.lib.makeBinPath [ pkgs.graphviz ])
           ];
         };
@@ -69,10 +69,11 @@
           src = pkgs.fetchFromGitHub {
             owner = "FreeCAD";
             repo = "FreeCAD";
-            rev = "6c20224379d6f52dfbc768ebab4942f90bcb3ea4";
-            hash = "sha256-XuySqC529mVns/M3yItUdIqz3+/g0UxyKUsJmAd9ZK8=";
+            rev = "e7156aa32608e7d06eefb2fe7fd0dd8d1aa7f138";
+            hash = "sha256-42HgBYesoz90K2KqBTZRtjufOUSeUVURaBUrSBwJln4=";
             fetchSubmodules = true;
           };
+          nativeBuildInputs = pkgs.freecad.nativeBuildInputs ++ [pkgs.pcl];
         };
       };
 
