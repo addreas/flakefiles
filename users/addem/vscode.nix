@@ -53,7 +53,7 @@ in
   programs.vscode = {
     enable = true;
     mutableExtensionsDir = true;
-    extensions = nixpkgs-extensions ++ market-extensions;
+    profiles.default.extensions = nixpkgs-extensions ++ market-extensions;
   };
 
   xdg.mimeApps.associations.removed = {
