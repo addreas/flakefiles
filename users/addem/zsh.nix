@@ -122,7 +122,7 @@ in
     # TODO: try out prezto
     # prezto.terminal.autoTitle = true;
 
-    initExtra = ''
+    initContent = ''
       # open command line in $EDITOR with ctrl-x ctrl-e
       autoload -U edit-command-line
       zle -N edit-command-line

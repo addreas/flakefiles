@@ -50,31 +50,32 @@
         simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
         simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
 
+        freecad = pkgs.freecad-wayland;
         # freecad = pkgs.callPackage ./packages/freecad { inherit freecad-git; };
-        freecad = (freecad-git.override {
-          withWayland = true;
-          # ifcSupport = true;
-        }).customize {
-          makeWrapperFlags = [
-          "--set" "LD_LIBRARY_PATH" (pkgs.lib.makeLibraryPath [ pkgs.fontconfig pkgs.freetype ])
-          "--set" "PATH" (pkgs.lib.makeBinPath [ pkgs.graphviz ])
-          ];
-        };
-        freecad-git = pkgs.freecad.overrideAttrs {
-          version = "1.1.0-dev";
-          patches = let patch = index: builtins.elemAt pkgs.freecad.patches index; in [
-            (patch 0)
-            (patch 1)
-          ];
-          src = pkgs.fetchFromGitHub {
-            owner = "FreeCAD";
-            repo = "FreeCAD";
-            rev = "e7156aa32608e7d06eefb2fe7fd0dd8d1aa7f138";
-            hash = "sha256-42HgBYesoz90K2KqBTZRtjufOUSeUVURaBUrSBwJln4=";
-            fetchSubmodules = true;
-          };
-          nativeBuildInputs = pkgs.freecad.nativeBuildInputs ++ [pkgs.pcl];
-        };
+        # freecad = (freecad-git.override {
+        #   withWayland = true;
+        #   # ifcSupport = true;
+        # }).customize {
+        #   makeWrapperFlags = [
+        #   "--set" "LD_LIBRARY_PATH" (pkgs.lib.makeLibraryPath [ pkgs.fontconfig pkgs.freetype ])
+        #   "--set" "PATH" (pkgs.lib.makeBinPath [ pkgs.graphviz ])
+        #   ];
+        # };
+        # freecad-git = pkgs.freecad.overrideAttrs {
+        #   version = "1.1.0-dev";
+        #   patches = let patch = index: builtins.elemAt pkgs.freecad.patches index; in [
+        #     (patch 0)
+        #     (patch 1)
+        #   ];
+        #   src = pkgs.fetchFromGitHub {
+        #     owner = "FreeCAD";
+        #     repo = "FreeCAD";
+        #     rev = "d680de81c053d0342f8eace65b10ae880685069f";
+        #     hash = "sha256-/djlg0ETvpWqPA+Br2JTz44Nek74tkklAasdKEkv1fg=";
+        #     fetchSubmodules = true;
+        #   };
+        #   nativeBuildInputs = pkgs.freecad.nativeBuildInputs ++ [pkgs.pcl];
+        # };
       };
 
       apps.${system} =

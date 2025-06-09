@@ -52,7 +52,8 @@
     prusa-slicer
 
     blender
-    flakepkgs.freecad
+    freecad-wayland
+    # flakepkgs.freecad
   ];
 
   networking.firewall.allowedTCPPorts = [
