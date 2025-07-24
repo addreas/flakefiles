@@ -68,5 +68,8 @@
     git
     parted
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/76671
+  boot.supportedFilesystems = [ "nfs" ];
 }
 
