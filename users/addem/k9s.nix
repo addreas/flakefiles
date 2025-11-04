@@ -4,7 +4,7 @@
     enable = true;
     # settings.k9s.ui.headless = true;
 
-    plugin.plugins =
+    plugins =
       let
         flux-reconcile = scopes: args: extra-args: {
           shortCut = "r";

@@ -106,11 +106,11 @@
     enable = true;
     lfs.enable = true;
 
-    userName = "Andreas Mårtensson";
-    userEmail = "andreas@addem.se";
 
-    extraConfig = {
+    settings = {
       # https://jvns.ca/blog/2024/02/16/popular-git-config-options
+      user.name = "Andreas Mårtensson";
+      user.email = "andreas@addem.se";
       merge.conflictstyle = "zdiff3";
       push.default = "current";
       pull.rebase = true;
@@ -123,8 +123,10 @@
       branch.autosetupmerge = true;
     };
 
-    delta = {
+  };
+  programs.delta = {
       enable = true;
+      enableGitIntegration = true;
       options = {
         features = "decorations";
         line-numbers = true;
@@ -140,5 +142,4 @@
         };
       };
     };
-  };
 }

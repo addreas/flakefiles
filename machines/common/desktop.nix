@@ -17,7 +17,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd sway";
         user = "greeter";
       };
     };
@@ -45,8 +45,7 @@
     roboto
     nerd-fonts.hack
     noto-fonts
-    noto-fonts-extra
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     noto-fonts-emoji-blob-bin
     liberation_ttf
   ];
