@@ -1,16 +1,16 @@
 {
   description = "Just a bunch of stuff";
 
-  inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
+  # inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
   # inputs.nixpkgs.url = "nixpkgs/nixos-23.11";
   # inputs.nixpkgs.url = "github:NixOS/nixpkgs";
-  # inputs.nixpkgs.url = "nixpkgs/nixos-24.11";
+  inputs.nixpkgs.url = "nixpkgs/nixos-25.05";
 
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.home-manager.url = "github:nix-community/home-manager";
-  # inputs.home-manager.url = "github:nix-community/home-manager/release-24.11";
+  # inputs.home-manager.url = "github:nix-community/home-manager";
+  inputs.home-manager.url = "github:nix-community/home-manager/release-25.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, nixpkgs, vscode-extensions, home-manager, ... }:
