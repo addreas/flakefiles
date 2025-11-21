@@ -4,6 +4,7 @@
   services.locate.enable = true;
   services.locate.package = pkgs.plocate;
   services.avahi.enable = true;
+  services.avahi.nssmdns= true;
 
   virtualisation.podman.enable = true;
 

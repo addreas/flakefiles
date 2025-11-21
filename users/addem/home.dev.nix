@@ -1,4 +1,4 @@
-{ pkgs, flakepkgs, lib, ... }:
+{ config, pkgs, flakepkgs, lib, ... }:
 {
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
@@ -99,7 +99,7 @@
 
   programs.go = {
     enable = true;
-    goPath = ".go";
+    env.GOPATH = ["${config.home.homeDirectory}/.go"];
   };
 
   programs.git = {
