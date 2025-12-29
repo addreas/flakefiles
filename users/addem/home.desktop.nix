@@ -1,4 +1,4 @@
-{ pkgs, lib, flakepkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [
     ./home.nix
@@ -11,6 +11,7 @@
     ./swaylock.nix
     ./sway.nix
     ./ulauncher.nix
+    # ./walker.nix
     ./variety.nix
     ./vscode.nix
     ./waybar.nix

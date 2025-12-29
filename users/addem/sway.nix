@@ -16,6 +16,7 @@
       terminal = "alacritty";
       # terminal = "wezterm";
       menu = "ulauncher-toggle";
+      # menu = "walker";
 
       bars = [ ];
 

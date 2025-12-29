@@ -13,7 +13,13 @@
   # inputs.home-manager.url = "github:nix-community/home-manager/release-25.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, vscode-extensions, home-manager, ... }:
+  inputs.elephant.url = "github:abenz1267/elephant";
+  inputs.walker = {
+    url = "github:abenz1267/walker";
+    inputs.elephant.follows = "elephant";
+  };
+
+  outputs = { self, nixpkgs, vscode-extensions, home-manager, elephant, walker, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -111,7 +117,7 @@
             ];
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs.flakepkgs = self.packages.${system};
+            home-manager.extraSpecialArgs.inputs = inputs;
             home-manager.users.addem = import "${self}/users/addem/${path}";
           };
         in
@@ -129,8 +135,14 @@
         let
           addem-home-config = path: home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            modules = [ "${self}/users/addem/${path}" ];
-            extraSpecialArgs.flakepkgs = self.packages.${system};
+            modules = [ "${self}/users/addem/${path}" {
+               nixpkgs.config.allowUnfree = true;
+               nixpkgs.config.segger-jlink.acceptLicense = true;
+               nixpkgs.config.permittedInsecurePackages = [
+                "segger-jlink-qt4-874"
+              ];
+            }];
+            extraSpecialArgs.inputs = inputs;
           };
         in
         {
