@@ -40,6 +40,7 @@
     fluxcd
     kubernetes-helm
     cilium-cli
+    hubble
 
     tree
   ];
