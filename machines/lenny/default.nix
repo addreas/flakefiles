@@ -1,7 +1,7 @@
 # ./users/mkshadow.d.sh addem
 # ./users/mkshadow.d.sh addem /mnt
 # sudo nixos-install --root /mnt --flake .#expessy --no-root-password
-{ config, pkgs, flakepkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -53,7 +53,6 @@
 
     blender
     freecad-wayland
-    # flakepkgs.freecad
   ];
 
   networking.firewall.allowedTCPPorts = [

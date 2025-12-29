@@ -1,4 +1,4 @@
-{ config, pkgs, flakepkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 {
   programs.nix-index.enable = true;
   programs.nix-index.enableZshIntegration = true;
