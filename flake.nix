@@ -28,8 +28,8 @@
           vscode-extensions.overlays.default
         ];
         config.allowUnfree = true;
-        # config.segger-jlink.acceptLicense = true;
-        # config.permittedInsecurePackages = [ "segger-jlink-qt4-794l" ];
+        config.segger-jlink.acceptLicense = true;
+        config.permittedInsecurePackages = [ "segger-jlink-qt4-874" ];
       };
 
       machine = name: extraModules: nixpkgs.lib.nixosSystem {

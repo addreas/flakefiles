@@ -5,14 +5,8 @@ in
 {
   services.swayidle = {
     enable = true;
-    events = [{
-      event = "lock";
-      command = "${swaylock} -f";
-    }
-    {
-      event = "before-sleep";
-      command = "${swaylock} -f";
-    }];
+    events.lock = "${swaylock} -f";
+    events.before-sleep = "${swaylock} -f";
     timeouts = [{
       timeout = 60 * 5;
       command = "${swaylock} -f --grace 5";
