@@ -14,6 +14,7 @@
     # ./walker.nix
     ./variety.nix
     ./vscode.nix
+    ./zed.nix
     ./waybar.nix
   ];
 
