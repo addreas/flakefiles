@@ -35,6 +35,7 @@
     rustup
 
     kubeseal
+    mask
 
     gnumake
     pkg-config

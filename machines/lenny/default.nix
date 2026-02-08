@@ -54,7 +54,7 @@
     blender
     freecad-wayland
   ];
-
+  networking.firewall.enable = false;
   networking.firewall.allowedTCPPorts = [
     8080
     8081

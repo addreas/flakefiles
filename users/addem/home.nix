@@ -41,6 +41,9 @@
     kubernetes-helm
     cilium-cli
     hubble
+    kind
+    talosctl
+    clusterctl
 
     tree
   ];
