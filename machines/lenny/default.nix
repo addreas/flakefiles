@@ -53,6 +53,7 @@
 
     blender
     freecad-wayland
+    trilium-desktop
   ];
   networking.firewall.enable = false;
   networking.firewall.allowedTCPPorts = [

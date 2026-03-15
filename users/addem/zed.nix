@@ -3,7 +3,13 @@
   programs.zed-editor = {
     enable = true;
 
-    extensions = [ "nix" "toml" "cue" "make" "dockerfile" ];
+    extensions = [
+      "nix"
+      "toml"
+      "cue"
+      "make"
+      "dockerfile"
+    ];
     userSettings = {
       auto_update = false;
 
@@ -45,6 +51,13 @@
 
       base_keymap = "SublimeText";
       helix_mode = true;
+
+      agent.tool_permissions.tools = {
+        terminal.always_allow = [
+          { pattern = "git (diff|status|show|remote|fetch|log|branch|merge|rebase).*"; }
+          { pattern = "go mod tidy"; }
+        ];
+      };
     };
   };
 }
