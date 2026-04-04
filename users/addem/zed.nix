@@ -54,8 +54,20 @@
 
       agent.tool_permissions.tools = {
         terminal.always_allow = [
-          { pattern = "git (diff|status|show|remote|fetch|log|branch|merge|rebase).*"; }
-          { pattern = "go mod tidy"; }
+          { pattern = "git (diff|status|show|worktree|ref-log|show-branch|remote|fetch|log|branch|merge|rebase).*"; }
+          { pattern = "go mod tidy\s(2>&1)?"; }
+          { pattern =  "git\\s+(diff|status|show|ref-log|show-branch|remote|fetch|log|branch|merge|rebase).*"; }
+          { pattern =  "(cd.*)?.*go mod tidy.*"; }
+          { pattern =  "(cd.*)?go build.*"; }
+          { pattern =  "^git\\s+worktree(\\s|$)"; }
+          { pattern =  "^ls\\b"; }
+          { pattern =  "^cp\\b"; }
+          { pattern =  "^cat\\b"; }
+          { pattern =  "^find\\b"; }
+          { pattern =  "^grep\\b"; }
+          { pattern =  "^sed\\b"; }
+          { pattern =  "^head\\b"; }
+          { pattern =  "^pwd\\b"; }
         ];
       };
     };

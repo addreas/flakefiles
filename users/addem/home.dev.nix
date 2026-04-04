@@ -36,6 +36,8 @@
 
     kubeseal
     mask
+    sops
+    age
 
     gnumake
     pkg-config
