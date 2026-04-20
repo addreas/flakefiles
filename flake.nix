@@ -100,7 +100,10 @@
         };
 
       nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
-      nixosConfigurations.lenny = machine "lenny" [ self.nixosModules.addem-desktop ];
+      nixosConfigurations.lenny = machine "lenny" [
+        self.nixosModules.addem-desktop
+        nix-flatpak.nixosModules.nix-flatpak
+      ];
 
       packages.${system} = rec {
         nrf-udev = pkgs.callPackage ./packages/nrf-udev { };
