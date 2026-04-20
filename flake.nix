@@ -6,8 +6,7 @@
   # inputs.nixpkgs.url = "github:NixOS/nixpkgs";
   # inputs.nixpkgs.url = "nixpkgs/nixos-25.05";
 
-  inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-  inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nix-flatpak.url = "github:gmodena/nix-flatpak";
 
   inputs.home-manager.url = "github:nix-community/home-manager";
   # inputs.home-manager.url = "github:nix-community/home-manager/release-25.05";
@@ -19,17 +18,25 @@
     inputs.elephant.follows = "elephant";
   };
 
-  outputs = { self, nixpkgs, vscode-extensions, home-manager, elephant, walker, ... }@inputs:
+  outputs =
+    { self
+    , nixpkgs
+    , home-manager
+    , nix-flatpak
+    , ...
+    }@inputs:
     let
       system = "x86_64-linux";
+
+      nixpkgs-config = {
+        allowUnfree = true;
+        segger-jlink.acceptLicense = true;
+        permittedInsecurePackages = [ "segger-jlink-qt4-874" ];
+      };
+
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [
-          vscode-extensions.overlays.default
-        ];
-        config.allowUnfree = true;
-        config.segger-jlink.acceptLicense = true;
-        config.permittedInsecurePackages = [ "segger-jlink-qt4-874" ];
+        config = nixpkgs-config;
       };
 
       machine = name: extraModules: nixpkgs.lib.nixosSystem {
@@ -43,74 +50,35 @@
         ] ++ extraModules;
       };
 
+      home-files = {
+        addem-basic = "addem/home.nix";
+        addem-dev = "addem/home.dev.nix";
+        addem-desktop = "addem/home.desktop.nix";
+      };
+
+      addem-home-config = name: extraModules: home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs.inputs = inputs;
+        modules = [
+          "${self}/users/${home-files.${name}}"
+          { nixpkgs.config = nixpkgs-config; }
+        ] ++ extraModules;
+      };
     in
     {
       formatter.${system} = pkgs.nixpkgs-fmt;
 
-      packages.${system} = rec {
-        cockpit-machines = pkgs.callPackage ./packages/cockpit-machines { };
-        cockpit-podman = pkgs.callPackage ./packages/cockpit-podman { };
+      homeConfigurations = {
+        addem = self.homeConfigurations.addem-desktop;
 
-        nrf-udev = pkgs.callPackage ./packages/nrf-udev { };
-
-        simplicity-commander = pkgs.callPackage ./packages/simplicity-commander { };
-        simplicity-commander-cli = pkgs.callPackage ./packages/simplicity-commander-cli { };
-
-        freecad = pkgs.freecad-wayland;
-        # freecad = pkgs.callPackage ./packages/freecad { inherit freecad-git; };
-        # freecad = (freecad-git.override {
-        #   withWayland = true;
-        #   # ifcSupport = true;
-        # }).customize {
-        #   makeWrapperFlags = [
-        #   "--set" "LD_LIBRARY_PATH" (pkgs.lib.makeLibraryPath [ pkgs.fontconfig pkgs.freetype ])
-        #   "--set" "PATH" (pkgs.lib.makeBinPath [ pkgs.graphviz ])
-        #   ];
-        # };
-        # freecad-git = pkgs.freecad.overrideAttrs {
-        #   version = "1.1.0-dev";
-        #   patches = let patch = index: builtins.elemAt pkgs.freecad.patches index; in [
-        #     (patch 0)
-        #     (patch 1)
-        #   ];
-        #   src = pkgs.fetchFromGitHub {
-        #     owner = "FreeCAD";
-        #     repo = "FreeCAD";
-        #     rev = "d680de81c053d0342f8eace65b10ae880685069f";
-        #     hash = "sha256-/djlg0ETvpWqPA+Br2JTz44Nek74tkklAasdKEkv1fg=";
-        #     fetchSubmodules = true;
-        #   };
-        #   nativeBuildInputs = pkgs.freecad.nativeBuildInputs ++ [pkgs.pcl];
-        # };
+        addem-basic = addem-home-config "addem-basic" [ ];
+        addem-dev = addem-home-config "addem-dev" [ ];
+        addem-desktop = addem-home-config "addem-desktop" [ ];
       };
-
-      apps.${system} =
-        let
-          script = name: src: {
-            type = "app";
-            program = "${pkgs.writeScript name src}";
-          };
-        in
-        {
-          diff-current-system-store = script "diff-current-system-store" ''
-            #!/bin/sh
-            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
-            && nix store diff-closures /nix/var/nix/profiles/system ./result
-          '';
-          diff-current-system-drv = script "diff-current-system-drv" ''
-            #!/bin/sh
-            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
-            && ${pkgs.nix-diff}/bin/nix-diff --character-oriented --environment  /run/current-system ./result
-          '';
-          tree-current-system-drv = script "tree-current-system-drv" ''
-            #!/bin/sh
-            nix eval --raw .#nixosConfigurations.$(hostname).config.system.build.toplevel | xargs -o ${pkgs.nix-tree}/bin/nix-tree --derivation
-          '';
-        };
 
       nixosModules =
         let
-          addem-module = path: {
+          addem-module = name: {
             imports = [
               home-manager.nixosModules.home-manager
               ./users/addem.nix
@@ -118,42 +86,43 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs.inputs = inputs;
-            home-manager.users.addem = import "${self}/users/addem/${path}";
+            home-manager.users.addem = import "${self}/users/${home-files.${name}}";
           };
         in
         {
-          addem-basic = addem-module "home.nix";
-          addem-desktop = addem-module "home.desktop.nix";
-          addem-dev = addem-module "home.dev.nix";
-
           base = import ./machines/common/base.nix;
           nix-builder = import ./machines/common/nix-builder.nix;
           services = import ./machines/common/services.nix;
-        };
 
-      homeConfigurations =
-        let
-          addem-home-config = path: home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            modules = [ "${self}/users/addem/${path}" {
-               nixpkgs.config.allowUnfree = true;
-               nixpkgs.config.segger-jlink.acceptLicense = true;
-               nixpkgs.config.permittedInsecurePackages = [
-                "segger-jlink-qt4-874"
-              ];
-            }];
-            extraSpecialArgs.inputs = inputs;
-          };
-        in
-        {
-          addem = addem-home-config "home.desktop.nix";
-          addem-basic = addem-home-config "home.nix";
-          addem-desktop = addem-home-config "home.desktop.nix";
-          addem-dev = addem-home-config "home.dev.nix";
+          addem-basic = addem-module "addem-basic";
+          addem-dev = addem-module "addem-dev";
+          addem-desktop = addem-module "addem-desktop";
         };
 
       nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
-
       nixosConfigurations.lenny = machine "lenny" [ self.nixosModules.addem-desktop ];
+
+      packages.${system} = rec {
+        nrf-udev = pkgs.callPackage ./packages/nrf-udev { };
+      };
+
+      apps.${system} =
+        let appScript = name: src: { type = "app"; program = "${pkgs.writeScript name src}"; }; in
+        {
+          diff-current-system-store = appScript "diff-current-system-store" ''
+            #!/bin/sh
+            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
+            && nix store diff-closures /nix/var/nix/profiles/system ./result
+          '';
+          diff-current-system-drv = appScript "diff-current-system-drv" ''
+            #!/bin/sh
+            nix build .#nixosConfigurations.$(hostname).config.system.build.toplevel \
+            && ${pkgs.nix-diff}/bin/nix-diff --character-oriented --environment  /run/current-system ./result
+          '';
+          tree-current-system-drv = appScript "tree-current-system-drv" ''
+            #!/bin/sh
+            nix eval --raw .#nixosConfigurations.$(hostname).config.system.build.toplevel | xargs -o ${pkgs.nix-tree}/bin/nix-tree --derivation
+          '';
+        };
     };
 }

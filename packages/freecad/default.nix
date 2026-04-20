@@ -11,16 +11,16 @@
 let
   freecad = freecad-git;
   pyenv = (python311.withPackages (ps: with ps; [
-      ifcopenshell
-      requests
-      lark
-    ]));
+    ifcopenshell
+    requests
+    lark
+  ]));
   libpath = lib.makeLibraryPath [
-      fontconfig
-      freetype
-    ];
+    fontconfig
+    freetype
+  ];
 
-  path = lib.makeBinPath [graphviz];
+  path = lib.makeBinPath [ graphviz ];
 in
 stdenvNoCC.mkDerivation rec {
   pname = "freecad-wrapped";

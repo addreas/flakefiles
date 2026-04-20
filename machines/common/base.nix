@@ -33,7 +33,7 @@
   nix.registry.nixpkgs.flake = nixpkgs;
   # for `nix repl '<nixpkgs>'`
   environment.etc."nix/inputs/nixpkgs".source = "${nixpkgs}";
-  nix.nixPath = ["/etc/nix/inputs"];
+  nix.nixPath = [ "/etc/nix/inputs" ];
 
   time.timeZone = "Europe/Stockholm";
 

@@ -11,10 +11,10 @@ in
       timeout = 60 * 5;
       command = "${swaylock} -f --grace 5";
     }
-    {
-      timeout = 60 * 10;
-      command = "${pkgs.systemd}/bin/systemctl suspend";
-    }];
+      {
+        timeout = 60 * 10;
+        command = "${pkgs.systemd}/bin/systemctl suspend";
+      }];
     extraArgs = [ "idlehint" "300" ];
   };
 }

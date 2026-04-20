@@ -1,5 +1,5 @@
 let
-  pkgs = import <nixpkgs> {};
+  pkgs = import <nixpkgs> { };
 in
 (pkgs.buildFHSEnv {
   name = "python-fuckery";

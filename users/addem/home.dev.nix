@@ -108,7 +108,7 @@
 
   programs.go = {
     enable = true;
-    env.GOPATH = ["${config.home.homeDirectory}/.go"];
+    env.GOPATH = [ "${config.home.homeDirectory}/.go" ];
   };
 
   programs.git = {
@@ -134,21 +134,21 @@
 
   };
   programs.delta = {
-      enable = true;
-      enableGitIntegration = true;
-      options = {
-        features = "decorations";
-        line-numbers = true;
-        right-arrow = "⟶";
-        relative-paths = true;
-        navigate = true;
-        # hyperlinks = true;
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      features = "decorations";
+      line-numbers = true;
+      right-arrow = "⟶";
+      relative-paths = true;
+      navigate = true;
+      # hyperlinks = true;
 
-        decorations = {
-          file-decoration-style = "ul ol";
-          hunk-header-style = "syntax";
-          hunk-header-decoration-style = "none";
-        };
+      decorations = {
+        file-decoration-style = "ul ol";
+        hunk-header-style = "syntax";
+        hunk-header-decoration-style = "none";
       };
     };
+  };
 }

@@ -5,7 +5,7 @@
 
     servers.trilium = {
       command = "npx";
-      args = ["@iflow-mcp/perfectra1n-triliumnext-mcp"];
+      args = [ "@iflow-mcp/perfectra1n-triliumnext-mcp" ];
     };
 
     servers.context7.url = "https://mcp.context7.com/mcp";

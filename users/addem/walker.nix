@@ -1,6 +1,6 @@
 { config, pkgs, lib, inputs, ... }:
 {
-  imports = [inputs.walker.homeManagerModules.default];
+  imports = [ inputs.walker.homeManagerModules.default ];
 
   programs.walker = {
     enable = true;
@@ -26,7 +26,7 @@
   #   systemd.enable = true;
   # };
 
-  
+
 
   # systemd.user.services.walker.Service.Environment = "PATH=${lib.makeBinPath (with pkgs; [
   #   wl-clipboard
