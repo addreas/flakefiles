@@ -10,6 +10,7 @@
     ../common/services.nix
     ../common/desktop.nix
     ../common/embedded.nix
+    ../common/flatpak.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -49,8 +50,6 @@
   services.fwupd.enable = true;
 
   environment.systemPackages = with pkgs; [
-    prusa-slicer
-
     blender
     freecad-wayland
     trilium-desktop

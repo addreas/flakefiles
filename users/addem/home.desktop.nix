@@ -3,6 +3,7 @@
   imports = [
     ./home.nix
     ./home.dev.nix
+    ./opencode.nix
     ./kanshi.nix
     ./mako.nix
     ./alacritty.nix

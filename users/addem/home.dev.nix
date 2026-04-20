@@ -29,7 +29,7 @@
     erlang_27
     rebar3
     nodejs
-    nodePackages.pnpm
+    pnpm
     deno
     python3
     rustup
