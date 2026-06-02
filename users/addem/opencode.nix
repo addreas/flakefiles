@@ -76,7 +76,7 @@
       };
     };
 
-    rules = ''
+    context = ''
       # Global Rules
 
       ## Security

@@ -77,13 +77,13 @@
         freetype
         libGL
         libxkbcommon
-        xorg.libX11
-        xorg.libXext
-        xorg.libxcb
-        xorg.xcbutilwm
-        xorg.xcbutilimage
-        xorg.xcbutilkeysyms
-        xorg.xcbutilrenderutil
+        libx11
+        libxext
+        libxcb
+        libxcb-wm
+        libxcb-image
+        libxcb-keysyms
+        libxcb-render-util
 
         musl
         iconv

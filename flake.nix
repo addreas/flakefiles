@@ -7,22 +7,15 @@
   # inputs.nixpkgs.url = "nixpkgs/nixos-25.05";
 
   inputs.nix-flatpak.url = "github:gmodena/nix-flatpak";
+  inputs.nix-alien.url = "github:thiagokokada/nix-alien";
 
   inputs.home-manager.url = "github:nix-community/home-manager";
   # inputs.home-manager.url = "github:nix-community/home-manager/release-25.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-  inputs.elephant.url = "github:abenz1267/elephant";
-  inputs.walker = {
-    url = "github:abenz1267/walker";
-    inputs.elephant.follows = "elephant";
-  };
-
   outputs =
     { self
     , nixpkgs
-    , home-manager
-    , nix-flatpak
     , ...
     }@inputs:
     let
@@ -46,6 +39,10 @@
         specialArgs.flakepkgs = self.packages.${system};
         modules = [
           { environment.etc."nixos-source".source = self; }
+          {
+            environment.systemPackages = [ inputs.nix-alien.packages.${system}.default ];
+            programs.nix-ld.enable = true;
+          }
           "${self}/machines/${name}"
         ] ++ extraModules;
       };
@@ -56,7 +53,7 @@
         addem-desktop = "addem/home.desktop.nix";
       };
 
-      addem-home-config = name: extraModules: home-manager.lib.homeManagerConfiguration {
+      addem-home-config = name: extraModules: inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs.inputs = inputs;
         modules = [
@@ -80,7 +77,7 @@
         let
           addem-module = name: {
             imports = [
-              home-manager.nixosModules.home-manager
+              inputs.home-manager.nixosModules.home-manager
               ./users/addem.nix
             ];
             home-manager.useGlobalPkgs = true;
@@ -102,7 +99,7 @@
       nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
       nixosConfigurations.lenny = machine "lenny" [
         self.nixosModules.addem-desktop
-        nix-flatpak.nixosModules.nix-flatpak
+        inputs.nix-flatpak.nixosModules.nix-flatpak
       ];
 
       packages.${system} = rec {

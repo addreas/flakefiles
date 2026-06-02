@@ -65,7 +65,7 @@
     xdg-utils
 
     firefox-bin
-    # chromium
+    chromium
     wl-clipboard
     nautilus
     nfs-utils
