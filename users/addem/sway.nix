@@ -50,6 +50,7 @@
         { app_id = "wdisplays"; }
         { app_id = "variety"; }
         { app_id = "org.gnome.NautilusPreviewer"; }
+        { app_id = "satty"; }
         { title = ".+[Ss]haring (Indicator|your screen)"; }
 
         { app_id = "lutris"; }
