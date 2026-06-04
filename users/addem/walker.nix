@@ -1,33 +1,20 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 {
-  programs.walker = {
+  services.elephant.enable = true;
+
+  # TODO: replacements for
+  # https://github.com/fsevenm/ulauncher-uuid
+  # https://github.com/brpaz/ulauncher-encoder
+  # https://github.com/friday/ulauncher-hash2
+  # https://github.com/brpaz/ulauncher-timestamp
+
+  services.walker = {
     enable = true;
-    runAsService = true;
-    elephant.debug = true;
+    systemd.enable = true;
+
+    settings = {
+      close_when_open = true;
+      force_keyboard_focus = true;
+    };
   };
-
-  # services.walker = {
-  #   enable = true;
-  #   settings = {
-  #     app_launch_prefix = "";
-  #     as_window = false;
-  #     close_when_open = false;
-  #     disable_click_to_close = false;
-  #     force_keyboard_focus = false;
-  #     hotreload_theme = false;
-  #     locale = "";
-  #     monitor = "";
-  #     terminal_title_flag = "";
-  #     theme = "default";
-  #     timeout = 0;
-  #   };
-  #   systemd.enable = true;
-  # };
-
-
-
-  # systemd.user.services.walker.Service.Environment = "PATH=${lib.makeBinPath (with pkgs; [
-  #   wl-clipboard
-  #   libqalculate
-  # ])}";
 }

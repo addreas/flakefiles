@@ -11,8 +11,8 @@
     ./swayidle.nix
     ./swaylock.nix
     ./sway.nix
-    ./ulauncher.nix
-    # ./walker.nix
+    # ./ulauncher.nix
+    ./walker.nix
     ./variety.nix
     ./zed.nix
     ./waybar.nix
