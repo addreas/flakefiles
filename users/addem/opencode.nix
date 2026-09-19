@@ -23,7 +23,7 @@
         typescript.command = [ (getExe typescript-language-server) ];
         deno.command = [ (getExe deno) ];
         bash.command = [ (getExe bash-language-server) ];
-        elixir-ls.command = [ (getExe elixir-ls) ];
+        elixir-ls.command = [ (getExe beamPackages.elixir-ls) ];
         gleam.command = [ (getExe gleam) "lsp" ];
         cue = {
           command = [ (getExe cue) "lsp" ];

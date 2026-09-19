@@ -42,7 +42,6 @@
   services.gvfs.enable = true;
   services.gnome.sushi.enable = true;
   services.packagekit.enable = true;
-  programs.file-roller.enable = true;
 
   environment.systemPackages = with pkgs; [ darktable digikam nfs-utils libraw exiftool ];
 }

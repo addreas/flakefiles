@@ -19,6 +19,7 @@
   ];
 
   home.pointerCursor = {
+    enable = true;
     package = pkgs.adwaita-icon-theme;
     name = "Adwaita";
 
@@ -57,5 +58,5 @@
   services.network-manager-applet.enable = true;
   services.blueman-applet.enable = true;
 
-  home.packages = [ pkgs.gcr ];
+  home.packages = with pkgs; [ gcr_4 cloudflared ];
 }

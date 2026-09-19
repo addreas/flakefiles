@@ -23,10 +23,10 @@
     go-jsonnet
     jsonnet-bundler
     cue
-    elixir
-    elixir-ls
+    beamPackages.elixir
+    beamPackages.elixir-ls
     gleam
-    erlang_27
+    beam27Packages.erlang
     rebar3
     nodejs
     pnpm
