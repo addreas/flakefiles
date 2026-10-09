@@ -28,6 +28,21 @@
         flux-reconcile-source-git = flux-reconcile [ "gitrepositories" ] [ "source" "git" ] [ ];
         flux-reconcile-kustomization = flux-reconcile [ "kustomizations" ] [ "kustomization" ] [ "--with-source" ];
         flux-reconcile-helm-release = flux-reconcile [ "helmreleases" ] [ "helmrelease" ] [ "--with-source" "--reset" ];
+        csr-approve = {
+          shortCut = "a";
+          scopes = ["certificatesigningrequests"];
+          background = true;
+          description = "Approve CSR";
+          confirm = false;
+          command = "kubectl";
+          args = [
+            "certificate"
+            "approve"
+            "--context"
+            "$CONTEXT"
+            "$NAME"
+          ];
+        };
       };
   };
 }

@@ -45,6 +45,7 @@
     talosctl
     clusterctl
 
+    tcpdump
     tree
   ];
 
