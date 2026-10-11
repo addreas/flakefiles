@@ -45,6 +45,11 @@
     # extraUpFlags = ["--accept-dns" "--accept-routes"];
   };
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false; # https://github.com/NixOS/nixpkgs/issues/180175
+
+  # disable wakeup from shitty keyboard
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="04d9", ATTR{idProduct}=="0183", ATTR{power/wakeup}="disabled"
+  '';
   programs.wireshark.enable = true;
   services.tlp.enable = true;
   services.fwupd.enable = true;

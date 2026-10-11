@@ -90,16 +90,18 @@
       workspaceAutoBackAndForth = true;
 
       workspaceOutputAssign =
-        let
-          up = "\"Dell Inc. DELL U3421WE 50F6753\"";
-          home = "\"Samsung Electric Company LS27A800U HNMTA00128\"";
-        in
+        # let
+          # up = "\"Dell Inc. DELL U3421WE 50F6753\"";
+          # up = "\"Dell Inc. DELL U2725QE CK8YLF4\"";
+          # home = "\"Samsung Electric Company LS27A800U HNMTA00128\"";
+        # in
         [
-          { workspace = "1"; output = "${up} ${home} eDP-1"; }
-          { workspace = "2"; output = "${up} ${home} eDP-1"; }
-          { workspace = "3"; output = "${up} ${home} eDP-1"; }
-          { workspace = "4"; output = "${up} eDP-1"; }
-          { workspace = "9"; output = "eDP-1"; }
+          { workspace = "1"; output = [ "DP-1" "eDP-1" ]; }
+          { workspace = "2"; output = [ "DP-1" "eDP-1" ]; }
+          { workspace = "3"; output = [ "DP-1" "eDP-1" ]; }
+          { workspace = "4"; output = [ "DP-1" "eDP-1" ]; }
+          { workspace = "7"; output = [ "eDP-1" ]; }
+          { workspace = "8"; output = [ "DP-1" "eDP-1" ]; }
         ];
     };
     extraConfig = ''

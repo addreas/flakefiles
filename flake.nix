@@ -24,7 +24,7 @@
       nixpkgs-config = {
         allowUnfree = true;
         segger-jlink.acceptLicense = true;
-        permittedInsecurePackages = [ "segger-jlink-qt4-952" ];
+        permittedInsecurePackages = [ "segger-jlink-qt4-970" ];
       };
 
       pkgs = import nixpkgs {

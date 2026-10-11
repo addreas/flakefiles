@@ -42,6 +42,27 @@ in
   # https://github.com/friday/ulauncher-hash2
   # https://github.com/brpaz/ulauncher-timestamp
 
+  xdg.configFile."elephant/menus/power.toml" = {
+    source = (pkgs.formats.toml { }).generate "elephant-menus-power" {
+      name = "power";
+      name_pretty = "Power";
+      icon = "system-shutdown";
+
+      entries = [
+        {
+          text = "Sleep";
+          keywords = [ "suspend" "sleep" ];
+          actions = { suspend = "${lib.getExe' pkgs.systemd "systemctl"} suspend"; };
+        }
+        {
+          text = "Shutdown";
+          keywords = [ "shutdown" "poweroff" ];
+          actions = { shutdown = "${lib.getExe' pkgs.systemd "systemctl"} poweroff"; };
+        }
+      ];
+    };
+  };
+
   services.walker = {
     enable = true;
     systemd.enable = true;
@@ -53,6 +74,7 @@ in
         default = [
           "desktopapplications"
           "menus:screenshots"
+          "menus:power"
           "calc"
           "actions"
           "symbols"
