@@ -50,6 +50,11 @@ in
 
       entries = [
         {
+          text = "Lock";
+          keywords = [ "lock" ];
+          actions = { suspend = "${lib.getExe' pkgs.systemd "loginctl"} lock-session"; };
+        }
+        {
           text = "Sleep";
           keywords = [ "suspend" "sleep" ];
           actions = { suspend = "${lib.getExe' pkgs.systemd "systemctl"} suspend"; };
@@ -77,7 +82,7 @@ in
           "menus:power"
           "calc"
           "actions"
-          "symbols"
+          # "symbols"
           # "unicode"
           # "websearch"
         ];
