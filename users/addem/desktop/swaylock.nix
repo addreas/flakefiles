@@ -1,13 +1,14 @@
 { pkgs, config, ... }:
 {
   programs.swaylock.package = pkgs.swaylock-effects.overrideAttrs rec {
-    version = "1.7.2";
+    version = "1.8.1";
     src = pkgs.fetchFromGitHub {
-      owner = "blastrock";
-      repo = "swaylock-effects-second";
-      rev = "da4efb5632d72eeb23086a8274d00f20dc8847ac";
-      sha256 = "sha256-YeF3mZIkH2X8QR8jvVCDEcHDbtMp3JBhizpvUzVHHz0=";
+      owner = "hboetes";
+      repo = "swaylock-effects";
+      rev = "v${version}";
+      hash = "sha256-6PZU72kvI+alpPSgsCixr254AjeRyaURCyhGRsTBEF8=";
     };
+    mesonFlags = (pkgs.swaylock-effects.mesonFlags or [ ]) ++ [ "-Dfingerprint=disabled" ];
   };
   programs.swaylock.enable = true;
   programs.swaylock.settings = {
@@ -15,7 +16,6 @@
     clock = true;
     text-color = "EEEEEE";
     image = "${config.xdg.configHome}/variety/wallpaper/wallpaper.jpg";
-    effect-blur = "5x1";
     inside-clear-color = "000000C0";
     text-caps-lock-color = "FA0000C0";
     text-clear-color = "E5A555FF";
