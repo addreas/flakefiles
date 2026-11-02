@@ -1,5 +1,7 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 let
+  helpers = import ../lib.nix { inherit config lib; };
+
   set-wallpaper = pkgs.writeShellScript "set_wallpaper" ''
     #!/bin/bash
     WP=$1
@@ -32,12 +34,7 @@ in
   systemd.user.services.variety = {
     Unit = { Description = "Variety"; };
     Service = {
-      Environment = [
-        "PATH=${lib.strings.makeBinPath [
-        pkgs.bash
-        "/run/current-system/sw"
-      ]}"
-      ];
+      Environment = [ helpers.pathEnvironment ];
       ExecStart = "${pkgs.variety}/bin/variety";
     };
     Install = { WantedBy = [ "graphical-session.target" ]; };

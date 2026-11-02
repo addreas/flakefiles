@@ -1,10 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
+let
+  helpers = import ../lib.nix { inherit config lib; };
+in
 {
   programs.waybar = {
     enable = true;
-    # package = pkgs.waybar.override {
-    #   hyprlandSupport = false;
-    # };
     systemd.enable = true;
     settings.top = {
       spacing = 4;
@@ -114,16 +114,7 @@
     style = builtins.readFile ./waybar.style.css;
   };
 
-  systemd.user.services.waybar.Service.Environment =
-    let
-      paths = [
-        "${config.home.homeDirectory}/.nix-profile"
-        "/etc/profiles/per-user/${config.home.username}"
-        "${config.xdg.stateHome}/nix/profile"
-        "/run/current-system/sw"
-      ];
-    in
-    [ "PATH=${lib.strings.makeBinPath paths}" ];
+  systemd.user.services.waybar.Service.Environment = [ helpers.pathEnvironment ];
 
 
   # programs.eww?

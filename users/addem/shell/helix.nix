@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ ... }:
 {
   programs.helix.enable = true;
   programs.helix.settings = {

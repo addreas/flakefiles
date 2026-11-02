@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, config, ... }:
 {
   programs.swaylock.package = pkgs.swaylock-effects.overrideAttrs rec {
     version = "1.7.2";

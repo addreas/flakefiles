@@ -15,7 +15,6 @@
 
       terminal = "alacritty";
       # terminal = "wezterm";
-      # menu = "ulauncher-toggle";
       menu = "walker";
 
       bars = [ ];
@@ -46,7 +45,6 @@
       floating.border = 1;
       floating.titlebar = false;
       floating.criteria = [
-        { app_id = "ulauncher"; }
         { app_id = "wdisplays"; }
         { app_id = "variety"; }
         { app_id = "org.gnome.NautilusPreviewer"; }
@@ -62,7 +60,6 @@
       window.titlebar = false;
       window.commands = [
         # TODO: deduplicate criteria
-        { criteria = { app_id = "ulauncher"; }; command = "border none"; }
         { criteria = { app_id = "wdisplays"; }; command = "border none"; }
         { criteria = { app_id = "variety"; }; command = "border none"; }
 
@@ -85,24 +82,16 @@
         };
       };
 
-      output.eDP-1.scale = "1.5";
-
       workspaceAutoBackAndForth = true;
 
-      workspaceOutputAssign =
-        # let
-          # up = "\"Dell Inc. DELL U3421WE 50F6753\"";
-          # up = "\"Dell Inc. DELL U2725QE CK8YLF4\"";
-          # home = "\"Samsung Electric Company LS27A800U HNMTA00128\"";
-        # in
-        [
-          { workspace = "1"; output = [ "DP-1" "eDP-1" ]; }
-          { workspace = "2"; output = [ "DP-1" "eDP-1" ]; }
-          { workspace = "3"; output = [ "DP-1" "eDP-1" ]; }
-          { workspace = "4"; output = [ "DP-1" "eDP-1" ]; }
-          { workspace = "7"; output = [ "eDP-1" ]; }
-          { workspace = "8"; output = [ "DP-1" "eDP-1" ]; }
-        ];
+      workspaceOutputAssign = [
+        { workspace = "1"; output = [ "DP-1" "eDP-1" ]; }
+        { workspace = "2"; output = [ "DP-1" "eDP-1" ]; }
+        { workspace = "3"; output = [ "DP-1" "eDP-1" ]; }
+        { workspace = "4"; output = [ "DP-1" "eDP-1" ]; }
+        { workspace = "7"; output = [ "eDP-1" ]; }
+        { workspace = "8"; output = [ "DP-1" "eDP-1" ]; }
+      ];
     };
     extraConfig = ''
       bindswitch --reload --locked lid:on output eDP-1 disable

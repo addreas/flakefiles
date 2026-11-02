@@ -1,8 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   regionArea = ''-g "$(${lib.getExe pkgs.slurp})" -'';
-  fullArea   = "-";
+  fullArea = "-";
 
   screenshot = grimArgs: pipeTo:
     "${lib.getExe pkgs.wayfreeze} --after-freeze-cmd '${lib.getExe pkgs.grim} ${grimArgs} | ${pipeTo}; killall wayfreeze'";
@@ -10,8 +10,7 @@ in
 {
   services.elephant.enable = true;
 
-  services.elephant.settings = {
-  };
+  services.elephant.settings = { };
 
   xdg.configFile."elephant/menus/screenshots.toml" = {
     source = (pkgs.formats.toml { }).generate "elephant-menus-screenshots" {

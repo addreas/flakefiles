@@ -1,5 +1,20 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    kubectl
+    kubectx
+    kustomize
+    krew
+    k9s
+    fluxcd
+    kubernetes-helm
+    cilium-cli
+    hubble
+    kind
+    talosctl
+    clusterctl
+  ];
+
   programs.k9s = {
     enable = true;
     # settings.k9s.ui.headless = true;
@@ -30,7 +45,7 @@
         flux-reconcile-helm-release = flux-reconcile [ "helmreleases" ] [ "helmrelease" ] [ "--with-source" "--reset" ];
         csr-approve = {
           shortCut = "a";
-          scopes = ["certificatesigningrequests"];
+          scopes = [ "certificatesigningrequests" ];
           background = true;
           description = "Approve CSR";
           confirm = false;

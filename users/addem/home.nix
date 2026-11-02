@@ -1,17 +1,18 @@
-{ pkgs, lib, ... }:
+{ ... }:
 {
+  imports = [
+    ./shell/helix.nix
+    ./shell/zsh.nix
+    ./shell/zsh-starship.nix
+    ./shell/cli.nix
+    ./k8s.nix
+  ];
+
   home = {
     stateVersion = "23.05";
     username = "addem";
     homeDirectory = "/home/addem";
   };
-
-  imports = [
-    ./helix.nix
-    ./zsh.nix
-    # ./zsh-omp.nix
-    ./zsh-starship.nix
-  ];
 
   home.sessionPath = [
     "$HOME/.bin"
@@ -31,43 +32,5 @@
     ERL_AFLAGS = "-kernel shell_history enabled";
   };
 
-  home.packages = with pkgs; [
-    kubectl
-    kubectx
-    kustomize
-    krew
-    k9s
-    fluxcd
-    kubernetes-helm
-    cilium-cli
-    hubble
-    kind
-    talosctl
-    clusterctl
-
-    tcpdump
-    tree
-  ];
-
   programs.home-manager.enable = true;
-
-  programs.fzf.enable = true;
-  programs.ripgrep.enable = true;
-
-  # z auto jump thing, would i use it?
-  programs.zoxide.enable = true;
-  programs.zoxide.enableZshIntegration = true;
-  # programs.pazi.enable = true;
-
-  # filemanagers, yazi + broot frankenstein wouldbe cool
-  # programs.yazi.enable = true;
-  # programs.broot.enable = true;
-  # programs.joshuto.enable = true;
-
-  home.file.digrc = {
-    target = ".digrc";
-    text = ''
-      +nostats +nocomments +nocmd +noquestion +recurse
-    '';
-  };
 }

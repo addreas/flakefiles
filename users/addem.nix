@@ -1,4 +1,4 @@
-{ lib, pkgs, config, modulesPath, ... }:
+{ pkgs, ... }:
 {
   users.users.addem = {
     isNormalUser = true;
