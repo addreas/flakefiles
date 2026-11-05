@@ -5,7 +5,20 @@ let
   set-wallpaper = pkgs.writeShellScript "set_wallpaper" ''
     #!/bin/bash
     WP=$1
-    if [[ -n $SWAYSOCK ]]; then
+
+    # Under niri, let DMS set the wallpaper so it regenerates the palette.
+    applied=0
+    if command -v dms >/dev/null 2>&1; then
+        for _ in 1 2 3 4 5; do
+            if dms ipc call wallpaper set "$WP" >/dev/null 2>&1; then
+                applied=1
+                break
+            fi
+            sleep 1
+        done
+    fi
+
+    if [[ $applied -eq 0 && -n $SWAYSOCK ]]; then
         # If swaybg is available, use it as prevents system freeze.
         # See https://github.com/swaywm/sway/issues/5606
         if command -v "swaybg" >/dev/null 2>&1; then

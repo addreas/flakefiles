@@ -1,4 +1,7 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
+let
+  plain = import ./plain-session.nix { inherit config; };
+in
 
 let
   regionArea = ''-g "$(${lib.getExe pkgs.slurp})" -'';
@@ -7,7 +10,7 @@ let
   screenshot = grimArgs: pipeTo:
     "${lib.getExe pkgs.wayfreeze} --after-freeze-cmd '${lib.getExe pkgs.grim} ${grimArgs} | ${pipeTo}; killall wayfreeze'";
 in
-{
+lib.mkIf plain.enable {
   services.elephant.enable = true;
 
   services.elephant.settings = { };
@@ -65,6 +68,18 @@ in
         }
       ];
     };
+  };
+
+  # sway only: niri uses the DMS launcher
+  systemd.user.services.elephant = {
+    Unit.After = lib.mkForce plain.targets;
+    Unit.PartOf = lib.mkForce plain.targets;
+    Install.WantedBy = lib.mkForce plain.targets;
+  };
+
+  systemd.user.services.walker = {
+    Unit.After = lib.mkForce (plain.targets ++ [ "elephant.service" ]);
+    Install.WantedBy = lib.mkForce plain.targets;
   };
 
   services.walker = {

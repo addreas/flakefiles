@@ -9,6 +9,23 @@
   inputs.nix-flatpak.url = "github:gmodena/nix-flatpak";
   inputs.nix-alien.url = "github:thiagokokada/nix-alien";
 
+  inputs.dms = {
+    url = "github:duxlabs-dev/dux-shell/stable";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  inputs.niri = {
+    url = "github:sodiboo/niri-flake";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  inputs.dank-greeter = {
+    url = "github:duxlabs-dev/dux-greeter/v2.0.0";
+    inputs.nixpkgs.follows = "nixpkgs";
+    # same DCommon revision as dux-shell 2.0.0 (pinned by both)
+    inputs.dank-qml-common.follows = "dms/dank-qml-common";
+  };
+
   inputs.home-manager.url = "github:nix-community/home-manager";
   # inputs.home-manager.url = "github:nix-community/home-manager/release-25.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -32,75 +49,67 @@
         config = nixpkgs-config;
       };
 
-      machine = name: extraModules: nixpkgs.lib.nixosSystem {
+      lib = nixpkgs.lib;
+
+      home-module = host: {
+        imports = [ "${self}/users/addem/home.${host}.nix" ];
+      };
+
+      home-config = host: inputs.home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs.inputs = inputs;
+        modules = [
+          (home-module host)
+          { nixpkgs.config = nixpkgs-config; }
+        ];
+      };
+
+      nixos-module = host: {
+        imports = [
+          inputs.home-manager.nixosModules.home-manager
+          ./users/addem.nix
+        ];
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs.inputs = inputs;
+        home-manager.users.addem = home-module host;
+      };
+
+      machine = host: extraModules: lib.nixosSystem {
         inherit system;
         inherit pkgs;
         specialArgs.nixpkgs = nixpkgs;
         specialArgs.flakepkgs = self.packages.${system};
+        specialArgs.inputs = inputs;
         modules = [
           { environment.etc."nixos-source".source = self; }
           {
             environment.systemPackages = [ inputs.nix-alien.packages.${system}.default ];
             programs.nix-ld.enable = true;
           }
-          "${self}/machines/${name}"
-        ] ++ extraModules;
-      };
-
-      home-files = {
-        addem-basic = "addem/home.nix";
-        addem-dev = "addem/home.dev.nix";
-        addem-desktop = "addem/home.desktop.nix";
-      };
-
-      addem-home-config = name: extraModules: inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs.inputs = inputs;
-        modules = [
-          "${self}/users/${home-files.${name}}"
-          { nixpkgs.config = nixpkgs-config; }
+          "${self}/machines/${host}"
+          (nixos-module host)
         ] ++ extraModules;
       };
     in
     {
       formatter.${system} = pkgs.nixpkgs-fmt;
 
-      homeConfigurations = {
-        addem = self.homeConfigurations.addem-desktop;
-
-        addem-basic = addem-home-config "addem-basic" [ ];
-        addem-dev = addem-home-config "addem-dev" [ ];
-        addem-desktop = addem-home-config "addem-desktop" [ ];
+      nixosConfigurations = {
+        expessy = machine "expessy" [ ];
+        lenny = machine "lenny" [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
       };
 
-      nixosModules =
-        let
-          addem-module = name: {
-            imports = [
-              inputs.home-manager.nixosModules.home-manager
-              ./users/addem.nix
-            ];
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs.inputs = inputs;
-            home-manager.users.addem = import "${self}/users/${home-files.${name}}";
-          };
-        in
-        {
-          base = import ./machines/common/base.nix;
-          nix-builder = import ./machines/common/nix-builder.nix;
-          services = import ./machines/common/services.nix;
+      homeConfigurations = {
+        expessy = home-config "expessy";
+        lenny = home-config "lenny";
+      };
 
-          addem-basic = addem-module "addem-basic";
-          addem-dev = addem-module "addem-dev";
-          addem-desktop = addem-module "addem-desktop";
-        };
-
-      nixosConfigurations.expessy = machine "expessy" [ self.nixosModules.addem-desktop ];
-      nixosConfigurations.lenny = machine "lenny" [
-        self.nixosModules.addem-desktop
-        inputs.nix-flatpak.nixosModules.nix-flatpak
-      ];
+      nixosModules = {
+        base = import ./machines/common/base.nix;
+        nix-builder = import ./machines/common/nix-builder.nix;
+        services = import ./machines/common/services.nix;
+      };
 
       packages.${system} = rec {
         nrf-udev = pkgs.callPackage ./packages/nrf-udev { };

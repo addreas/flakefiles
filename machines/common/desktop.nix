@@ -17,12 +17,10 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd sway";
         user = "greeter";
       };
     };
   };
-
 
   xdg.portal = {
     enable = true;
@@ -34,7 +32,6 @@
   services.pipewire.pulse.enable = true;
 
   hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
   services.hardware.bolt.enable = true;
 
   fonts.enableDefaultPackages = true;
@@ -94,4 +91,3 @@
     # man.generateCaches = true;
   };
 }
-

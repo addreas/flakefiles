@@ -1,5 +1,11 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
+let
+  dms = config.desktop.sway.dms;
+in
 {
+  options.desktop.sway.dms = lib.mkEnableOption "Dux Shell on sway (else waybar/mako/walker)";
+
+  config = {
   home.packages = with pkgs; [
     pulseaudio
     brightnessctl
@@ -29,6 +35,11 @@
         # "${modifier}+w" = null; # no layout tabbed
 
         "${modifier}+w" = "resize set width 66ppt";
+
+        "${modifier}+d" = lib.mkIf dms "exec dms ipc spotlight toggle";
+        "${modifier}+n" = lib.mkIf dms "exec dms ipc notifications toggle";
+        "${modifier}+x" = lib.mkIf dms "exec dms ipc powermenu toggle";
+        "Super+Alt+l" = lib.mkIf dms "exec dms ipc lock lock";
 
         "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +5%";
         "XF86AudioLowerVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ -5%";
@@ -96,6 +107,9 @@
     extraConfig = ''
       bindswitch --reload --locked lid:on output eDP-1 disable
       bindswitch --reload --locked lid:off output eDP-1 enable
+    '' + lib.optionalString dms ''
+      exec dms run
     '';
   };
+};
 }

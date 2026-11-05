@@ -1,18 +1,26 @@
 { config, lib, ... }:
 let
   helpers = import ../lib.nix { inherit config lib; };
+  plain = import ./plain-session.nix { inherit config; };
+
+  workspaces = if plain.niriPlain then "niri/workspaces" else "sway/workspaces";
+  window = if plain.niriPlain then "niri/window" else "sway/window";
+  language = if plain.niriPlain then "niri/language" else "sway/language";
 in
-{
+lib.mkIf plain.enable {
   programs.waybar = {
     enable = true;
-    systemd.enable = true;
+    systemd = {
+      enable = true;
+      inherit (plain) targets;
+    };
     settings.top = {
       spacing = 4;
-      modules-left = [ "sway/workspaces" "sway/mode" ];
-      modules-center = [ "sway/window" ];
-      modules-right = [ "sway/scratchpad" "idle_inhibitor" "sway/language" "network" "pulseaudio" "backlight" "cpu" "memory" "temperature" "battery" "clock" "tray" ];
+      modules-left = [ workspaces ] ++ lib.optional (!plain.niriPlain) "sway/mode";
+      modules-center = [ window ];
+      modules-right = [ "idle_inhibitor" language "network" "pulseaudio" "backlight" "cpu" "memory" "temperature" "battery" "clock" "tray" ];
 
-      "sway/mode".format = "{}";
+      "sway/mode".format = lib.mkIf (!plain.niriPlain) "{}";
       "sway/scratchpad" = {
         format = "{icon} {count}";
         show-empty = false;
@@ -105,16 +113,20 @@ in
         };
         on-click = "pavucontrol";
       };
-      "sway/language" = {
+      ${language} = {
         format = "{short}";
         tooltip-format = "{long}";
-        on-click = "swaymsg input type:keyboard xkb_switch_layout next";
+        on-click = lib.mkIf (!plain.niriPlain) "swaymsg input type:keyboard xkb_switch_layout next";
       };
     };
     style = builtins.readFile ./waybar.style.css;
   };
 
-  systemd.user.services.waybar.Service.Environment = [ helpers.pathEnvironment ];
+  systemd.user.services.waybar = {
+    Unit.PartOf = lib.mkForce [ "sway-session.target" ];
+    Install.WantedBy = lib.mkForce [ "sway-session.target" ];
+    Service.Environment = [ helpers.pathEnvironment ];
+  };
 
 
   # programs.eww?

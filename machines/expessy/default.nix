@@ -10,6 +10,7 @@
     ../common/nix-builder.nix
     ../common/services.nix
     ../common/desktop.nix
+    ../common/dms.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -37,11 +38,13 @@
 
   # services.tailscale.enable = true;
   programs.wireshark.enable = true;
-  services.tlp.enable = true;
+  services.tlp.enable = false; # conflicts with power-profiles-daemon
   services.udisks2.enable = true;
   services.gvfs.enable = true;
   services.gnome.sushi.enable = true;
   services.packagekit.enable = true;
+
+  programs.niri.enable = true;
 
   environment.systemPackages = with pkgs; [ darktable digikam nfs-utils libraw exiftool ];
 }

@@ -99,6 +99,7 @@
     };
     shlvl = {
       disabled = false;
+      threshold = 2; # session already starts at level 2
       symbol = "";
       style = "dimmed blue";
     };
