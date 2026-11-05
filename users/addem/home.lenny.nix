@@ -10,17 +10,15 @@
     ./dev/tools.nix
 
     ./desktop/alacritty.nix
+    ./desktop/packages.nix
     ./desktop/env.nix
     ./desktop/kanshi.nix
-    ./desktop/mako.nix
     ./desktop/services.nix
     ./desktop/sway.nix
-    ./desktop/swayidle.nix
+    ./desktop/plain.nix
     ./desktop/swaylock.nix
     ./desktop/theming.nix
     ./desktop/variety.nix
-    ./desktop/walker.nix
-    ./desktop/waybar.nix
     ./desktop/wezterm.nix
     ./desktop/zed.nix
   ];

@@ -1,7 +1,4 @@
-{ config, lib, pkgs, ... }:
-let
-  plain = import ./plain-session.nix { inherit config; };
-in
+{ pkgs, ... }:
 {
   # services.cliphist.enable = true;
 
@@ -16,19 +13,6 @@ in
   services.gnome-keyring = {
     enable = true;
     components = [ "secrets" ];
-  };
-
-  # DMS has its own NetworkManager/Bluetooth widgets and pairing/secret agents,
-  # so the applets only run in sessions without it.
-  services.network-manager-applet.enable = plain.enable;
-  services.blueman-applet = {
-    enable = plain.enable;
-    systemdTargets = plain.targets;
-  };
-
-  systemd.user.services.network-manager-applet = lib.mkIf plain.enable {
-    Unit.PartOf = lib.mkForce plain.targets;
-    Install.WantedBy = lib.mkForce plain.targets;
   };
 
   home.packages = with pkgs; [ gcr_4 ];

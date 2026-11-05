@@ -11,7 +11,7 @@
 
   programs.dank-material-shell = {
     enable = true;
-    systemd.enable = false; # niri spawns it
+    systemd.enable = false; # the shell is a HM user unit (users/addem/desktop/dms.nix)
   };
 
   # Login screen matching the shell (theme/wallpaper come from

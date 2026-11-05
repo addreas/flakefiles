@@ -42,7 +42,7 @@ in
 {
   # replace with programs.gallery-dl and services.wpaperd?
 
-  home.packages = [ pkgs.variety ];
+  home.packages = [ pkgs.variety pkgs.swaybg ];
 
   systemd.user.services.variety = {
     Unit = { Description = "Variety"; };

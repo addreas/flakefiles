@@ -1,36 +1,16 @@
 { config, inputs, lib, pkgs, ... }:
-let
-  dms = config.desktop.niri.dms;
-in
 {
-  options.desktop.niri.dms = lib.mkEnableOption "Dux Shell on niri (else bare niri)" // {
-    default = true;
-  };
+  imports = [ inputs.niri.homeModules.config ];
 
-  imports = [
-    inputs.niri.homeModules.config
-    inputs.dms.homeModules.dank-material-shell
-    inputs.dms.homeModules.niri
-  ];
-
-  config = {
+  xdg.configFile."systemd/user/niri.service.d/override.conf".text = ''
+    [Service]
+    UnsetEnvironment=SHLVL
+  '';
 
   # niri comes from the system (machines/expessy/default.nix); niri-flake only
   # generates the config. Match the package so it's validated against the
   # version we run.
   programs.niri.package = pkgs.niri;
-
-  programs.dank-material-shell.enable = dms;
-
-  # `dms run` at startup; config.kdl includes the dms/*.kdl fragments and our
-  # config moves to hm.kdl.
-  programs.dank-material-shell.niri = lib.mkIf dms {
-    enableSpawn = true;
-    includes = {
-      enable = true;
-      override = false; # settings below win over DMS's fragments
-    };
-  };
 
   programs.niri.settings = {
     input = {
@@ -87,22 +67,14 @@ in
       ];
     };
 
-    binds = lib.optionalAttrs dms {
-      "Mod+Print".action.spawn-sh = "dms screenshot region --stdout | ${lib.getExe pkgs.satty} -f -";
-      "Mod+D".action.spawn = [ "dms" "ipc" "spotlight" "toggle" ];
-      "Mod+N".action.spawn = [ "dms" "ipc" "notifications" "toggle" ];
-      "Mod+Shift+Comma".action.spawn = [ "dms" "ipc" "settings" "toggle" ];
-      "Mod+X".action.spawn = [ "dms" "ipc" "powermenu" "toggle" ];
-      "Mod+Alt+V".action.spawn = [ "dms" "ipc" "clipboard" "toggle" ];
-      "Super+Alt+L".action.spawn = [ "dms" "ipc" "lock" "lock" ];
-    }
-    // lib.optionalAttrs (!dms) {
-      "Mod+Print".action.spawn-sh =
-        "${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp})\" - | ${lib.getExe pkgs.satty} -f -";
-      "Super+Alt+L".action.spawn = [ "swaylock" "-f" ];
-    }
-    // {
+    binds = {
       "Mod+Shift+Slash".action.show-hotkey-overlay = [ ];
+
+      # plain-niri bindings; dms.nix overrides these with normal priority
+      "Super+Alt+L".action = lib.mkDefault { spawn = [ "swaylock" "-f" ]; };
+      "Mod+Print".action = lib.mkDefault {
+        spawn-sh = "${lib.getExe pkgs.grim} -g \"$(${lib.getExe pkgs.slurp})\" - | ${lib.getExe pkgs.satty} -f -";
+      };
 
       "Mod+Return".action.spawn = "alacritty";
 
@@ -303,6 +275,5 @@ in
         ];
       };
     };
-  };
   };
 }

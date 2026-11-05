@@ -41,10 +41,10 @@
   services.tlp.enable = false; # conflicts with power-profiles-daemon
   services.udisks2.enable = true;
   services.gvfs.enable = true;
-  services.gnome.sushi.enable = true;
   services.packagekit.enable = true;
 
   programs.niri.enable = true;
+  programs.sway.enable = lib.mkForce false;
 
   environment.systemPackages = with pkgs; [ darktable digikam nfs-utils libraw exiftool ];
 }

@@ -47,34 +47,15 @@
     liberation_ttf
   ];
 
+  services.gnome.sushi.enable = true;
   services.udisks2.enable = true;
   services.gvfs.enable = true;
 
   environment.systemPackages = with pkgs; [
-    sway
-    swaybg
-    sway-contrib.grimshot
-    swappy
-    mako
     qt5.qtwayland
     wayland
     glib
     xdg-utils
-
-    firefox-bin
-    chromium
-    wl-clipboard
-    nautilus
-    nfs-utils
-    cifs-utils
-    file-roller
-    sushi
-    adwaita-icon-theme
-    evince
-    wireshark
-    wdisplays
-    pavucontrol
-
 
     usbutils
     pciutils
