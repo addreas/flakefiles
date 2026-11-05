@@ -20,6 +20,7 @@
       };
       touchpad.tap = true;
       warp-mouse-to-focus.enable = true;
+      focus-follows-mouse.enable = true;
     };
 
     layout = {

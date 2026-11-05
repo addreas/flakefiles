@@ -19,6 +19,7 @@
     ./desktop/swaylock.nix
     ./desktop/theming.nix
     ./desktop/variety.nix
+    ./desktop/wallpapers.nix
     ./desktop/wezterm.nix
     ./desktop/zed.nix
   ];

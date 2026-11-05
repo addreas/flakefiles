@@ -20,5 +20,6 @@
     ./desktop/swaylock.nix
     ./desktop/theming.nix
     ./desktop/variety.nix
+    ./desktop/wallpapers.nix
   ];
 }
