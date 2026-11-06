@@ -9,6 +9,7 @@
       hash = "sha256-6PZU72kvI+alpPSgsCixr254AjeRyaURCyhGRsTBEF8=";
     };
     mesonFlags = (pkgs.swaylock-effects.mesonFlags or [ ]) ++ [ "-Dfingerprint=disabled" ];
+    patches = [ ./swaylock-screencopy-single-flight.patch ];
   };
   programs.swaylock.enable = true;
   programs.swaylock.settings = {

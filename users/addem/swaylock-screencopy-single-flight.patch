@@ -1,0 +1,24 @@
+diff --git a/main.c b/main.c
+index 9971283..e9ed0ec 100644
+--- a/main.c
++++ b/main.c
+@@ -824,11 +824,14 @@ static void handle_wl_output_done(void *data, struct wl_output *output) {
+ 
+ 	static bool has_printed_screencopy_error = false;
+ 	if (state->screencopy_manager) {
+-		surface->screencopy_frame = zwlr_screencopy_manager_v1_capture_output(
+-				state->screencopy_manager, false, surface->output);
+-		zwlr_screencopy_frame_v1_add_listener(surface->screencopy_frame,
+-				&screencopy_frame_listener, surface);
+-		surface->events_pending += 1;
++		if (surface->screencopy_frame == NULL &&
++				(state->args.screenshots || state->args.fade_in > 0)) {
++			surface->screencopy_frame = zwlr_screencopy_manager_v1_capture_output(
++					state->screencopy_manager, false, surface->output);
++			zwlr_screencopy_frame_v1_add_listener(surface->screencopy_frame,
++					&screencopy_frame_listener, surface);
++			surface->events_pending += 1;
++		}
+ 	} else if (!has_printed_screencopy_error) {
+ 		swaylock_log(LOG_INFO, "Compositor does not support screencopy manager, "
+ 				"screenshots / fade-in will not work");
