@@ -7,7 +7,7 @@
     jsonnet-bundler
     cue
 
-    beamPackages.elixir
+    beamPackages.elixir_1_19
     beamPackages.elixir-ls
     gleam
     beam27Packages.erlang
